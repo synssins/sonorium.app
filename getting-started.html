@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started - Sonorium</title>
+    <meta name="description" content="Get started with Sonorium - installation guide for Home Assistant and Windows.">
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="images/logo.png" alt="Sonorium">
+            </a>
+            <div class="nav-links">
+                <a href="index.html#downloads">Downloads</a>
+                <a href="getting-started.html">Get Started</a>
+                <a href="index.html#features">Features</a>
+                <a href="faq.html">FAQ</a>
+                <a href="docs.html">Documentation</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+            <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Getting Started</h1>
+        <p>Up and running in minutes with your choice of installation.</p>
+    </header>
+
+    <div class="content-container">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('ha')">Home Assistant</button>
+            <button class="tab" onclick="showTab('windows')">Windows App</button>
+        </div>
+
+        <div id="ha-content" class="tab-content active">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Add the Repository</h3>
+                    <p>Click the button below to add Sonorium to your Home Assistant Add-on Store with one click.</p>
+                    <a href="https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fsynssins%2Fsonorium" target="_blank" style="display: inline-block; margin-bottom: 1rem;">
+                        <img src="https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg" alt="Add Repository">
+                    </a>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Or manually: <strong>Settings → Add-ons → ⋮ → Repositories</strong> then add:</p>
+                    <pre>https://github.com/synssins/sonorium</pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Install & Start</h3>
+                    <p>Find "Sonorium" in the Add-on Store, click <strong>Install</strong>, then <strong>Start</strong>. The addon will appear in your Home Assistant sidebar.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Add Your Audio</h3>
+                    <p>You have two options for adding audio themes:</p>
+                    <p><strong>Option A: Use the Web Interface</strong><br>Open Sonorium from your sidebar, go to <strong>Themes</strong>, and create new themes directly in the app. You can upload audio files via drag-and-drop.</p>
+                    <p><strong>Option B: File System</strong><br>Create theme folders in <code>/media/sonorium/</code> with your audio files:</p>
+                    <pre>/media/sonorium/
+├── Thunder/
+│   ├── distant_thunder.mp3
+│   └── rain_on_roof.mp3
+├── Forest/
+│   ├── birds.mp3
+│   └── wind_leaves.mp3
+└── Your Theme/
+    └── your_audio.mp3</pre>
+                    <p style="color: var(--text-muted);">Two starter themes (Sleigh Ride and Tavern) are included out of the box!</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Create a Channel</h3>
+                    <p>Open Sonorium from your sidebar, click <strong>"New Channel"</strong>, select a theme and your speakers, then hit <strong>Play</strong>!</p>
+                    <p>Each channel streams independently, so you can have different soundscapes in different rooms.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="windows-content" class="tab-content">
+            <div class="card" style="background: var(--bg-secondary); border-color: var(--accent-warning); margin-bottom: 2rem;">
+                <p style="margin: 0;"><strong>🚧 Alpha Release:</strong> The Windows app is currently in alpha. Network streaming to external speakers is coming soon—currently plays through your PC's audio output.</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Download the App</h3>
+                    <p>Download the latest Windows release from the <a href="index.html#downloads" style="color: var(--accent-primary);">Downloads page</a> or directly from <a href="https://github.com/synssins/sonorium/releases" target="_blank" style="color: var(--accent-primary);">GitHub Releases</a>.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Extract & Run</h3>
+                    <p>Extract the zip file to any location and run <code>Sonorium.exe</code>. No installation required—it's fully portable.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Add Themes</h3>
+                    <p>You have two options for adding audio themes:</p>
+                    <p><strong>Option A: Use the App Interface</strong><br>Open Sonorium, go to <strong>Themes</strong>, and create new themes directly in the app. You can upload audio files via drag-and-drop.</p>
+                    <p><strong>Option B: File System</strong><br>Place audio files in the <code>themes</code> folder next to the exe. Create subfolders for each theme:</p>
+                    <pre>Sonorium/
+├── Sonorium.exe
+└── themes/
+    ├── Thunder/
+    │   └── thunder.mp3
+    └── Rain/
+        └── rain.mp3</pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Start Mixing</h3>
+                    <p>Select a theme, adjust the track mixer, and enjoy ambient soundscapes through your PC speakers or connected audio device.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 3rem;">
+            <h2>What's Next?</h2>
+            <ul>
+                <li><a href="faq.html" style="color: var(--accent-primary);">FAQ</a> - Common questions and troubleshooting</li>
+                <li><a href="docs.html" style="color: var(--accent-primary);">Documentation</a> - Full feature documentation</li>
+                <li><a href="https://github.com/synssins/sonorium/wiki" target="_blank" style="color: var(--accent-primary);">Wiki</a> - Detailed guides on GitHub</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="images/icon.png" alt="Sonorium">
+                <span style="font-weight: 600;">Sonorium</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
+                <a href="docs.html">Documentation</a>
+                <a href="https://github.com/synssins/sonorium/issues" target="_blank">Report an Issue</a>
+            </div>
+            <div class="footer-credit">
+                Fork of <a href="https://github.com/fmtr/amniotic" target="_blank" style="color: var(--accent-primary);">Amniotic</a> by fmtr
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tab + '-content').classList.add('active');
+        }
+    </script>
+</body>
+</html>

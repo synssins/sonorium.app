@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Sonorium</title>
+    <meta name="description" content="Frequently asked questions about Sonorium - troubleshooting, features, and tips.">
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="images/logo.png" alt="Sonorium">
+            </a>
+            <div class="nav-links">
+                <a href="index.html#downloads">Downloads</a>
+                <a href="getting-started.html">Get Started</a>
+                <a href="index.html#features">Features</a>
+                <a href="faq.html">FAQ</a>
+                <a href="docs.html">Documentation</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+            <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Frequently Asked Questions</h1>
+        <p>Quick answers to common questions about Sonorium.</p>
+    </header>
+
+    <div class="content-container">
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Why don't I hear any sound?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    <p>The most common causes are:</p>
+                    <ul>
+                        <li><strong>Speaker compatibility:</strong> Your media player doesn't support HTTP audio streams</li>
+                        <li><strong>Network issue:</strong> The stream URL isn't accessible from your speaker (firewall, different subnet)</li>
+                        <li><strong>Volume:</strong> Channel volume or master gain is set to 0</li>
+                        <li><strong>Device muted:</strong> The speaker itself is muted or volume is down</li>
+                    </ul>
+                    <p><strong>Troubleshooting steps:</strong></p>
+                    <ol>
+                        <li>Try playing to a different speaker to isolate the issue</li>
+                        <li>Check the Sonorium logs for errors</li>
+                        <li>Verify your stream URL setting matches your network</li>
+                        <li>Test the stream URL directly in a browser</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>My speakers aren't showing up in Sonorium</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    <p>Sonorium discovers speakers from Home Assistant's <code>media_player</code> entities. Check the following:</p>
+                    <ul>
+                        <li>Your speakers are added as <code>media_player</code> entities in Home Assistant</li>
+                        <li>The speakers aren't disabled in Sonorium Settings</li>
+                        <li>Try clicking "Refresh Speakers" in Settings</li>
+                        <li>Verify the Home Assistant API connection is working</li>
+                    </ul>
+                    <p>Speakers must support HTTP audio streaming. Most Chromecast, Sonos, and DLNA devices work well.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>What audio formats are supported?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    <p>Sonorium supports these formats:</p>
+                    <ul>
+                        <li><strong>.mp3</strong> - Most compatible, recommended</li>
+                        <li><strong>.wav</strong> - Uncompressed audio</li>
+                        <li><strong>.flac</strong> - Lossless compression</li>
+                        <li><strong>.ogg</strong> - Open format</li>
+                    </ul>
+                    <p><strong>Recommendations:</strong></p>
+                    <ul>
+                        <li>Use MP3 files at 128-320kbps for best compatibility</li>
+                        <li>Longer tracks (1-10 minutes) work best for seamless looping</li>
+                        <li>Tracks with natural fade-in/fade-out blend better</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Where do I put my audio files?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    <p><strong>Easiest: Use the App</strong></p>
+                    <p>Open Sonorium, go to <strong>Themes</strong>, and create themes directly in the interface. You can upload audio files via drag-and-drop.</p>
+                    
+                    <p><strong>Home Assistant (File System):</strong></p>
+                    <p>Place audio files in <code>/media/sonorium/</code>. Create a subfolder for each theme:</p>
+                    <pre>/media/sonorium/Thunder/distant_thunder.mp3
+/media/sonorium/Thunder/rain_on_roof.mp3
+/media/sonorium/Forest/birds.mp3</pre>
+                    
+                    <p><strong>Windows App (File System):</strong></p>
+                    <p>Place audio files in the <code>themes</code> folder next to Sonorium.exe.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>What does "Presence" do in the Track Mixer?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    <p><strong>Presence</strong> controls how often a track appears in the mix (0-100%).</p>
+                    <ul>
+                        <li><strong>100%:</strong> Track plays continuously</li>
+                        <li><strong>50%:</strong> Track fades in and out, present about half the time</li>
+                        <li><strong>20%:</strong> Track appears occasionally</li>
+                    </ul>
+                    <p>This is perfect for occasional sounds like thunder claps, bird calls, or door creaks—set presence to 20-40% so they appear naturally without looping constantly.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>What's the difference between playback modes?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    <ul>
+                        <li><strong>Auto:</strong> Automatically selects the best mode based on file length</li>
+                        <li><strong>Continuous:</strong> Loop continuously with seamless crossfade (best for background sounds)</li>
+                        <li><strong>Sparse:</strong> Play once, wait 30-300 seconds, repeat (best for short sounds)</li>
+                        <li><strong>Gapless:</strong> Loop without crossfade (for tracks designed to loop perfectly)</li>
+                        <li><strong>Presence:</strong> Fade in/out based on presence setting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Can I use Sonorium with Sonos/Google Home/Alexa?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    <p>Yes! Any speaker that appears as a <code>media_player</code> entity in Home Assistant and supports HTTP audio streaming will work:</p>
+                    <ul>
+                        <li><strong>Sonos:</strong> Full support via Home Assistant integration</li>
+                        <li><strong>Google Home/Chromecast:</strong> Works great with cast devices</li>
+                        <li><strong>Amazon Echo:</strong> Requires additional setup (check HA community)</li>
+                        <li><strong>DLNA/UPnP speakers:</strong> Most network speakers work</li>
+                        <li><strong>AirPlay:</strong> Works with AirPlay-compatible devices</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Where can I get ambient audio files?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    <p>Several options for finding quality ambient audio:</p>
+                    <ul>
+                        <li><strong>Included themes:</strong> Sleigh Ride and Tavern come with Sonorium</li>
+                        <li><strong>Freesound.org:</strong> Large library of free sound effects</li>
+                        <li><strong>Ambient-Mixer.com:</strong> Downloadable ambient soundscapes</li>
+                        <li><strong>YouTube Audio Library:</strong> Free ambient tracks</li>
+                        <li><strong>MyNoise.net:</strong> High-quality ambient generators</li>
+                        <li><strong>Record your own:</strong> Nature recordings, rain on windows, etc.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Will the Windows/Mac app support network speakers?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    <p><strong>Yes!</strong> Network streaming to external speakers is on the roadmap for standalone apps (Windows, Mac, Linux) and Docker.</p>
+                    <p>Currently, the Windows app plays through your PC's audio output. Future versions will include:</p>
+                    <ul>
+                        <li>Chromecast/Google Cast support</li>
+                        <li>DLNA/UPnP streaming</li>
+                        <li>AirPlay support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Is Sonorium really free?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    <p>Yes! Sonorium is completely free and open source under the MIT license.</p>
+                    <p>It's a fork of the original <a href="https://github.com/fmtr/amniotic" target="_blank" style="color: var(--accent-primary);">Amniotic</a> project by fmtr, with significant new features added.</p>
+                    <p>The source code is available on <a href="https://github.com/synssins/sonorium" target="_blank" style="color: var(--accent-primary);">GitHub</a>. Contributions are welcome!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>How do I report a bug or request a feature?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    <p>Use GitHub Issues:</p>
+                    <ul>
+                        <li><a href="https://github.com/synssins/sonorium/issues/new?template=bug_report.md" target="_blank" style="color: var(--accent-primary);">Report a Bug</a></li>
+                        <li><a href="https://github.com/synssins/sonorium/issues/new?template=feature_request.md" target="_blank" style="color: var(--accent-primary);">Request a Feature</a></li>
+                    </ul>
+                    <p>Please include as much detail as possible: your setup, steps to reproduce, logs, screenshots, etc.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="images/icon.png" alt="Sonorium">
+                <span style="font-weight: 600;">Sonorium</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
+                <a href="docs.html">Documentation</a>
+                <a href="https://github.com/synssins/sonorium/issues" target="_blank">Report an Issue</a>
+            </div>
+            <div class="footer-credit">
+                Fork of <a href="https://github.com/fmtr/amniotic" target="_blank" style="color: var(--accent-primary);">Amniotic</a> by fmtr
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            // Close others
+            document.querySelectorAll('.faq-item.open').forEach(i => {
+                if (i !== item) i.classList.remove('open');
+            });
+            item.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
