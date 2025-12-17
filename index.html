@@ -9,850 +9,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #1a1a2e;
-            --bg-secondary: #16213e;
-            --bg-card: #1f2937;
-            --bg-card-hover: #283548;
-            --bg-sidebar: #0f172a;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --accent-primary: #06d6a0;
-            --accent-secondary: #8b5cf6;
-            --accent-warning: #f59e0b;
-            --accent-blue: #3b82f6;
-            --border-color: #334155;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 1000;
-            padding: 1rem 2rem;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-            color: var(--text-primary);
-        }
-
-        .nav-logo img {
-            height: 36px;
-            width: auto;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-primary);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.625rem 1.25rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.2s;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background: var(--accent-primary);
-            color: var(--bg-primary);
-        }
-
-        .btn-primary:hover {
-            background: #05c490;
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--accent-primary);
-        }
-
-        .btn-windows {
-            background: var(--accent-blue);
-            color: white;
-        }
-
-        .btn-windows:hover {
-            background: #2563eb;
-            transform: translateY(-1px);
-        }
-
-        .btn-ha {
-            background: #18bcf2;
-            color: white;
-        }
-
-        .btn-ha:hover {
-            background: #0ea5e9;
-            transform: translateY(-1px);
-        }
-
-        .btn-large {
-            padding: 1rem 2rem;
-            font-size: 1rem;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8rem 2rem 4rem;
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 30% 20%, rgba(6, 214, 160, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
-        .hero-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-text h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero-text h1 span {
-            color: var(--accent-primary);
-        }
-
-        .hero-text p {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-            max-width: 500px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .hero-image {
-            position: relative;
-        }
-
-        .hero-image img {
-            width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--border-color);
-        }
-
-        /* Platforms Badge */
-        .platforms {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .platform-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--bg-card);
-            border-radius: 9999px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .platform-badge.available {
-            border-color: var(--accent-primary);
-            color: var(--accent-primary);
-        }
-
-        .platform-badge:hover {
-            border-color: var(--accent-primary);
-            color: var(--accent-primary);
-        }
-
-        .platform-badge svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .version-tag {
-            font-size: 0.7rem;
-            background: rgba(6, 214, 160, 0.2);
-            padding: 0.125rem 0.375rem;
-            border-radius: 4px;
-            margin-left: 0.25rem;
-        }
-
-        /* Sections */
-        section {
-            padding: 6rem 2rem;
-        }
-
-        .section-header {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto 4rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .section-header p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-        }
-
-        /* Downloads Section */
-        .downloads {
-            background: var(--bg-secondary);
-        }
-
-        .downloads-grid {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .download-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 2.5rem;
-            border: 1px solid var(--border-color);
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .download-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent-primary);
-            box-shadow: 0 20px 40px -15px rgba(6, 214, 160, 0.2);
-        }
-
-        .download-card .icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 1.5rem;
-            background: rgba(6, 214, 160, 0.1);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .download-card .icon svg {
-            width: 32px;
-            height: 32px;
-            color: var(--accent-primary);
-        }
-
-        .download-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .download-card .version {
-            color: var(--accent-primary);
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-
-        .download-card p {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-        }
-
-        .download-card .btn {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .download-note {
-            margin-top: 0.75rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* Getting Started */
-        .getting-started {
-            background: var(--bg-primary);
-        }
-
-        .steps-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .step {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-            align-items: start;
-        }
-
-        .step-number {
-            width: 48px;
-            height: 48px;
-            background: var(--accent-primary);
-            color: var(--bg-primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .step-content h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .step-content p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-        }
-
-        .step-content code {
-            background: var(--bg-card);
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            display: block;
-            font-family: 'Monaco', 'Consolas', monospace;
-            font-size: 0.9rem;
-            color: var(--accent-primary);
-            border: 1px solid var(--border-color);
-            overflow-x: auto;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .tab {
-            padding: 0.5rem 1rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .tab.active {
-            background: var(--accent-primary);
-            color: var(--bg-primary);
-            border-color: var(--accent-primary);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Features */
-        .features {
-            background: var(--bg-secondary);
-        }
-
-        .features-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-card {
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 2rem;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent-primary);
-            box-shadow: 0 20px 40px -15px rgba(6, 214, 160, 0.2);
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(6, 214, 160, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-icon svg {
-            width: 24px;
-            height: 24px;
-            color: var(--accent-primary);
-        }
-
-        .feature-card h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-
-        .feature-card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        /* Screenshots */
-        .screenshots {
-            background: var(--bg-primary);
-        }
-
-        .screenshot-gallery {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .screenshot-item {
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s;
-        }
-
-        .screenshot-item:hover {
-            transform: scale(1.02);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
-        }
-
-        .screenshot-item img {
-            width: 100%;
-            display: block;
-        }
-
-        .screenshot-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1rem;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* FAQ Section */
-        .faq {
-            background: var(--bg-secondary);
-        }
-
-        .faq-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .faq-item {
-            background: var(--bg-card);
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-        }
-
-        .faq-question {
-            padding: 1.5rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-
-        .faq-question:hover {
-            background: var(--bg-card-hover);
-        }
-
-        .faq-question svg {
-            width: 20px;
-            height: 20px;
-            color: var(--accent-primary);
-            transition: transform 0.3s;
-        }
-
-        .faq-item.open .faq-question svg {
-            transform: rotate(180deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-
-        .faq-item.open .faq-answer {
-            max-height: 500px;
-        }
-
-        .faq-answer-content {
-            padding: 0 1.5rem 1.5rem;
-            color: var(--text-secondary);
-        }
-
-        .faq-answer-content code {
-            background: var(--bg-sidebar);
-            padding: 0.125rem 0.375rem;
-            border-radius: 4px;
-            font-family: 'Monaco', 'Consolas', monospace;
-            font-size: 0.85rem;
-        }
-
-        /* Who It's For */
-        .audience {
-            background: var(--bg-primary);
-        }
-
-        .audience-content {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .audience-card {
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 2.5rem;
-            border: 1px solid var(--border-color);
-        }
-
-        .audience-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--accent-primary);
-        }
-
-        .audience-list {
-            list-style: none;
-            display: grid;
-            gap: 1rem;
-        }
-
-        .audience-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            color: var(--text-secondary);
-        }
-
-        .audience-list li svg {
-            width: 20px;
-            height: 20px;
-            color: var(--accent-primary);
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        /* CTA Section */
-        .cta {
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-            text-align: center;
-        }
-
-        .cta-content {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .cta h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .cta p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--bg-sidebar);
-            padding: 3rem 2rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .footer-logo img {
-            height: 32px;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent-primary);
-        }
-
-        .footer-credit {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        /* Mobile menu */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .nav-links.show {
-            display: flex;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: var(--bg-sidebar);
-            flex-direction: column;
-            padding: 1rem 2rem;
-            gap: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        /* Responsive */
-        @media (max-width: 968px) {
-            .hero-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .hero-text p {
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .hero-buttons {
-                justify-content: center;
-            }
-
-            .platforms {
-                justify-content: center;
-            }
-
-            .hero-image {
-                order: -1;
-                max-width: 600px;
-                margin: 0 auto;
-            }
-
-            .hero-text h1 {
-                font-size: 2.5rem;
-            }
-
-            .step {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .step-number {
-                margin: 0 auto;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .hero-text h1 {
-                font-size: 2rem;
-            }
-
-            .section-header h2 {
-                font-size: 2rem;
-            }
-
-            .screenshot-gallery {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .downloads-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Loading state */
-        .loading {
-            opacity: 0.6;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <a href="#" class="nav-logo">
+            <a href="index.html" class="nav-logo">
                 <img src="images/logo.png" alt="Sonorium">
             </a>
             <div class="nav-links">
                 <a href="#downloads">Downloads</a>
-                <a href="#getting-started">Get Started</a>
+                <a href="getting-started.html">Get Started</a>
                 <a href="#features">Features</a>
-                <a href="#faq">FAQ</a>
-                <a href="https://github.com/synssins/sonorium/wiki" target="_blank">Documentation</a>
+                <a href="faq.html">FAQ</a>
+                <a href="docs.html">Docs</a>
                 <a href="https://github.com/synssins/sonorium" target="_blank" class="btn btn-primary">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                     GitHub
                 </a>
             </div>
@@ -866,7 +39,7 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
             <div class="hero-text">
@@ -874,19 +47,15 @@
                 <p>Sonorium is a multi-zone ambient soundscape mixer. Stream layered audio—rain, thunder, forests, oceans—to any speaker in your space.</p>
                 <div class="hero-buttons">
                     <a href="#downloads" class="btn btn-primary btn-large">
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
                         Download Now
                     </a>
-                    <a href="#getting-started" class="btn btn-secondary btn-large">
-                        Get Started
-                    </a>
+                    <a href="getting-started.html" class="btn btn-secondary btn-large">Get Started</a>
                 </div>
                 <div class="platforms">
                     <a href="#downloads" class="platform-badge available">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                        Home Assistant Addon
+                        Home Assistant
                         <span class="version-tag" id="addon-version-badge">v1.2.3</span>
                     </a>
                     <a href="#downloads" class="platform-badge available">
@@ -894,9 +63,10 @@
                         Windows App
                         <span class="version-tag" id="app-version-badge">Alpha</span>
                     </a>
-                    <div class="platform-badge">
+                    <div class="platform-badge coming-soon">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                        Docker (Coming Soon)
+                        Docker
+                        <span class="soon-label">Soon</span>
                     </div>
                 </div>
             </div>
@@ -906,7 +76,7 @@
         </div>
     </section>
 
-    <!-- Downloads Section -->
+    <!-- Downloads -->
     <section class="downloads" id="downloads">
         <div class="section-header">
             <h2>Download Sonorium</h2>
@@ -915,407 +85,109 @@
         <div class="downloads-grid">
             <div class="download-card">
                 <div class="icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 </div>
                 <h3>Home Assistant Addon</h3>
                 <div class="version" id="addon-version">v1.2.3</div>
-                <p>The full-featured version for Home Assistant users. Integrates with your media players and appears in your sidebar.</p>
+                <p>Full-featured addon for Home Assistant. Integrates with your media players, streams to any room, and appears in your sidebar.</p>
                 <a href="https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fsynssins%2Fsonorium" target="_blank" class="btn btn-ha">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                     Add to Home Assistant
                 </a>
-                <p class="download-note">One-click installation via My Home Assistant</p>
+                <p class="download-note">One-click install via My Home Assistant</p>
             </div>
             <div class="download-card">
-                <div class="icon" style="background: rgba(59, 130, 246, 0.1);">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2">
-                        <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
-                    </svg>
+                <div class="icon windows">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
                 </div>
                 <h3>Windows Standalone</h3>
                 <div class="version" id="app-version">Loading...</div>
-                <p>Standalone desktop app for Windows. Run ambient soundscapes without Home Assistant. Plays through your PC speakers.</p>
+                <p>Standalone desktop app for Windows. Run ambient soundscapes without Home Assistant. Network streaming coming soon.</p>
                 <a href="#" id="windows-download-btn" class="btn btn-windows" target="_blank">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                    </svg>
-                    Download for Windows
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    Download .exe
                 </a>
-                <p class="download-note" id="windows-note">Alpha release - experimental features</p>
+                <p class="download-note" id="windows-note">Alpha release • No install required</p>
             </div>
+        </div>
+        <div class="coming-soon-notice">
+            <h4>Coming Soon</h4>
+            <p>Docker container, macOS app, and Linux app are in development. All standalone versions will support network streaming to Chromecast, DLNA, and AirPlay speakers.</p>
         </div>
     </section>
 
-    <!-- Getting Started Section -->
-    <section class="getting-started" id="getting-started">
-        <div class="section-header">
-            <h2>Getting Started</h2>
-            <p>Up and running in minutes with your choice of installation.</p>
-        </div>
-        <div class="steps-container">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('ha')">Home Assistant</button>
-                <button class="tab" onclick="showTab('windows')">Windows App</button>
-            </div>
-
-            <div id="ha-content" class="tab-content active">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Add the Repository</h3>
-                        <p>Click the button below or manually add the repository URL to your Home Assistant Add-on Store.</p>
-                        <a href="https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fsynssins%2Fsonorium" target="_blank" style="display: inline-block; margin-bottom: 1rem;">
-                            <img src="https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg" alt="Add Repository">
-                        </a>
-                        <p style="color: var(--text-muted); font-size: 0.9rem;">Or manually: Settings → Add-ons → ⋮ → Repositories → Add: <code style="display: inline; padding: 0.25rem 0.5rem;">https://github.com/synssins/sonorium</code></p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>Install & Start</h3>
-                        <p>Find "Sonorium" in the Add-on Store, click Install, then Start. The addon will appear in your sidebar.</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Add Your Audio</h3>
-                        <p>Create theme folders in <code>/media/sonorium/</code> with your audio files. Two starter themes are included!</p>
-                        <code>/media/sonorium/
-├── Thunder/
-│   ├── distant_thunder.mp3
-│   └── rain_on_roof.mp3
-├── Forest/
-│   ├── birds.mp3
-│   └── wind_leaves.mp3
-└── Your Theme/
-    └── your_audio.mp3</code>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h3>Create a Channel</h3>
-                        <p>Open Sonorium from your sidebar, click "New Channel", select a theme and your speakers, then hit Play!</p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="windows-content" class="tab-content">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Download the App</h3>
-                        <p>Download the latest Windows release from the <a href="#downloads" style="color: var(--accent-primary);">Downloads section</a> above or from GitHub Releases.</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>Extract & Run</h3>
-                        <p>Extract the zip file and run <code style="display: inline; padding: 0.25rem 0.5rem;">Sonorium.exe</code>. No installation required—it's fully portable.</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Add Themes</h3>
-                        <p>Place your audio files in the <code style="display: inline; padding: 0.25rem 0.5rem;">themes</code> folder next to the exe. Create subfolders for each theme.</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h3>Start Mixing</h3>
-                        <p>Select a theme, adjust your mix, and enjoy ambient soundscapes through your PC speakers or connected audio device.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
+    <!-- Features -->
     <section class="features" id="features">
         <div class="section-header">
             <h2>Everything You Need</h2>
-            <p>Powerful features to create the perfect ambient atmosphere in every room.</p>
+            <p>Powerful features to create the perfect ambient atmosphere.</p>
         </div>
         <div class="features-grid">
             <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="7" height="7"/>
-                        <rect x="14" y="3" width="7" height="7"/>
-                        <rect x="14" y="14" width="7" height="7"/>
-                        <rect x="3" y="14" width="7" height="7"/>
-                    </svg>
-                </div>
+                <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
                 <h3>Multi-Channel Audio</h3>
-                <p>Run up to 10 independent audio channels simultaneously. Each channel can play a different theme to different speakers.</p>
+                <p>Run up to 10 independent channels. Each plays a different theme to different speakers.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18V5l12-2v13"/>
-                        <circle cx="6" cy="18" r="3"/>
-                        <circle cx="18" cy="16" r="3"/>
-                    </svg>
-                </div>
+                <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
                 <h3>Theme-Based Mixing</h3>
-                <p>Organize audio into themes that automatically blend together. Thunder, rain, wind—they all mix seamlessly in real-time.</p>
+                <p>Audio files blend together automatically. Thunder, rain, wind—all mix seamlessly.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 20v-6M6 20V10M18 20V4"/>
-                    </svg>
-                </div>
+                <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20v-6M6 20V10M18 20V4"/></svg></div>
                 <h3>Track Mixer</h3>
-                <p>Fine-tune individual tracks with volume, presence, and playback controls. Create the exact atmosphere you want.</p>
+                <p>Fine-tune volume, presence, and playback mode for each individual track.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                    </svg>
-                </div>
+                <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
                 <h3>Presets</h3>
-                <p>Save your favorite track configurations as presets. Switch between "morning focus" and "deep sleep" modes instantly.</p>
+                <p>Save track configurations. Switch between "focus" and "sleep" modes instantly.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="17 8 12 3 7 8"/>
-                        <line x1="12" y1="3" x2="12" y2="15"/>
-                    </svg>
-                </div>
+                <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
                 <h3>Export & Import</h3>
-                <p>Package themes as zip files to share with others. Import themes from the community with a single click.</p>
+                <p>Package themes as zip files. Share with the community, import with one click.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                        <path d="M2 17l10 5 10-5"/>
-                        <path d="M2 12l10 5 10-5"/>
-                    </svg>
-                </div>
+                <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
                 <h3>Plugin System</h3>
-                <p>Extend functionality with plugins. Import soundscapes from ambient-mixer.com or build your own integrations.</p>
+                <p>Extend Sonorium with plugins. Import themes from external sources.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M12 1v6m0 6v10"/>
-                        <path d="M4.22 4.22l4.24 4.24m7.08 7.08l4.24 4.24"/>
-                        <path d="M1 12h6m6 0h10"/>
-                        <path d="M4.22 19.78l4.24-4.24m7.08-7.08l4.24-4.24"/>
-                    </svg>
-                </div>
+                <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v10"/><path d="M4.22 4.22l4.24 4.24m7.08 7.08l4.24 4.24"/><path d="M1 12h6m6 0h10"/><path d="M4.22 19.78l4.24-4.24m7.08-7.08l4.24-4.24"/></svg></div>
                 <h3>Broadcast Model</h3>
-                <p>All speakers on a channel hear the exact same stream, like a radio station. Join mid-stream without restarting.</p>
+                <p>All speakers on a channel hear the same stream. Join mid-stream like a radio station.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                    </svg>
-                </div>
-                <h3>Live Speaker Management</h3>
-                <p>Add or remove speakers from an active channel without stopping playback. Changes take effect immediately.</p>
+                <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                <h3>Live Speaker Control</h3>
+                <p>Add or remove speakers without stopping playback. Changes apply instantly.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-                    </svg>
-                </div>
+                <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
                 <h3>Smart Short Files</h3>
-                <p>Short sounds like bird calls play once then wait naturally, rather than looping annoyingly. Fully configurable.</p>
+                <p>Short sounds play naturally with gaps instead of looping annoyingly.</p>
             </div>
         </div>
     </section>
 
-    <!-- Screenshots Section -->
+    <!-- Screenshots -->
     <section class="screenshots" id="screenshots">
         <div class="section-header">
             <h2>See It In Action</h2>
             <p>A modern, dark-themed interface designed for ease of use.</p>
         </div>
         <div class="screenshot-gallery">
-            <div class="screenshot-item">
-                <img src="screenshots/channels.jpg" alt="Channels View">
-                <div class="screenshot-caption">Channels - Manage multiple audio streams</div>
-            </div>
-            <div class="screenshot-item">
-                <img src="screenshots/themes.jpg" alt="Themes Library">
-                <div class="screenshot-caption">Themes - Organize your soundscapes</div>
-            </div>
-            <div class="screenshot-item">
-                <img src="screenshots/track-mixer.jpg" alt="Track Mixer">
-                <div class="screenshot-caption">Track Mixer - Fine-tune every detail</div>
-            </div>
-            <div class="screenshot-item">
-                <img src="screenshots/speakers.jpg" alt="Speaker Selection">
-                <div class="screenshot-caption">Speakers - Target any room or zone</div>
-            </div>
-            <div class="screenshot-item">
-                <img src="screenshots/presets.jpg" alt="Presets">
-                <div class="screenshot-caption">Presets - Save your favorite configurations</div>
-            </div>
-            <div class="screenshot-item">
-                <img src="screenshots/settings.jpg" alt="Settings">
-                <div class="screenshot-caption">Settings - Full control over your setup</div>
-            </div>
+            <div class="screenshot-item"><img src="screenshots/channels.jpg" alt="Channels"><div class="screenshot-caption">Channels</div></div>
+            <div class="screenshot-item"><img src="screenshots/themes.jpg" alt="Themes"><div class="screenshot-caption">Themes</div></div>
+            <div class="screenshot-item"><img src="screenshots/track-mixer.jpg" alt="Track Mixer"><div class="screenshot-caption">Track Mixer</div></div>
+            <div class="screenshot-item"><img src="screenshots/speakers.jpg" alt="Speakers"><div class="screenshot-caption">Speakers</div></div>
+            <div class="screenshot-item"><img src="screenshots/presets.jpg" alt="Presets"><div class="screenshot-caption">Presets</div></div>
+            <div class="screenshot-item"><img src="screenshots/settings.jpg" alt="Settings"><div class="screenshot-caption">Settings</div></div>
         </div>
     </section>
 
-    <!-- FAQ Section -->
-    <section class="faq" id="faq">
-        <div class="section-header">
-            <h2>Frequently Asked Questions</h2>
-            <p>Quick answers to common questions about Sonorium.</p>
-        </div>
-        <div class="faq-container">
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Why don't I hear any sound?</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="faq-answer">
-                    <div class="faq-answer-content">
-                        <p>The most common causes are:</p>
-                        <ul style="margin: 0.5rem 0 0.5rem 1.5rem; color: var(--text-secondary);">
-                            <li>Your media player doesn't support HTTP audio streams (check speaker compatibility)</li>
-                            <li>The stream URL isn't accessible from your speaker (firewall or network issue)</li>
-                            <li>Channel volume or master gain is set to 0</li>
-                            <li>The speaker is muted or volume is down on the physical device</li>
-                        </ul>
-                        <p style="margin-top: 0.5rem;">Try playing to a different speaker to isolate the issue.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>My speakers aren't showing up in Sonorium</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="faq-answer">
-                    <div class="faq-answer-content">
-                        <p>Sonorium discovers speakers from Home Assistant's <code>media_player</code> entities. Make sure:</p>
-                        <ul style="margin: 0.5rem 0 0.5rem 1.5rem; color: var(--text-secondary);">
-                            <li>Your speakers are added as media_player entities in Home Assistant</li>
-                            <li>The speakers aren't disabled in Sonorium Settings</li>
-                            <li>Try clicking "Refresh Speakers" in Settings</li>
-                        </ul>
-                        <p style="margin-top: 0.5rem;">Speakers must support HTTP audio streaming (most Chromecast, Sonos, and DLNA devices do).</p>
-                    </div>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>What audio formats are supported?</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="faq-answer">
-                    <div class="faq-answer-content">
-                        <p>Sonorium supports the following formats:</p>
-                        <ul style="margin: 0.5rem 0 0.5rem 1.5rem; color: var(--text-secondary);">
-                            <li><strong>.mp3</strong> - Most compatible</li>
-                            <li><strong>.wav</strong> - Uncompressed audio</li>
-                            <li><strong>.flac</strong> - Lossless compression</li>
-                            <li><strong>.ogg</strong> - Open format</li>
-                        </ul>
-                        <p style="margin-top: 0.5rem;">For best results, use MP3 files at 128-320kbps. Longer, seamlessly looping tracks work best for ambient soundscapes.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Where do I put my audio files?</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="faq-answer">
-                    <div class="faq-answer-content">
-                        <p><strong>Home Assistant:</strong> Place audio files in <code>/media/sonorium/</code>. Create a subfolder for each theme (e.g., <code>/media/sonorium/Thunder/</code>).</p>
-                        <p style="margin-top: 0.5rem;"><strong>Windows App:</strong> Place audio files in the <code>themes</code> folder next to the Sonorium.exe. Create subfolders for each theme.</p>
-                        <p style="margin-top: 0.5rem;">You can also upload files directly through the Sonorium web interface by going to Themes and using drag-and-drop.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>What does "Presence" do in the Track Mixer?</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="faq-answer">
-                    <div class="faq-answer-content">
-                        <p>Presence controls how often a track appears in the mix (0-100%). At 100%, the track plays continuously. At lower values, the track fades in and out naturally over time.</p>
-                        <p style="margin-top: 0.5rem;">This is great for occasional sounds like thunder claps or bird calls—set presence to 20-40% so they appear periodically rather than constantly.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Can I use Sonorium with Sonos/Google Home/Alexa?</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="faq-answer">
-                    <div class="faq-answer-content">
-                        <p>Yes! Any speaker that appears as a <code>media_player</code> entity in Home Assistant and supports HTTP audio streaming will work. This includes:</p>
-                        <ul style="margin: 0.5rem 0 0.5rem 1.5rem; color: var(--text-secondary);">
-                            <li><strong>Sonos</strong> - Full support via Home Assistant integration</li>
-                            <li><strong>Google Home/Chromecast</strong> - Works great with cast devices</li>
-                            <li><strong>Amazon Echo</strong> - Requires additional setup (check HA docs)</li>
-                            <li><strong>DLNA/UPnP speakers</strong> - Most network speakers work</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Where can I get ambient audio files?</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="faq-answer">
-                    <div class="faq-answer-content">
-                        <p>Several options for finding quality ambient audio:</p>
-                        <ul style="margin: 0.5rem 0 0.5rem 1.5rem; color: var(--text-secondary);">
-                            <li><strong>Ambient Mixer Plugin</strong> - Import soundscapes directly from ambient-mixer.com</li>
-                            <li><strong>Freesound.org</strong> - Large library of free sound effects</li>
-                            <li><strong>YouTube Audio Library</strong> - Free ambient tracks</li>
-                            <li><strong>Record your own</strong> - Nature recordings, rain on windows, etc.</li>
-                        </ul>
-                        <p style="margin-top: 0.5rem;">Two themes (Sleigh Ride and Tavern) are included with Sonorium to get you started!</p>
-                    </div>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Is Sonorium really free?</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="faq-answer">
-                    <div class="faq-answer-content">
-                        <p>Yes! Sonorium is completely free and open source. It's a fork of the original <a href="https://github.com/fmtr/amniotic" target="_blank" style="color: var(--accent-primary);">Amniotic</a> project by fmtr, with significant new features added.</p>
-                        <p style="margin-top: 0.5rem;">The source code is available on <a href="https://github.com/synssins/sonorium" target="_blank" style="color: var(--accent-primary);">GitHub</a>. Contributions are welcome!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Who It's For Section -->
+    <!-- Who It's For -->
     <section class="audience" id="who-its-for">
         <div class="section-header">
             <h2>Who It's For</h2>
@@ -1324,158 +196,53 @@
         <div class="audience-content">
             <div class="audience-card">
                 <h3>Built from Personal Need</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                    Sonorium was created by someone who is AuDHD (autism + ADHD) and needs ambient sound to function. 
-                    Background audio quiets the part of the brain that's really good at distracting everything else.
-                </p>
+                <p class="intro">Sonorium was created by someone who is AuDHD (autism + ADHD) and needs ambient sound to function. Background audio quiets the part of the brain that's really good at distracting everything else.</p>
                 <ul class="audience-list">
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span><strong>ADHD & Focus:</strong> White noise and nature sounds help filter distracting sounds and improve concentration</span>
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span><strong>Misophonia:</strong> Ambient masking helps cover trigger sounds and reduce emotional responses</span>
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span><strong>Sensory Processing:</strong> Controlled ambient environments provide predictable, soothing auditory input</span>
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span><strong>Anxiety & Stress:</strong> Nature sounds activate the parasympathetic nervous system, promoting relaxation</span>
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span><strong>Sleep:</strong> Consistent ambient sound masks disruptive noises for better rest</span>
-                    </li>
-                    <li>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span><strong>Work & Study:</strong> The "coffee shop effect"—moderate ambient noise boosts creative thinking</span>
-                    </li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span><strong>ADHD & Focus:</strong> White noise and nature sounds help filter distractions</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Misophonia:</strong> Ambient masking covers trigger sounds</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Sensory Processing:</strong> Predictable, soothing auditory input</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Anxiety & Stress:</strong> Nature sounds promote relaxation</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Sleep:</strong> Mask disruptive noises for better rest</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Work & Study:</strong> The "coffee shop effect" boosts creativity</span></li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
+    <!-- CTA -->
     <section class="cta">
         <div class="cta-content">
             <h2>Ready to Get Started?</h2>
-            <p>Sonorium is free and open source. Install it as a Home Assistant addon or download the Windows app today.</p>
+            <p>Sonorium is free and open source. Install it today.</p>
             <div class="cta-buttons">
                 <a href="https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fsynssins%2Fsonorium" target="_blank" class="btn btn-ha btn-large">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                     Add to Home Assistant
                 </a>
                 <a href="#" id="cta-windows-btn" class="btn btn-windows btn-large" target="_blank">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                        <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
                     Download for Windows
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-logo">
                 <img src="images/icon.png" alt="Sonorium">
-                <span style="font-weight: 600;">Sonorium</span>
+                <span>Sonorium</span>
             </div>
             <div class="footer-links">
                 <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
-                <a href="https://github.com/synssins/sonorium/wiki" target="_blank">Documentation</a>
-                <a href="https://github.com/synssins/sonorium/issues" target="_blank">Report an Issue</a>
-                <a href="https://github.com/synssins/sonorium/releases" target="_blank">Releases</a>
+                <a href="docs.html">Docs</a>
+                <a href="faq.html">FAQ</a>
+                <a href="https://github.com/synssins/sonorium/issues" target="_blank">Issues</a>
             </div>
-            <div class="footer-credit">
-                Fork of <a href="https://github.com/fmtr/amniotic" target="_blank" style="color: var(--accent-primary);">Amniotic</a> by fmtr
-            </div>
+            <div class="footer-credit">Fork of <a href="https://github.com/fmtr/amniotic" target="_blank">Amniotic</a> by fmtr</div>
         </div>
     </footer>
 
-    <script>
-        // Tab switching
-        function showTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(tab + '-content').classList.add('active');
-        }
-
-        // FAQ accordion
-        function toggleFaq(element) {
-            const item = element.parentElement;
-            item.classList.toggle('open');
-        }
-
-        // Fetch addon version from config.yaml
-        async function fetchAddonVersion() {
-            try {
-                const response = await fetch('https://raw.githubusercontent.com/synssins/sonorium/main/sonorium_addon/config.yaml');
-                const text = await response.text();
-                const versionMatch = text.match(/version:\s*"?([^"\n]+)"?/);
-                if (versionMatch) {
-                    const version = 'v' + versionMatch[1];
-                    document.getElementById('addon-version').textContent = version;
-                    document.getElementById('addon-version-badge').textContent = version;
-                }
-            } catch (e) {
-                console.log('Could not fetch addon version');
-            }
-        }
-
-        // Fetch Windows app release from GitHub API
-        async function fetchAppRelease() {
-            try {
-                const response = await fetch('https://api.github.com/repos/synssins/sonorium/releases');
-                const releases = await response.json();
-                
-                // Find the latest release with a Windows exe
-                for (const release of releases) {
-                    const exeAsset = release.assets.find(a => a.name.endsWith('.exe') || a.name.includes('Sonorium') && a.name.endsWith('.zip'));
-                    if (exeAsset) {
-                        const version = release.tag_name || release.name;
-                        document.getElementById('app-version').textContent = version;
-                        document.getElementById('app-version-badge').textContent = version;
-                        document.getElementById('windows-download-btn').href = exeAsset.browser_download_url;
-                        document.getElementById('cta-windows-btn').href = exeAsset.browser_download_url;
-                        
-                        // Update note if it's an alpha/beta
-                        if (version.includes('alpha')) {
-                            document.getElementById('windows-note').textContent = 'Alpha release - experimental features';
-                        } else if (version.includes('beta')) {
-                            document.getElementById('windows-note').textContent = 'Beta release - nearly stable';
-                        } else {
-                            document.getElementById('windows-note').textContent = 'Stable release';
-                        }
-                        return;
-                    }
-                }
-                
-                // Fallback to releases page if no exe found
-                document.getElementById('windows-download-btn').href = 'https://github.com/synssins/sonorium/releases';
-                document.getElementById('cta-windows-btn').href = 'https://github.com/synssins/sonorium/releases';
-                document.getElementById('app-version').textContent = 'Latest';
-            } catch (e) {
-                console.log('Could not fetch app release');
-                document.getElementById('windows-download-btn').href = 'https://github.com/synssins/sonorium/releases';
-                document.getElementById('cta-windows-btn').href = 'https://github.com/synssins/sonorium/releases';
-                document.getElementById('app-version').textContent = 'See Releases';
-            }
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchAddonVersion();
-            fetchAppRelease();
-        });
-    </script>
+    <script src="version.js"></script>
 </body>
 </html>
