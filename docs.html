@@ -37,25 +37,24 @@
             <aside class="docs-sidebar">
                 <h3>Getting Started</h3>
                 <ul>
-                    <li><a href="getting-started.html">Installation</a></li>
                     <li><a href="#" onclick="loadPage('Home'); return false;" class="active">Overview</a></li>
+                    <li><a href="getting-started.html">HA Addon Install</a></li>
+                    <li><a href="#" onclick="loadPage('Standalone-App'); return false;">Windows App</a></li>
                 </ul>
-                
+
                 <h3>Features</h3>
                 <ul>
-                    <li><a href="#" onclick="loadPage('Channels'); return false;">Channels</a></li>
                     <li><a href="#" onclick="loadPage('Themes'); return false;">Themes</a></li>
-                    <li><a href="#" onclick="loadPage('Track-Mixer'); return false;">Track Mixer</a></li>
+                    <li><a href="#" onclick="loadPage('Track-Settings'); return false;">Track Settings</a></li>
                     <li><a href="#" onclick="loadPage('Presets'); return false;">Presets</a></li>
                     <li><a href="#" onclick="loadPage('Speakers'); return false;">Speakers</a></li>
                 </ul>
-                
+
                 <h3>Advanced</h3>
                 <ul>
-                    <li><a href="#" onclick="loadPage('Configuration'); return false;">Configuration</a></li>
-                    <li><a href="#" onclick="loadPage('API'); return false;">API Reference</a></li>
+                    <li><a href="#" onclick="loadPage('API-Reference'); return false;">API Reference</a></li>
                 </ul>
-                
+
                 <h3>Help</h3>
                 <ul>
                     <li><a href="faq.html">FAQ</a></li>
@@ -128,7 +127,45 @@ Share themes as zip files with the community.
 
 All standalone versions will support Chromecast, DLNA, and AirPlay streaming.`,
 
-            'Channels': `# Channels
+            
+            'Standalone-App': `# Standalone Windows App
+
+Download and run Sonorium without Home Assistant. Perfect for desktop ambient sound.
+
+## Download
+
+Get the latest release from [GitHub Releases](https://github.com/synssins/sonorium/releases).
+
+## Requirements
+
+- Windows 10 or 11
+- No installation required—single portable executable
+
+## Features
+
+- **Local Audio** — Plays through your default audio device
+- **Network Speakers** — Stream to DLNA, Sonos, and Arylic/Linkplay speakers
+- **Self-Updating** — Checks for updates automatically
+- **Portable** — Runs from any folder, no install needed
+
+## Quick Start
+
+1. Download \ from the releases page
+2. Run the executable (click "More info" → "Run anyway" if SmartScreen appears)
+3. Create a session, select a theme and speakers
+4. Click Play
+
+## Network Speakers
+
+The standalone app can stream to:
+- **Local Audio** — Your computer's speakers
+- **DLNA/UPnP** — Most network speakers
+- **Sonos** — Via SoCo library
+- **Arylic/Linkplay** — Via HTTP API
+
+Speakers are discovered automatically on your network.`,
+
+'Channels': `# Channels
 
 Channels are independent audio streams. Each channel plays one theme to one or more speakers.
 
@@ -183,7 +220,7 @@ Two starter themes are included:
 - **Sleigh Ride** — Winter ambience with sleigh bells and snow
 - **Tavern** — Medieval inn with fireplace and pub sounds`,
 
-            'Track-Mixer': `# Track Mixer
+            'Track-Settings': `# Track Mixer
 
 The Track Mixer lets you fine-tune how individual audio files play within a theme.
 
@@ -293,7 +330,7 @@ In Sonorium, go to **Settings** to configure:
 - **Master Gain** — Global output level
 - **Short File Threshold** — Files shorter than this use sparse mode`,
 
-            'API': `# API Reference
+            'API-Reference': `# API Reference
 
 Sonorium provides a REST API for automation.
 
