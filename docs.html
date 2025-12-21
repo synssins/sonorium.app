@@ -370,7 +370,265 @@ POST /api/themes/{id}/upload  # Upload audio
 GET /api/status    # System status
 \`\`\``,
 
-            'Troubleshooting': `# Troubleshooting
+            
+            'Requirements': `# Requirements & Caveats
+
+## Home Assistant Addon Requirements
+
+### Minimum Requirements
+- Home Assistant OS, Supervised, or Container installation
+- MQTT broker (Mosquitto addon recommended)
+- At least one media_player entity for audio output
+
+### Supported Architectures
+- **amd64** (x86-64)
+- **aarch64** (ARM64, Raspberry Pi 4/5)
+
+## Proxmox / Virtualization Users
+
+**IMPORTANT: If you run Home Assistant as a VM in Proxmox, you MUST set CPU type to "host".**
+
+Sonorium uses numpy for real-time audio processing. Numpy requires modern CPU instructions (AVX, SSE4) that are only available when the VM passes through host CPU features.
+
+### Symptoms of Incorrect Configuration
+\`\`\`
+Segmentation fault (core dumped)
+\`\`\`
+
+### The Fix
+1. Shut down your Home Assistant VM
+2. In Proxmox: VM → Hardware → Processor → Type → **host**
+3. Start the VM
+
+## Standalone Windows App Requirements
+- Windows 10 or later (64-bit)
+- No installation required (portable executable)
+
+## Audio File Requirements
+Supported: MP3, WAV, FLAC, OGG`,
+
+            'Home-Assistant-Integration': `# Home Assistant Integration
+
+Sonorium integrates with Home Assistant through MQTT Discovery, automatically creating entities that you can use in dashboards, automations, and scripts.
+
+## Overview
+
+When running as a Home Assistant addon, Sonorium publishes MQTT entities for each session you create:
+
+- Control playback from HA dashboards
+- Create automations (morning alarms, scheduled soundscapes)
+- Include Sonorium in scenes
+- Build custom Lovelace cards
+
+## Requirements
+
+- Home Assistant with MQTT integration configured
+- Sonorium addon installed and running
+- At least one session/channel created in Sonorium
+
+## How It Works
+
+1. **Create Sessions in Sonorium** - Use the web UI to create sessions
+2. **Entities Auto-Created** - Sonorium publishes MQTT discovery configs
+3. **Control from HA** - Use entities in dashboards and automations
+
+## Entity Naming
+
+Entity IDs are based on your session names:
+
+| Session Name | Entity Pattern |
+|--------------|----------------|
+| Bedroom | \`*.sonorium_bedroom_*\` |
+| Living Room | \`*.sonorium_living_room_*\` |
+
+## Next Steps
+
+- [MQTT Entities Reference](MQTT-Entities) - Complete list of all entities
+- [Dashboard Examples](Dashboard-Examples) - Lovelace card configurations
+- [Automation Examples](Automation-Examples) - Wake-up alarms and schedules`,
+
+            'MQTT-Entities': `# MQTT Entities Reference
+
+Sonorium publishes the following entities for each session via MQTT Discovery.
+
+## Entity Naming Convention
+
+All entities follow this pattern:
+\`\`\`
+{domain}.sonorium_{session_name}_{entity_type}
+\`\`\`
+
+**Example:** A session named "Master Bedroom" creates:
+- \`switch.sonorium_master_bedroom_play\`
+- \`select.sonorium_master_bedroom_theme\`
+- \`number.sonorium_master_bedroom_volume\`
+
+## Per-Session Entities
+
+### Play Switch
+\`switch.sonorium_{session}_play\` - Controls playback
+
+### Theme Select
+\`select.sonorium_{session}_theme\` - Select which theme to play
+
+### Preset Select
+\`select.sonorium_{session}_preset\` - Select a preset for current theme
+
+### Volume Number
+\`number.sonorium_{session}_volume\` - Adjust session volume (0-100%)
+
+### Status Sensor
+\`sensor.sonorium_{session}_status\` - Shows playback status
+
+## Global Entities
+
+- \`select.sonorium_session\` - Switch between sessions
+- \`switch.sonorium_global_play\` - Start/stop selected session
+- \`select.sonorium_global_theme\` - Theme for selected session
+- \`number.sonorium_volume\` - Volume for selected session
+- \`sensor.sonorium_global_active_sessions\` - Count of playing sessions
+- \`switch.sonorium_stop_all\` - Stop all sessions`,
+
+            'Dashboard-Examples': `# Dashboard Examples
+
+Lovelace card configurations for controlling Sonorium from your Home Assistant dashboard.
+
+## Basic Session Control Card
+
+\`\`\`yaml
+type: entities
+title: Bedroom Ambiance
+entities:
+  - entity: select.sonorium_bedroom_theme
+    name: Theme
+  - entity: select.sonorium_bedroom_preset
+    name: Preset
+  - entity: number.sonorium_bedroom_volume
+    name: Volume
+  - entity: switch.sonorium_bedroom_play
+    name: Play
+\`\`\`
+
+## Global Control Card
+
+\`\`\`yaml
+type: entities
+title: Sonorium
+entities:
+  - entity: select.sonorium_session
+    name: Session
+  - entity: switch.sonorium_global_play
+    name: Play
+  - entity: select.sonorium_global_theme
+    name: Theme
+  - entity: number.sonorium_volume
+    name: Volume
+  - entity: switch.sonorium_stop_all
+    name: Stop All
+\`\`\`
+
+## Multi-Room Overview
+
+\`\`\`yaml
+type: glance
+title: Ambient Sound
+entities:
+  - entity: switch.sonorium_bedroom_play
+    name: Bedroom
+  - entity: switch.sonorium_office_play
+    name: Office
+  - entity: switch.sonorium_living_room_play
+    name: Living Room
+\`\`\`
+
+## Tips
+
+### Finding Your Entity Names
+1. Go to **Developer Tools > States**
+2. Filter by "sonorium"
+3. Note the exact entity IDs for your sessions`,
+
+            'Automation-Examples': `# Automation Examples
+
+Home Assistant automations for Sonorium.
+
+## Morning Wake-Up Alarm
+
+Wake up to ambient sounds at a specific time.
+
+\`\`\`yaml
+alias: "Morning Wake-Up"
+trigger:
+  - platform: time
+    at: "07:00:00"
+action:
+  - service: select.select_option
+    target:
+      entity_id: select.sonorium_bedroom_theme
+    data:
+      option: "Primeval Forest"
+  - delay:
+      seconds: 1
+  - service: number.set_value
+    target:
+      entity_id: number.sonorium_bedroom_volume
+    data:
+      value: 30
+  - service: switch.turn_on
+    target:
+      entity_id: switch.sonorium_bedroom_play
+\`\`\`
+
+## Sleep Timer
+
+Stop playback after falling asleep.
+
+\`\`\`yaml
+alias: "Sleep Timer - 1 Hour"
+trigger:
+  - platform: state
+    entity_id: input_boolean.sleep_timer
+    to: "on"
+action:
+  - delay:
+      hours: 1
+  - service: switch.turn_on
+    target:
+      entity_id: switch.sonorium_stop_all
+\`\`\`
+
+## Work Focus Hours
+
+Play focus sounds during work.
+
+\`\`\`yaml
+alias: "Work Focus Ambiance"
+trigger:
+  - platform: time
+    at: "09:00:00"
+condition:
+  - condition: time
+    weekday: [mon, tue, wed, thu, fri]
+action:
+  - service: select.select_option
+    target:
+      entity_id: select.sonorium_office_theme
+    data:
+      option: "Tavern"
+  - delay:
+      seconds: 1
+  - service: switch.turn_on
+    target:
+      entity_id: switch.sonorium_office_play
+\`\`\`
+
+## Tips
+
+- Theme names are case-sensitive
+- Always add 1-second delay after theme selection before starting playback
+- Use Developer Tools > States to find exact entity IDs`,
+
+'Troubleshooting': `# Troubleshooting
 
 ## No Sound
 
