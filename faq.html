@@ -125,11 +125,14 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>A group is a folder inside a theme. Groups replace the old per-track "Exclusive" switch.</p>
+                <p>A group is a folder inside a theme. Each group has a Mode: <strong>Intermittent</strong> (the default), <strong>Merry-go-round</strong> or <strong>Intrusion</strong>. Groups replace the old per-track "Exclusive" switch.</p>
                 <ul>
-                    <li><strong>Take turns:</strong> a group is a folder of tracks where only one plays at a time, never overlapping. Use it for sounds that shouldn't pile up, like thunder cracks or songs from one musician.</li>
+                    <li><strong>Take turns:</strong> a group is a folder of tracks. In an Intermittent group only one plays at a time, never overlapping. Use it for sounds that shouldn't pile up, like thunder cracks or songs from one musician.</li>
+                    <li><strong>Group mode:</strong> Intermittent plays one track at a time with a gap; Merry-go-round makes a continuous bed.</li>
                     <li><strong>Gap:</strong> after a track finishes, the group waits a random time in this range (minutes) before the next one starts. Different groups don't wait for each other.</li>
-                    <li><strong>Intermittent only:</strong> on its turn, a track plays its whole file once, start to finish, then hands over. Background and Ebb &amp; Flow are for the ambience outside groups.</li>
+                    <li><strong>Intermittent group:</strong> on its turn, a track plays its whole file once, start to finish, then hands over. Background and Ebb &amp; Flow are for the ambience outside groups.</li>
+                    <li><strong>Merry-go-round:</strong> one file plays, then crossfades into another picked at random, never the same one twice in a row. Crossfade sets the overlap. One file crossfades into itself. Use 3 or more files of the same scene for a bed that never repeats the same way.</li>
+                    <li><strong>Intrusion group:</strong> a group in Intrusion mode, marked 🔗. Its tracks keep their own mode and settings, and it can hold files linked from other themes.</li>
                     <li><strong>Weight:</strong> each time a track plays, it gets heavier and is less likely to be picked next. The weight wears off as other tracks play. The same track never plays twice in a row.</li>
                     <li><strong>Interval:</strong> how fast a track's weight wears off. Higher comes back sooner; lower plays less often.</li>
                     <li><strong>Deleting a group:</strong> keeps its files; they move back into the theme.</li>
@@ -139,11 +142,39 @@
 
         <div class="faq-item">
             <div class="faq-question" onclick="toggleFaq(this)">
+                <span>How do I blend two themes?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-content">
+                <p>Use an intrusion. It brings files from another theme into this one without copying them, and a preset turns them on.</p>
+                <ul>
+                    <li>In the Theme Editor, add a group and set its Mode to <strong>Intrusion</strong>.</li>
+                    <li>Open the group's <strong>⋯</strong> menu and pick <strong>Add from another theme</strong>. Pick a theme, preview its files, tick the ones you want and click <strong>Add</strong>.</li>
+                    <li>Linked files start muted. Make a preset that turns them on, and turns off what they replace, then click <strong>Save Theme</strong>.</li>
+                </ul>
+                <p>Example: a Campsite theme links rain from a Rainy Day theme. Its "Rain" preset turns the rain on and mutes the crickets. Pick it on a channel and the rain fades in while the crickets fade out.</p>
+                <p>A preset that turns intrusion tracks on shows ⚭ (after the ★ of the default preset). A linked file whose source is gone shows <strong>Missing</strong>. Moving a linked file to a normal group asks first, then copies it in, and exports copy linked files in.</p>
+            </div></div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Why does my theme go quiet between loops?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-content">
+                <p>Some recordings fade in at the start and fade out at the end. Looped, the sound drops each time the file ends.</p>
+                <p>Put the file in a group, set the group's Mode to <strong>Merry-go-round</strong>, and set its <strong>Crossfade</strong> at least as long as the file's fade. A single file crossfades into itself, so the next pass is already playing while this one fades. With 3 or more recordings of the same scene, the bed never repeats the same way.</p>
+            </div></div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
                 <span>Can two channels play the same theme with different presets?</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>Yes. Each channel keeps its own preset, so changing the preset on one channel doesn't change the other.</p>
+                <p>Yes. Each channel keeps its own preset, so changing the preset on one channel doesn't change the other. Tracks a preset turns on or off fade in or out over 3 seconds.</p>
             </div></div>
         </div>
 

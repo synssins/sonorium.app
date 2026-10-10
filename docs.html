@@ -127,10 +127,10 @@ Organize audio into themes that automatically blend together. Thunder, rain, win
 Fine-tune individual tracks with volume, interval, and playback mode.
 
 ### Groups
-A group is a folder inside a theme. Its tracks take turns, one at a time, never overlapping.
+A group is a folder inside a theme. Its Mode sets how it plays: Intermittent plays one track at a time with a gap; Merry-go-round makes a continuous bed. An Intrusion group is a layer a preset turns on, and it can hold files linked from other themes.
 
 ### Presets
-Save your favorite track configurations as presets for quick recall. Each channel keeps its own preset.
+Save your favorite track configurations as presets for quick recall. Each channel keeps its own preset. Tracks a preset turns on or off fade in or out over 3 seconds.
 
 ### Export & Import
 Package themes as zip files to share with others.
@@ -202,16 +202,39 @@ Create a folder in your themes directory with audio files inside:
 
 ## Groups
 
-A group is a folder inside the theme.
+A group is a folder inside the theme. Each group has a **Mode**, picked in the group's row in the Theme Editor:
 
-- **Take turns:** a group is a folder of tracks where only one plays at a time, never overlapping. Use it for sounds that shouldn't pile up, like thunder cracks or songs from one musician.
+- **Intermittent** (the default): one track at a time, with a gap between them.
+- **Merry-go-round:** a continuous bed. Each file crossfades into the next.
+- **Intrusion:** a layer a preset turns on, like rain over a campsite. It can hold files linked from other themes.
+
+- **Take turns:** a group is a folder of tracks. In an Intermittent group only one plays at a time, never overlapping. Use it for sounds that shouldn't pile up, like thunder cracks or songs from one musician.
+- **Group mode:** Intermittent plays one track at a time with a gap; Merry-go-round makes a continuous bed.
 - **Gap:** after a track finishes, the group waits a random time in this range (minutes) before the next one starts. Different groups don't wait for each other.
-- **Intermittent only:** on its turn, a track plays its whole file once, start to finish, then hands over. Background and Ebb & Flow are for the ambience outside groups.
+- **Intermittent group:** on its turn, a track plays its whole file once, start to finish, then hands over. Background and Ebb & Flow are for the ambience outside groups.
+- **Merry-go-round:** one file plays, then crossfades into another picked at random, never the same one twice in a row. Crossfade sets the overlap. One file crossfades into itself. Use 3 or more files of the same scene for a bed that never repeats the same way.
 - **Weight:** each time a track plays, it gets heavier and is less likely to be picked next. The weight wears off as other tracks play. The same track never plays twice in a row.
 - **Interval:** how fast a track's weight wears off. Higher comes back sooner; lower plays less often.
 - **Deleting a group:** keeps its files; they move back into the theme.
 
 Groups replace the old per-track Exclusive switch.
+
+**Tip:** for a Merry-go-round, use 3 or more recordings of the same scene. A recording that fades in and out on its own needs a Crossfade at least as long as its fade.
+
+## Intrusions
+
+- **Intrusion group:** a group in Intrusion mode, marked 🔗. Its tracks keep their own mode and settings, and it can hold files linked from other themes.
+- **Linked file:** plays here but stays in its own theme. Add one with the group's ⋯ › Add from another theme. New links start muted. If the file is gone, it shows Missing.
+- **Presets:** turn intrusion tracks on and other tracks off, like rain that mutes the crickets. A preset that turns intrusion tracks on shows ⚭.
+
+To add files from another theme, set a group's Mode to Intrusion, open its **⋯** menu and pick **Add from another theme**. Pick a theme, preview its files, tick the ones you want and click **Add**. Linked files start muted; make a preset that turns them on.
+
+**Example:** a Campsite theme links rain from a Rainy Day theme. Its "Rain" preset turns the rain on and mutes the crickets.
+
+- A linked file whose source is gone shows **Missing**.
+- **Remove link** in the track's ⋯ menu removes it from this theme. The other theme's file stays.
+- Moving a linked file to a normal group asks first, then copies the file into this theme.
+- Exports copy linked files in, so a shared theme is complete.
             `,
             'Track-Mixer': `
 # Track Mixer
@@ -256,6 +279,15 @@ Select a preset from:
 - The presets area in the Theme Editor
 
 Each channel keeps its own preset. Two channels on one theme can use different presets.
+
+When a preset turns a track on or off, the track fades in or out over 3 seconds.
+
+## Preset Marks
+
+- **★** marks the default preset.
+- **⚭** marks a preset that turns intrusion tracks on.
+
+A preset with both shows ★ first, then ⚭. The marks show in the Theme Editor, on the channel cards and in the channel's Edit dialog.
 
 ## Preset Data
 
