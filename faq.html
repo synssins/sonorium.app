@@ -65,7 +65,7 @@
                 <ul>
                     <li>Verify speakers are set up as media_player entities in HA</li>
                     <li>Check they aren't disabled in Sonorium Settings</li>
-                    <li>Try "Refresh Speakers" in Settings</li>
+                    <li>Try <strong>Refresh from HA</strong> (or <strong>Rescan network</strong>) on Settings → Speakers</li>
                 </ul>
                 <p>Speakers must support HTTP audio streaming (Chromecast, Sonos, DLNA work great).</p>
             </div></div>
@@ -89,17 +89,17 @@
 
         <div class="faq-item">
             <div class="faq-question" onclick="toggleFaq(this)">
-                <span>What does "Presence" do?</span>
+                <span>What does "Interval" do?</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>Presence controls how often a track appears in the mix (0-100%):</p>
+                <p>Interval controls how often a track is heard in the mix (0-100%). Before 1.5.0 it was called Presence or "How often".</p>
                 <ul>
-                    <li><strong>100%:</strong> Always playing</li>
-                    <li><strong>50%:</strong> Fades in and out naturally</li>
-                    <li><strong>20%:</strong> Occasional appearances</li>
+                    <li><strong>Intermittent:</strong> Interval sets the wait between plays</li>
+                    <li><strong>Ebb &amp; Flow:</strong> Interval sets how much of the time it's heard</li>
+                    <li><strong>In a group:</strong> Interval sets how fast a track's weight wears off</li>
                 </ul>
-                <p>Great for occasional sounds like thunder or bird calls—set to 20-40% so they appear naturally.</p>
+                <p>For occasional sounds like thunder or bird calls, try 20-40%.</p>
             </div></div>
         </div>
 
@@ -110,12 +110,40 @@
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
                 <ul>
-                    <li><strong>Auto:</strong> Best mode based on file length</li>
-                    <li><strong>Continuous:</strong> Loop with seamless crossfade</li>
-                    <li><strong>Sparse:</strong> Play once, wait 30-300s, repeat</li>
-                    <li><strong>Gapless:</strong> Loop without crossfade</li>
-                    <li><strong>Presence:</strong> Fade based on presence setting</li>
+                    <li><strong>Background:</strong> plays all the time, looping smoothly. Rain, wind, a fire.</li>
+                    <li><strong>Intermittent:</strong> plays once, then goes quiet before playing again. <em>Interval</em> sets the wait. In a group, the group decides when it plays. Bird calls, a thunder crack, a door.</li>
+                    <li><strong>Ebb &amp; Flow:</strong> fades in, plays a while, fades out, then stays quiet before coming back. <em>Interval</em> sets how much of the time it's heard. Distant traffic, a passing crowd.</li>
+                    <li><strong>Auto:</strong> picks for you. Under 15 seconds plays Intermittent, longer plays Ebb &amp; Flow. At 100% <em>interval</em>, either plays as Background.</li>
                 </ul>
+                <p>Before 1.5.0, Background was Continuous, Intermittent was Sparse, and Ebb &amp; Flow was Presence. <strong>Gapless</strong> loops a Background track without crossfade.</p>
+            </div></div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>What is a group?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-content">
+                <p>A group is a folder inside a theme. Groups replace the old per-track "Exclusive" switch.</p>
+                <ul>
+                    <li><strong>Take turns:</strong> a group is a folder of tracks where only one plays at a time, never overlapping. Use it for sounds that shouldn't pile up, like thunder cracks or songs from one musician.</li>
+                    <li><strong>Gap:</strong> after a track finishes, the group waits a random time in this range (minutes) before the next one starts. Different groups don't wait for each other.</li>
+                    <li><strong>Intermittent only:</strong> on its turn, a track plays its whole file once, start to finish, then hands over. Background and Ebb &amp; Flow are for the ambience outside groups.</li>
+                    <li><strong>Weight:</strong> each time a track plays, it gets heavier and is less likely to be picked next. The weight wears off as other tracks play. The same track never plays twice in a row.</li>
+                    <li><strong>Interval:</strong> how fast a track's weight wears off. Higher comes back sooner; lower plays less often.</li>
+                    <li><strong>Deleting a group:</strong> keeps its files; they move back into the theme.</li>
+                </ul>
+            </div></div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Can two channels play the same theme with different presets?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-content">
+                <p>Yes. Each channel keeps its own preset, so changing the preset on one channel doesn't change the other.</p>
             </div></div>
         </div>
 
@@ -143,7 +171,7 @@
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
                 <ul>
-                    <li><strong>Included themes:</strong> Sleigh Ride and Tavern come with Sonorium</li>
+                    <li><strong>Included themes:</strong> Sleigh Ride, Tavern and "A Rainy Day... Or is it?" come with Sonorium</li>
                     <li><strong>Freesound.org:</strong> Large free sound library</li>
                     <li><strong>Ambient-Mixer.com:</strong> Downloadable ambient soundscapes</li>
                     <li><strong>YouTube Audio Library:</strong> Free ambient tracks</li>
@@ -190,6 +218,7 @@
                     <li><a href="https://github.com/synssins/sonorium/issues/new" target="_blank" style="color: var(--accent-primary);">Request a Feature</a></li>
                 </ul>
                 <p>Include your setup details, steps to reproduce, and any error logs.</p>
+                <p>The Sonorium version and install type (Home Assistant app or Docker) are shown at the bottom left of the menu. On a phone, open the menu with the button in the top bar.</p>
             </div></div>
         </div>
     </div>

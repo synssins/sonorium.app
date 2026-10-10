@@ -124,10 +124,13 @@ Run up to 10 independent audio channels simultaneously. Each channel can play a 
 Organize audio into themes that automatically blend together. Thunder, rain, wind—they all mix seamlessly in real-time.
 
 ### Track Mixer
-Fine-tune individual tracks with volume, presence, and playback controls.
+Fine-tune individual tracks with volume, interval, and playback mode.
+
+### Groups
+A group is a folder inside a theme. Its tracks take turns, one at a time, never overlapping.
 
 ### Presets
-Save your favorite track configurations as presets for quick recall.
+Save your favorite track configurations as presets for quick recall. Each channel keeps its own preset.
 
 ### Export & Import
 Package themes as zip files to share with others.
@@ -138,6 +141,8 @@ If you run into issues:
 1. Check the [FAQ](faq.html)
 2. Search [GitHub Issues](https://github.com/synssins/sonorium/issues)
 3. Open a new issue if needed
+
+The Sonorium version and install type (Home Assistant app or Docker) are shown at the bottom left of the menu. On a phone, open the menu with the button in the top bar. Include them when you report a problem.
             `,
             'Channels': `
 # Channels
@@ -155,7 +160,7 @@ Channels are independent audio streams in Sonorium. Each channel can play a diff
 ## Channel Settings
 
 - **Theme**: The soundscape to play
-- **Preset**: Quick-select a saved track configuration
+- **Preset**: Quick-select a saved track configuration. Each channel keeps its own preset, so two channels on one theme can use different presets.
 - **Speakers**: Target speakers for this channel
 - **Volume**: Channel-specific volume control
 
@@ -172,9 +177,10 @@ Themes are collections of audio files that blend together to create an ambient s
 
 ### In the App
 1. Go to **Themes**
-2. Click **"Create Theme"**
-3. Name your theme
+2. Click **Create theme**
+3. Name your theme; it opens in the Theme Editor
 4. Drag and drop audio files to upload
+5. Click **Save Theme**
 
 ### Via File System
 Create a folder in your themes directory with audio files inside:
@@ -193,57 +199,72 @@ Create a folder in your themes directory with audio files inside:
 - **Categories**: Organize themes into groups
 - **Icons**: Visual identification
 - **Export/Import**: Share themes as zip files
+
+## Groups
+
+A group is a folder inside the theme.
+
+- **Take turns:** a group is a folder of tracks where only one plays at a time, never overlapping. Use it for sounds that shouldn't pile up, like thunder cracks or songs from one musician.
+- **Gap:** after a track finishes, the group waits a random time in this range (minutes) before the next one starts. Different groups don't wait for each other.
+- **Intermittent only:** on its turn, a track plays its whole file once, start to finish, then hands over. Background and Ebb & Flow are for the ambience outside groups.
+- **Weight:** each time a track plays, it gets heavier and is less likely to be picked next. The weight wears off as other tracks play. The same track never plays twice in a row.
+- **Interval:** how fast a track's weight wears off. Higher comes back sooner; lower plays less often.
+- **Deleting a group:** keeps its files; they move back into the theme.
+
+Groups replace the old per-track Exclusive switch.
             `,
             'Track-Mixer': `
 # Track Mixer
 
-The Track Mixer lets you fine-tune how individual audio files play within a theme.
+The Theme Editor lets you fine-tune how individual audio files play within a theme. Each track has a **mode**, a **volume** and an **interval**.
 
 ## Controls
 
 ### Volume
 Adjust the amplitude of each track independently.
 
-### Presence
-Controls how often a track appears in the mix (0-100%):
-- **100%**: Always playing
-- **50%**: Fades in and out
-- **20%**: Occasional appearances
+### Interval
+How often a track is heard in the mix (0-100%). Before 1.5.0 this was called Presence.
 
 ### Playback Mode
-- **Auto**: Best mode based on file length
-- **Continuous**: Loop with crossfade
-- **Sparse**: Play once, wait, repeat
-- **Gapless**: Loop without crossfade
-- **Presence**: Fade based on presence setting
+- **Background:** plays all the time, looping smoothly. Rain, wind, a fire.
+- **Intermittent:** plays once, then goes quiet before playing again. *Interval* sets the wait. In a group, the group decides when it plays. Bird calls, a thunder crack, a door.
+- **Ebb & Flow:** fades in, plays a while, fades out, then stays quiet before coming back. *Interval* sets how much of the time it's heard. Distant traffic, a passing crowd.
+- **Auto:** picks for you. Under 15 seconds plays Intermittent, longer plays Ebb & Flow. At 100% *interval*, either plays as Background.
 
-### Enable/Disable
-Toggle individual tracks on or off without removing them.
+**Gapless** loops a Background track without crossfade.
+
+### Mute
+Turn individual tracks off without removing them.
             `,
             'Presets': `
 # Presets
 
-Presets save your track mixer settings for quick recall.
+Presets save your track settings for quick recall.
 
 ## Creating Presets
 
-1. Configure the track mixer how you like it
-2. Click **"Save Preset"**
+1. Set up the mix in the Theme Editor
+2. Click **New** in the presets area at the bottom
 3. Name your preset
+4. Click **Save Theme**
 
 ## Using Presets
 
 Select a preset from:
 - The channel card dropdown
-- The Presets section in track mixer
+- The presets area in the Theme Editor
+
+Each channel keeps its own preset. Two channels on one theme can use different presets.
 
 ## Preset Data
 
 Presets store:
 - Track volumes
-- Presence settings
+- Interval settings
 - Playback modes
-- Enabled/disabled states
+- Mute states
+- Group settings
 
 ## Sharing Presets
 
