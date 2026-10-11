@@ -98,7 +98,7 @@
                 <ul>
                     <li><strong>Intermittent:</strong> <em>Interval</em> sets the wait between plays. For occasional sounds like thunder or bird calls, try 20-40%.</li>
                     <li><strong>In an Intermittent group:</strong> how fast a track's weight wears off. Higher comes back sooner; lower plays less often.</li>
-                    <li><strong>Ebb &amp; Flow:</strong> <em>Duration</em> sets how long each rise and fall takes, from shorter to longer. Before 1.6.1 this slider was called Interval.</li>
+                    <li><strong>Ebb &amp; Flow:</strong> Duration increases or decreases the amount of time the track is at a value, while the Rise increases or decreases the speed at which the track reaches that value. Before 1.6.1 the Duration slider was called Interval.</li>
                 </ul>
             </div></div>
         </div>
@@ -112,9 +112,9 @@
                 <ul>
                     <li><strong>Background:</strong> plays all the time, looping smoothly. Rain, wind, a fire.</li>
                     <li><strong>Intermittent:</strong> plays once, then goes quiet before playing again. <em>Interval</em> sets the wait. In a group, the group decides when it plays. Bird calls, a thunder crack, a door.</li>
-                    <li><strong>Ebb &amp; Flow:</strong> always heard, but never at one level: it rises and falls between the two knobs of its Volume slider, gliding from one level to the next, never the same way twice. <em>Duration</em> sets how long each rise and fall takes, from shorter to longer. Wind, surf, rain that gusts.</li>
-                    <li><strong>Rise:</strong> in an Ebb &amp; Flow track's ⋯ menu: how fast it rises. Gradual rises as smoothly as it falls. Sudden jumps up quickly and eases back down, like gusts of wind or waves on rocks. A group can set the same Rise for every file.</li>
-                    <li><strong>Pause between plays:</strong> in an Ebb &amp; Flow track's ⋯ menu. Off, the file loops and is always heard, rising and falling. On, it plays once from start to finish, still rising and falling, fades out at its end, then pauses before it comes back. Rain on a tin roof that comes and goes.</li>
+                    <li><strong>Ebb &amp; Flow:</strong> Tracks can be configured with a minimum and maximum volume, and will automatically move to any value between those two limits randomly for a period of time. This interval is controlled by the Duration and Rise sliders. Duration increases or decreases the amount of time the track is at a value, while the Rise increases or decreases the speed at which the track reaches that value. Wind, surf, rain that gusts.</li>
+                    <li><strong>Rise:</strong> in an Ebb &amp; Flow track's ⋯ menu, from Gradual to Sudden. A group can set the same Rise for every file.</li>
+                    <li><strong>Pause between plays:</strong> in an Ebb &amp; Flow track's ⋯ menu. Off, the file loops and is always heard. On, it plays once from start to finish, fades out at its end, then pauses before it comes back. Rain on a tin roof that comes and goes.</li>
                     <li><strong>Unassigned:</strong> uploads and files added from another theme start here. Nothing here plays. Pick each file's Mode, or drag it into a section or a group.</li>
                 </ul>
                 <p>Before 1.5.0, Background was Continuous, Intermittent was Sparse, and Ebb &amp; Flow was Presence. <strong>Auto</strong> is retired in 1.6.1: each Auto track became the mode it was playing as. <strong>Gapless</strong> loops a Background track without crossfade.</p>
@@ -131,11 +131,11 @@
                 <ul>
                     <li><strong>Groups:</strong> a group belongs to its section and plays that section's way: Background groups are Merry-go-round, Intermittent groups take turns, Ebb &amp; Flow groups play every file at once. Make one with the section's New group.</li>
                     <li><strong>Take turns:</strong> a group is a folder of tracks. In an Intermittent group only one plays at a time, never overlapping. Use it for sounds that shouldn't pile up, like thunder cracks or songs from one musician.</li>
-                    <li><strong>Group mode:</strong> Intermittent plays one track at a time with a gap; Merry-go-round makes a continuous bed; Ebb &amp; Flow plays every file at once, each rising and falling.</li>
+                    <li><strong>Group mode:</strong> Intermittent plays one track at a time with a gap; Merry-go-round makes a continuous bed; Ebb &amp; Flow plays every file at once.</li>
                     <li><strong>Gap:</strong> after a track finishes, the group waits a random time in this range (minutes) before the next one starts. Different groups don't wait for each other.</li>
                     <li><strong>Intermittent group:</strong> on its turn, a track plays its whole file once, start to finish, then hands over. Background and Ebb &amp; Flow are for the ambience outside Intermittent groups.</li>
                     <li><strong>Merry-go-round:</strong> one file plays, then crossfades into another picked at random, never the same one twice in a row. Crossfade sets the overlap. One file crossfades into itself. Use 3 or more files of the same scene for a bed that never repeats the same way.</li>
-                    <li><strong>Ebb &amp; Flow group:</strong> every file plays at once, each rising and falling on its own. Each file keeps its own settings; the group's Volume and <em>Duration</em> scale them down. With the group's Pause between plays on, every file pauses between plays, at staggered times, so at least one is always playing. Off, each file follows its own Pause between plays.</li>
+                    <li><strong>Ebb &amp; Flow group:</strong> every file plays at once, each between its own minimum and maximum volume. Each file keeps its own settings; the group's Volume and <em>Duration</em> scale them down. With the group's Pause between plays on, every file pauses between plays, at staggered times, so at least one is always playing. Off, each file follows its own Pause between plays.</li>
                     <li><strong>Weight:</strong> each time a track plays, it gets heavier and is less likely to be picked next. The weight wears off as other tracks play. The same track never plays twice in a row.</li>
                     <li><strong>Interval:</strong> how fast a track's weight wears off. Higher comes back sooner; lower plays less often.</li>
                     <li><strong>Deleting a group:</strong> keeps its files; they move back into its section.</li>
