@@ -46,6 +46,7 @@
                 <ul>
                     <li><a href="#" onclick="loadPage('Home')" class="active">Overview</a></li>
                     <li><a href="getting-started.html">HA Addon Install</a></li>
+                    <li><a href="getting-started.html#docker">Docker Install</a></li>
                     <li><a href="#" onclick="loadPage('Standalone-App')">Windows App</a></li>
                     <li><a href="#" onclick="loadPage('Requirements')">Requirements</a></li>
                 </ul>
@@ -55,6 +56,7 @@
                     <li><a href="#" onclick="loadPage('Themes')">Themes</a></li>
                     <li><a href="#" onclick="loadPage('Track-Settings')">Track Settings</a></li>
                     <li><a href="#" onclick="loadPage('Presets')">Presets</a></li>
+                    <li><a href="#" onclick="loadPage('Sequences-and-Playlists')">Sequences &amp; Playlists</a></li>
                     <li><a href="#" onclick="loadPage('Speakers')">Speakers</a></li>
                 </ul>
 
@@ -107,7 +109,7 @@
             'Home': `
 # Sonorium Documentation
 
-Welcome to the Sonorium documentation. Sonorium is a multi-zone ambient soundscape mixer for Home Assistant and Windows.
+Welcome to the Sonorium documentation. Sonorium is a multi-zone ambient soundscape mixer for Home Assistant, Docker and Windows.
 
 ## Quick Links
 
@@ -118,19 +120,22 @@ Welcome to the Sonorium documentation. Sonorium is a multi-zone ambient soundsca
 ## Features Overview
 
 ### Multi-Channel Audio
-Run up to 10 independent audio channels simultaneously. Each channel can play a different theme to different speakers.
+Run up to 10 independent audio channels simultaneously. Each channel can play a different theme, or a playlist, to different speakers.
 
 ### Theme-Based Mixing
 Organize audio into themes that automatically blend together. Thunder, rain, wind—they all mix seamlessly in real-time.
 
 ### Track Mixer
-Fine-tune individual tracks with volume, interval, and playback mode.
+Tracks sit in sections by how they play: Unassigned, Background, Intermittent and Ebb & Flow, each with its own volume and interval or duration.
 
 ### Groups
-A group is a folder inside a theme. Its Mode sets how it plays: Intermittent plays one track at a time with a gap; Merry-go-round makes a continuous bed. An Intrusion group is a layer a preset turns on, and it can hold files linked from other themes.
+A group belongs to its section and plays that section's way: Background groups are Merry-go-round, Intermittent groups take turns, Ebb & Flow groups play every file at once.
 
 ### Presets
-Save your favorite track configurations as presets for quick recall. Each channel keeps its own preset. Tracks a preset turns on or off fade in or out over 3 seconds.
+Save your favorite track configurations as presets for quick recall. Each channel keeps its own preset. Picking a preset glides the mix to it over 3 seconds.
+
+### Sequences and Playlists
+A sequence walks through a theme's presets, gliding from one to the next. A playlist plays themes one after another on a channel.
 
 ### Export & Import
 Package themes as zip files to share with others.
@@ -147,22 +152,29 @@ The Sonorium version and install type (Home Assistant app or Docker) are shown a
             'Channels': `
 # Channels
 
-Channels are independent audio streams in Sonorium. Each channel can play a different theme to different speakers.
+Channels are independent audio streams in Sonorium. Each channel can play a different theme, or a playlist, to different speakers.
+
+![Channels](https://raw.githubusercontent.com/synssins/sonorium/main/screenshots/Channels.png)
 
 ## Creating a Channel
 
-1. Click **"New Channel"** on the Channels page
-2. Give your channel a name
+1. Click **New Channel** on the Channels page
+2. Give your channel a name (or leave it empty and Sonorium names it)
 3. Select a theme
 4. Choose one or more speakers
 5. Click **Play**
 
-## Channel Settings
+## Each Channel
 
-- **Theme**: The soundscape to play
-- **Preset**: Quick-select a saved track configuration. Each channel keeps its own preset, so two channels on one theme can use different presets.
-- **Speakers**: Target speakers for this channel
-- **Volume**: Channel-specific volume control
+Every channel is a block of the same size: its theme's icon, name and speakers at the top, with Edit (✎) and ⋯ (Delete and more).
+
+- **Theme or playlist:** the two buttons right of the fields. The palette plays a theme (Theme and Preset); the playlist icon plays a playlist (Playlist and Playing).
+- **Preset:** a saved mix of the theme's tracks. The theme's sequences are listed after its presets. Each channel keeps its own preset.
+- **Now:** the line under the fields: the sequence step or playlist entry playing and when the next one starts. **Next** skips ahead.
+- **Speaker button:** left of the Volume slider. Mutes the speakers: the sound sent to them goes silent, on any kind of speaker. Red while muted.
+- **Headphones button:** plays the channel on the device you're using, with its own volume slider, even while the speakers are stopped.
+- **Play / Stop:** starts or stops the channel on its speakers. Stop is red.
+- **Recent changes:** the channel's latest changes with their times.
 
 ## Broadcast Model
 
@@ -179,8 +191,9 @@ Themes are collections of audio files that blend together to create an ambient s
 1. Go to **Themes**
 2. Click **Create theme**
 3. Name your theme; it opens in the Theme Editor
-4. Drag and drop audio files to upload
-5. Click **Save Theme**
+4. Upload audio files; they land in **Unassigned**
+5. Pick each file's Mode, or drag it into a section
+6. Click **Save Theme**
 
 ### Via File System
 Create a folder in your themes directory with audio files inside:
@@ -200,60 +213,33 @@ Create a folder in your themes directory with audio files inside:
 - **Icons**: Visual identification
 - **Export/Import**: Share themes as zip files
 
-## Groups
+## Sections
 
-A group is a folder inside the theme. Each group has a **Mode**, picked in the group's row in the Theme Editor:
+- **Sections:** tracks sit in sections by how they play: Background, Intermittent and Ebb & Flow. Every section is always there, even empty. Change a track's Mode, or drag it to another section or into a group in one, and it moves there and plays that way. A track in a group plays its group's way: drag it out to change it.
+- **Unassigned:** uploads and files added from another theme start here. Nothing here plays. Pick each file's Mode, or drag it into a section or a group.
+- **Groups:** a group belongs to its section and plays that section's way: Background groups are Merry-go-round, Intermittent groups take turns, Ebb & Flow groups play every file at once. Make one with the section's New group.
+- **Files from another theme:** a linked file goes anywhere your own files can. A preset that turns one on shows ⚭.
 
-- **Intermittent** (the default): one track at a time, with a gap between them.
-- **Merry-go-round:** a continuous bed. Each file crossfades into the next.
-- **Intrusion:** a layer a preset turns on, like rain over a campsite. It can hold files linked from other themes.
+## Files from Another Theme
 
-- **Take turns:** a group is a folder of tracks. In an Intermittent group only one plays at a time, never overlapping. Use it for sounds that shouldn't pile up, like thunder cracks or songs from one musician.
-- **Group mode:** Intermittent plays one track at a time with a gap; Merry-go-round makes a continuous bed.
-- **Gap:** after a track finishes, the group waits a random time in this range (minutes) before the next one starts. Different groups don't wait for each other.
-- **Intermittent group:** on its turn, a track plays its whole file once, start to finish, then hands over. Background and Ebb & Flow are for the ambience outside groups.
-- **Merry-go-round:** one file plays, then crossfades into another picked at random, never the same one twice in a row. Crossfade sets the overlap. One file crossfades into itself. Use 3 or more files of the same scene for a bed that never repeats the same way.
-- **Weight:** each time a track plays, it gets heavier and is less likely to be picked next. The weight wears off as other tracks play. The same track never plays twice in a row.
-- **Interval:** how fast a track's weight wears off. Higher comes back sooner; lower plays less often.
-- **Deleting a group:** keeps its files; they move back into the theme.
+- **Linked file:** plays here but stays in its own theme. Add one with Add from another theme above the list; it starts in Unassigned. If the file is gone, it shows Missing.
+- **Presets:** turn linked files on and other tracks off, like rain that mutes the crickets. A preset that turns a linked file on shows ⚭.
 
-Groups replace the old per-track Exclusive switch.
-
-**Tip:** for a Merry-go-round, use 3 or more recordings of the same scene. A recording that fades in and out on its own needs a Crossfade at least as long as its fade.
-
-## Intrusions
-
-- **Intrusion group:** a group in Intrusion mode, marked 🔗. Its tracks keep their own mode and settings, and it can hold files linked from other themes.
-- **Linked file:** plays here but stays in its own theme. Add one with the group's ⋯ › Add from another theme. New links start muted. If the file is gone, it shows Missing.
-- **Presets:** turn intrusion tracks on and other tracks off, like rain that mutes the crickets. A preset that turns intrusion tracks on shows ⚭.
-
-To add files from another theme, set a group's Mode to Intrusion, open its **⋯** menu and pick **Add from another theme**. Pick a theme, preview its files, tick the ones you want and click **Add**. Linked files start muted; make a preset that turns them on.
-
-**Example:** a Campsite theme links rain from a Rainy Day theme. Its "Rain" preset turns the rain on and mutes the crickets.
-
-- A linked file whose source is gone shows **Missing**.
-- **Remove link** in the track's ⋯ menu removes it from this theme. The other theme's file stays.
-- Moving a linked file to a normal group asks first, then copies the file into this theme.
-- Exports copy linked files in, so a shared theme is complete.
+Exports copy linked files in, so a shared theme is complete.
             `,
-            'Track-Mixer': `
-# Track Mixer
+            'Track-Settings': `
+# Track Settings
 
 The Theme Editor lets you fine-tune how individual audio files play within a theme. Each track has a **mode**, a **volume** and an **interval**.
 
-## Controls
+## Modes
 
-### Volume
-Adjust the amplitude of each track independently.
-
-### Interval
-How often a track is heard in the mix (0-100%). Before 1.5.0 this was called Presence.
-
-### Playback Mode
 - **Background:** plays all the time, looping smoothly. Rain, wind, a fire.
 - **Intermittent:** plays once, then goes quiet before playing again. *Interval* sets the wait. In a group, the group decides when it plays. Bird calls, a thunder crack, a door.
-- **Ebb & Flow:** fades in, plays a while, fades out, then stays quiet before coming back. *Interval* sets how much of the time it's heard. Distant traffic, a passing crowd.
-- **Auto:** picks for you. Under 15 seconds plays Intermittent, longer plays Ebb & Flow. At 100% *interval*, either plays as Background.
+- **Ebb & Flow:** always heard, but never at one level: it rises and falls between the two knobs of its Volume slider, gliding from one level to the next, never the same way twice. *Duration* sets how long each rise and fall takes, from shorter to longer. Wind, surf, rain that gusts.
+- **Rise:** in an Ebb & Flow track's ⋯ menu: how fast it rises. Gradual rises as smoothly as it falls. Sudden jumps up quickly and eases back down, like gusts of wind or waves on rocks. A group can set the same Rise for every file.
+- **Pause between plays:** in an Ebb & Flow track's ⋯ menu. Off, the file loops and is always heard, rising and falling. On, it plays once from start to finish, still rising and falling, fades out at its end, then pauses before it comes back. Rain on a tin roof that comes and goes.
+- **Fade in / Fade out:** for a file that starts or ends abruptly. In the track's ⋯ menu, set how many seconds it fades in each time it starts, and fades out each time it ends, including each loop. Empty is off. Sequences and advanced transitions use them too.
 
 **Gapless** loops a Background track without crossfade.
 
@@ -275,32 +261,38 @@ Presets save your track settings for quick recall.
 ## Using Presets
 
 Select a preset from:
-- The channel card dropdown
+- The channel card's Preset menu
 - The presets area in the Theme Editor
 
-Each channel keeps its own preset. Two channels on one theme can use different presets.
-
-When a preset turns a track on or off, the track fades in or out over 3 seconds.
+Each channel keeps its own preset. Two channels on one theme can use different presets. Picking a preset glides the mix to it over 3 seconds.
 
 ## Preset Marks
 
 - **★** marks the default preset.
-- **⚭** marks a preset that turns intrusion tracks on.
-
-A preset with both shows ★ first, then ⚭. The marks show in the Theme Editor, on the channel cards and in the channel's Edit dialog.
-
-## Preset Data
-
-Presets store:
-- Track volumes
-- Interval settings
-- Playback modes
-- Mute states
-- Group settings
+- **⚭** marks a preset that turns on a file from another theme.
 
 ## Sharing Presets
 
 Export presets as JSON to share with others. Import with a single click.
+            `,
+            'Sequences-and-Playlists': `
+# Sequences and Playlists
+
+A **sequence** walks through a theme's presets, gliding from one to the next. A **playlist** plays themes one after another on a channel.
+
+## Sequences
+
+- **Sequence:** plays presets of this theme in the order you choose, gliding from one to the next. Marked with the sequence icon (square, triangle, circle).
+- **Time on each preset:** each preset plays for a random time in this range (minutes), drawn fresh each time.
+- **Ramp:** how long the glide to the next preset takes (seconds).
+- **At the end:** Reverse plays the list backwards, Start again goes back to the first preset, Stop stays on the last one.
+- **Picking one:** preset lists show the sequences after the presets. Picking a preset by hand stops a running sequence.
+
+## Playlists
+
+The **Playlists** page holds themes that play one after another: each entry is a theme, with a preset or sequence if you want one, played in order or shuffled, for a random time in the playlist's range, once or on repeat.
+
+On a channel's card, press the playlist button right of the fields and pick the playlist. **Next** skips to the next entry.
             `
         };
 
@@ -310,7 +302,7 @@ Export presets as JSON to share with others. Import with a single click.
             
             // Update active state in sidebar
             document.querySelectorAll('.docs-sidebar a').forEach(a => a.classList.remove('active'));
-            event?.target?.classList.add('active');
+            event?.target?.classList?.add('active');
 
             try {
                 // Try to fetch from GitHub wiki

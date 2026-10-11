@@ -49,6 +49,8 @@
                     <li><strong>Speaker compatibility:</strong> The speaker doesn't support HTTP audio streams</li>
                     <li><strong>Network:</strong> Firewall blocking the stream, or speaker on different subnet</li>
                     <li><strong>Volume:</strong> Channel volume or master gain set to 0</li>
+                    <li><strong>Speakers muted:</strong> The speaker button left of the channel's Volume slider is red</li>
+                    <li><strong>Unassigned tracks:</strong> Tracks in the Theme Editor's Unassigned section don't play. Pick a Mode or drag them into a section</li>
                     <li><strong>Device muted:</strong> Physical speaker is muted</li>
                 </ul>
                 <p>Try playing to a different speaker to isolate the issue. Check the Sonorium logs for errors.</p>
@@ -61,7 +63,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>Sonorium discovers speakers from Home Assistant's <code>media_player</code> entities:</p>
+                <p>In the Home Assistant add-on, Sonorium discovers speakers from Home Assistant's <code>media_player</code> entities. On Docker it also finds Google Cast, Sonos, DLNA, AirPlay, LinkPlay and HEOS speakers on your network (use <code>network_mode: host</code>), and you can add one by its address.</p>
                 <ul>
                     <li>Verify speakers are set up as media_player entities in HA</li>
                     <li>Check they aren't disabled in Sonorium Settings</li>
@@ -89,17 +91,15 @@
 
         <div class="faq-item">
             <div class="faq-question" onclick="toggleFaq(this)">
-                <span>What does "Interval" do?</span>
+                <span>What do "Interval" and "Duration" do?</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>Interval controls how often a track is heard in the mix (0-100%). Before 1.5.0 it was called Presence or "How often".</p>
                 <ul>
-                    <li><strong>Intermittent:</strong> Interval sets the wait between plays</li>
-                    <li><strong>Ebb &amp; Flow:</strong> Interval sets how much of the time it's heard</li>
-                    <li><strong>In a group:</strong> Interval sets how fast a track's weight wears off</li>
+                    <li><strong>Intermittent:</strong> <em>Interval</em> sets the wait between plays. For occasional sounds like thunder or bird calls, try 20-40%.</li>
+                    <li><strong>In an Intermittent group:</strong> how fast a track's weight wears off. Higher comes back sooner; lower plays less often.</li>
+                    <li><strong>Ebb &amp; Flow:</strong> <em>Duration</em> sets how long each rise and fall takes, from shorter to longer. Before 1.7.0 this slider was called Interval.</li>
                 </ul>
-                <p>For occasional sounds like thunder or bird calls, try 20-40%.</p>
             </div></div>
         </div>
 
@@ -112,10 +112,12 @@
                 <ul>
                     <li><strong>Background:</strong> plays all the time, looping smoothly. Rain, wind, a fire.</li>
                     <li><strong>Intermittent:</strong> plays once, then goes quiet before playing again. <em>Interval</em> sets the wait. In a group, the group decides when it plays. Bird calls, a thunder crack, a door.</li>
-                    <li><strong>Ebb &amp; Flow:</strong> fades in, plays a while, fades out, then stays quiet before coming back. <em>Interval</em> sets how much of the time it's heard. Distant traffic, a passing crowd.</li>
-                    <li><strong>Auto:</strong> picks for you. Under 15 seconds plays Intermittent, longer plays Ebb &amp; Flow. At 100% <em>interval</em>, either plays as Background.</li>
+                    <li><strong>Ebb &amp; Flow:</strong> always heard, but never at one level: it rises and falls between the two knobs of its Volume slider, gliding from one level to the next, never the same way twice. <em>Duration</em> sets how long each rise and fall takes, from shorter to longer. Wind, surf, rain that gusts.</li>
+                    <li><strong>Rise:</strong> in an Ebb &amp; Flow track's ⋯ menu: how fast it rises. Gradual rises as smoothly as it falls. Sudden jumps up quickly and eases back down, like gusts of wind or waves on rocks. A group can set the same Rise for every file.</li>
+                    <li><strong>Pause between plays:</strong> in an Ebb &amp; Flow track's ⋯ menu. Off, the file loops and is always heard, rising and falling. On, it plays once from start to finish, still rising and falling, fades out at its end, then pauses before it comes back. Rain on a tin roof that comes and goes.</li>
+                    <li><strong>Unassigned:</strong> uploads and files added from another theme start here. Nothing here plays. Pick each file's Mode, or drag it into a section or a group.</li>
                 </ul>
-                <p>Before 1.5.0, Background was Continuous, Intermittent was Sparse, and Ebb &amp; Flow was Presence. <strong>Gapless</strong> loops a Background track without crossfade.</p>
+                <p>Before 1.5.0, Background was Continuous, Intermittent was Sparse, and Ebb &amp; Flow was Presence. <strong>Auto</strong> is retired in 1.7.0: each Auto track became the mode it was playing as. <strong>Gapless</strong> loops a Background track without crossfade.</p>
             </div></div>
         </div>
 
@@ -125,17 +127,18 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>A group is a folder inside a theme. Each group has a Mode: <strong>Intermittent</strong> (the default), <strong>Merry-go-round</strong> or <strong>Intrusion</strong>. Groups replace the old per-track "Exclusive" switch.</p>
+                <p>A group is a folder inside a theme. Groups replace the old per-track "Exclusive" switch.</p>
                 <ul>
+                    <li><strong>Groups:</strong> a group belongs to its section and plays that section's way: Background groups are Merry-go-round, Intermittent groups take turns, Ebb &amp; Flow groups play every file at once. Make one with the section's New group.</li>
                     <li><strong>Take turns:</strong> a group is a folder of tracks. In an Intermittent group only one plays at a time, never overlapping. Use it for sounds that shouldn't pile up, like thunder cracks or songs from one musician.</li>
-                    <li><strong>Group mode:</strong> Intermittent plays one track at a time with a gap; Merry-go-round makes a continuous bed.</li>
+                    <li><strong>Group mode:</strong> Intermittent plays one track at a time with a gap; Merry-go-round makes a continuous bed; Ebb &amp; Flow plays every file at once, each rising and falling.</li>
                     <li><strong>Gap:</strong> after a track finishes, the group waits a random time in this range (minutes) before the next one starts. Different groups don't wait for each other.</li>
-                    <li><strong>Intermittent group:</strong> on its turn, a track plays its whole file once, start to finish, then hands over. Background and Ebb &amp; Flow are for the ambience outside groups.</li>
+                    <li><strong>Intermittent group:</strong> on its turn, a track plays its whole file once, start to finish, then hands over. Background and Ebb &amp; Flow are for the ambience outside Intermittent groups.</li>
                     <li><strong>Merry-go-round:</strong> one file plays, then crossfades into another picked at random, never the same one twice in a row. Crossfade sets the overlap. One file crossfades into itself. Use 3 or more files of the same scene for a bed that never repeats the same way.</li>
-                    <li><strong>Intrusion group:</strong> a group in Intrusion mode, marked 🔗. Its tracks keep their own mode and settings, and it can hold files linked from other themes.</li>
+                    <li><strong>Ebb &amp; Flow group:</strong> every file plays at once, each rising and falling on its own. Each file keeps its own settings; the group's Volume and <em>Duration</em> scale them down. With the group's Pause between plays on, every file pauses between plays, at staggered times, so at least one is always playing. Off, each file follows its own Pause between plays.</li>
                     <li><strong>Weight:</strong> each time a track plays, it gets heavier and is less likely to be picked next. The weight wears off as other tracks play. The same track never plays twice in a row.</li>
                     <li><strong>Interval:</strong> how fast a track's weight wears off. Higher comes back sooner; lower plays less often.</li>
-                    <li><strong>Deleting a group:</strong> keeps its files; they move back into the theme.</li>
+                    <li><strong>Deleting a group:</strong> keeps its files; they move back into its section.</li>
                 </ul>
             </div></div>
         </div>
@@ -146,14 +149,14 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>Use an intrusion. It brings files from another theme into this one without copying them, and a preset turns them on.</p>
+                <p>Link files from another theme. They play from their own theme's folder without being copied, and a preset turns them on.</p>
                 <ul>
-                    <li>In the Theme Editor, add a group and set its Mode to <strong>Intrusion</strong>.</li>
-                    <li>Open the group's <strong>⋯</strong> menu and pick <strong>Add from another theme</strong>. Pick a theme, preview its files, tick the ones you want and click <strong>Add</strong>.</li>
-                    <li>Linked files start muted. Make a preset that turns them on, and turns off what they replace, then click <strong>Save Theme</strong>.</li>
+                    <li>In the Theme Editor, click <strong>Add from another theme</strong> above the list. Pick a theme, preview its files, tick the ones you want and click <strong>Add</strong>.</li>
+                    <li><strong>Linked file:</strong> plays here but stays in its own theme. It starts in Unassigned. If the file is gone, it shows Missing. Pick its Mode, or drag it into any section or group.</li>
+                    <li><strong>Presets:</strong> turn linked files on and other tracks off, like rain that mutes the crickets. A preset that turns a linked file on shows ⚭.</li>
                 </ul>
                 <p>Example: a Campsite theme links rain from a Rainy Day theme. Its "Rain" preset turns the rain on and mutes the crickets. Pick it on a channel and the rain fades in while the crickets fade out.</p>
-                <p>A preset that turns intrusion tracks on shows ⚭ (after the ★ of the default preset). A linked file whose source is gone shows <strong>Missing</strong>. Moving a linked file to a normal group asks first, then copies it in, and exports copy linked files in.</p>
+                <p>Intrusion groups are retired in 1.7.0: a linked file is an ordinary file that can sit in any section or group. Exports copy linked files in, so a shared theme is complete.</p>
             </div></div>
         </div>
 
@@ -164,7 +167,7 @@
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
                 <p>Some recordings fade in at the start and fade out at the end. Looped, the sound drops each time the file ends.</p>
-                <p>Put the file in a group, set the group's Mode to <strong>Merry-go-round</strong>, and set its <strong>Crossfade</strong> at least as long as the file's fade. A single file crossfades into itself, so the next pass is already playing while this one fades. With 3 or more recordings of the same scene, the bed never repeats the same way.</p>
+                <p>Put the file in a group in the <strong>Background</strong> section (a Merry-go-round), and set its <strong>Crossfade</strong> at least as long as the file's fade. A single file crossfades into itself, so the next pass is already playing while this one fades. With 3 or more recordings of the same scene, the bed never repeats the same way.</p>
             </div></div>
         </div>
 
@@ -174,7 +177,34 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>Yes. Each channel keeps its own preset, so changing the preset on one channel doesn't change the other. Tracks a preset turns on or off fade in or out over 3 seconds.</p>
+                <p>Yes. Each channel keeps its own preset, so changing the preset on one channel doesn't change the other. Picking a preset glides the mix to it over 3 seconds.</p>
+            </div></div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>What are sequences and playlists?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-content">
+                <p>New in 1.7.0, they let a channel change over time.</p>
+                <ul>
+                    <li><strong>Sequence:</strong> plays presets of this theme in the order you choose, gliding from one to the next. Marked with the sequence icon (square, triangle, circle). For example, a mild summer storm that becomes a heavy one.</li>
+                    <li><strong>Playlist:</strong> themes that play one after another on a channel: each entry is a theme, with a preset or sequence if you want one, played in order or shuffled, for a random time in the playlist's range, once or on repeat.</li>
+                </ul>
+                <p>Make a sequence from <strong>Sequences</strong> in the Theme Editor; it is then listed in the Preset menu after the presets. Make a playlist on the <strong>Playlists</strong> page, then press the playlist button right of a channel's fields to play it. <strong>Next</strong> on the card skips ahead.</p>
+                <p>In Home Assistant, sequences are options of the channel's Preset select, as "<em>name</em> (sequence)", and each channel has a Playlist select, a Next button and a Step sensor.</p>
+            </div></div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Can I listen in my browser?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-content">
+                <p>Yes. The <strong>headphones</strong> button on a channel plays it on the device you're using, with its own volume slider, even while the speakers are stopped. Start on headphones, add speakers, then press Play: the speakers join the same stream without a break. Stop stops the speakers only.</p>
+                <p>The <strong>speaker</strong> button left of the Volume slider mutes the speakers: the sound sent to them goes silent, on any kind of speaker. It turns red while muted.</p>
             </div></div>
         </div>
 
@@ -217,12 +247,8 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p><strong>Yes!</strong> Network streaming is on the roadmap for all standalone versions:</p>
-                <ul>
-                    <li>Windows, macOS, and Linux apps</li>
-                    <li>Docker container</li>
-                </ul>
-                <p>Planned support includes Chromecast, DLNA/UPnP, and AirPlay. Currently the Windows app plays through local PC audio.</p>
+                <p><strong>Docker does already.</strong> The Docker image (<code>ghcr.io/synssins/sonorium:latest</code>) finds Google Cast, Sonos, DLNA, AirPlay, LinkPlay and HEOS speakers on your network, with or without Home Assistant. See <a href="getting-started.html#docker" style="color: var(--accent-primary);">Getting Started</a>.</p>
+                <p>Network streaming is on the roadmap for the standalone apps. Currently the Windows app plays through local PC audio. macOS and Linux apps are in development.</p>
             </div></div>
         </div>
 

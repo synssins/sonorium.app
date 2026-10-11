@@ -39,8 +39,9 @@
 
     <div class="content-container">
         <div class="tabs">
-            <button class="tab active" onclick="showTab('ha')">Home Assistant</button>
-            <button class="tab" onclick="showTab('windows')">Windows App</button>
+            <button class="tab active" id="ha-tab" onclick="showTab('ha')">Home Assistant</button>
+            <button class="tab" id="docker-tab" onclick="showTab('docker')">Docker</button>
+            <button class="tab" id="windows-tab" onclick="showTab('windows')">Windows App</button>
         </div>
 
         <!-- Home Assistant -->
@@ -62,6 +63,7 @@
                 <div class="step-content">
                     <h3>Install & Start</h3>
                     <p>Find <strong>"Sonorium"</strong> in the Add-on Store, click <strong>Install</strong>, then <strong>Start</strong>. The addon will appear in your Home Assistant sidebar.</p>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Sonorium needs the <strong>Mosquitto broker</strong> add-on (Settings → Add-ons → Add-on Store), started with <strong>Start on boot</strong> on.</p>
                 </div>
             </div>
 
@@ -69,8 +71,8 @@
                 <div class="step-number">3</div>
                 <div class="step-content">
                     <h3>Create Your First Theme</h3>
-                    <p>Open Sonorium from your sidebar and go to <strong>Themes</strong>. Click <strong>Create Theme</strong>, give it a name, then drag and drop your audio files to upload them.</p>
-                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Two starter themes (Sleigh Ride and Tavern) are included out of the box!</p>
+                    <p>Open Sonorium from your sidebar and go to <strong>Themes</strong>. Click <strong>Create Theme</strong>, give it a name, then upload your audio files. They land in <strong>Unassigned</strong>: pick each file's Mode (Background, Intermittent or Ebb &amp; Flow), or drag it into a section.</p>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Three starter themes (Sleigh Ride, Tavern and "A Rainy Day... Or is it?") are included out of the box!</p>
                 </div>
             </div>
 
@@ -79,7 +81,67 @@
                 <div class="step-content">
                     <h3>Start Playing</h3>
                     <p>Go to <strong>Channels</strong>, click <strong>New Channel</strong>, select your theme and speakers, then hit <strong>Play</strong>!</p>
-                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Each channel streams independently—run different soundscapes in different rooms.</p>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Each channel streams independently—run different soundscapes in different rooms. The headphones button plays a channel in your browser too.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>Let It Change Over Time</h3>
+                    <p>A <strong>sequence</strong> plays a theme's presets in turn, gliding from one to the next. A <strong>playlist</strong> plays themes one after another. Make sequences from <strong>Sequences</strong> in the Theme Editor, and playlists on the <strong>Playlists</strong> page.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Docker -->
+        <div id="docker-content" class="tab-content">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Create a Compose File</h3>
+                    <p>Sonorium runs on any Docker host, with or without Home Assistant. The image is <code>ghcr.io/synssins/sonorium:latest</code>.</p>
+                    <div class="card" style="padding: 0; margin-top: 1rem; border: none; background: none;">
+<pre>services:
+  sonorium:
+    image: ghcr.io/synssins/sonorium:latest
+    container_name: sonorium
+    network_mode: host        # needed to find speakers on your network
+    environment:
+      - PUID=1000             # optional: owner of the files Sonorium writes
+      - PGID=1000
+      - TZ=Etc/UTC            # your time zone, for log times
+    volumes:
+      - ./sonorium/config:/config          # settings and channels
+      - ./sonorium/media:/media/sonorium   # themes and audio
+    restart: unless-stopped</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Start It</h3>
+                    <p>Run <code>docker compose up -d</code>, then open <code>http://&lt;docker-host&gt;:8008</code> in your browser.</p>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Sonorium finds Google Cast, Sonos, DLNA, AirPlay, LinkPlay and HEOS speakers on your network. Add one the scan didn't find by its address, under <strong>Settings → Speakers</strong>.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Optional: Home Assistant and MQTT</h3>
+                    <p>Connect Home Assistant and MQTT under <strong>Settings → Connection</strong> to use Home Assistant's speakers and control Sonorium from your dashboard.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Start Playing</h3>
+                    <p>Go to <strong>Channels</strong>, click <strong>New Channel</strong>, select your theme and speakers, then hit <strong>Play</strong>!</p>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem;">More in the <a href="https://github.com/synssins/sonorium#docker" target="_blank" style="color: var(--accent-primary);">README</a> and on the <a href="https://github.com/synssins/sonorium/pkgs/container/sonorium" target="_blank" style="color: var(--accent-primary);">image page</a>.</p>
                 </div>
             </div>
         </div>
@@ -151,9 +213,12 @@
         function showTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            event.target.classList.add('active');
+            document.getElementById(tab + '-tab').classList.add('active');
             document.getElementById(tab + '-content').classList.add('active');
         }
+        // getting-started.html#docker (or #windows) opens that tab
+        const startTab = window.location.hash.slice(1);
+        if (['ha', 'docker', 'windows'].includes(startTab)) showTab(startTab);
     </script>
 </body>
 </html>
