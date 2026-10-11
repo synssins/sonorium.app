@@ -70,26 +70,8 @@
             <div class="step">
                 <div class="step-number">3</div>
                 <div class="step-content">
-                    <h3>Create Your First Theme</h3>
-                    <p>Open Sonorium from your sidebar and go to <strong>Themes</strong>. Click <strong>Create Theme</strong>, give it a name, then upload your audio files. They land in <strong>Unassigned</strong>: pick each file's Mode (Background, Intermittent or Ebb &amp; Flow), or drag it into a section.</p>
-                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Three starter themes (Sleigh Ride, Tavern and "A Rainy Day... Or is it?") are included out of the box!</p>
-                </div>
-            </div>
-
-            <div class="step">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <h3>Start Playing</h3>
-                    <p>Go to <strong>Channels</strong>, click <strong>New Channel</strong>, select your theme and speakers, then hit <strong>Play</strong>!</p>
-                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Each channel streams independently—run different soundscapes in different rooms. The headphones button plays a channel in your browser too.</p>
-                </div>
-            </div>
-
-            <div class="step">
-                <div class="step-number">5</div>
-                <div class="step-content">
-                    <h3>Let It Change Over Time</h3>
-                    <p>A <strong>sequence</strong> plays a theme's presets in turn, gliding from one to the next. A <strong>playlist</strong> plays themes one after another. Make sequences from <strong>Sequences</strong> in the Theme Editor, and playlists on the <strong>Playlists</strong> page.</p>
+                    <h3>Set It Up</h3>
+                    <p>Open Sonorium and follow <a href="#first-steps" style="color: var(--accent-primary);">First steps</a> below: turn on a speaker, make a channel and play a theme.</p>
                 </div>
             </div>
         </div>
@@ -139,9 +121,8 @@
             <div class="step">
                 <div class="step-number">4</div>
                 <div class="step-content">
-                    <h3>Start Playing</h3>
-                    <p>Go to <strong>Channels</strong>, click <strong>New Channel</strong>, select your theme and speakers, then hit <strong>Play</strong>!</p>
-                    <p style="color: var(--text-muted); margin-top: 0.5rem;">More in the <a href="https://github.com/synssins/sonorium#docker" target="_blank" style="color: var(--accent-primary);">README</a> and on the <a href="https://github.com/synssins/sonorium/pkgs/container/sonorium" target="_blank" style="color: var(--accent-primary);">image page</a>.</p>
+                    <h3>Set It Up</h3>
+                    <p>Open Sonorium and follow <a href="#first-steps" style="color: var(--accent-primary);">First steps</a> below: turn on a speaker, make a channel and play a theme.</p>
                 </div>
             </div>
         </div>
@@ -185,6 +166,68 @@
                     <p>Select a theme, adjust the track mixer to fine-tune volumes and interval, then enjoy ambient soundscapes through your speakers.</p>
                 </div>
             </div>
+        </div>
+
+        <!-- First steps (mirrors the wiki's Getting Started) -->
+        <h2 class="guide-title" id="first-steps">First steps</h2>
+        <div class="card guide">
+            <h2 id="before-you-start">Before you start</h2>
+            <p>This guide takes you from a fresh install to sound playing on a speaker. It has four parts:</p>
+            <ol><li><a href="#enabling-speakers">Enabling speakers</a>: tell Sonorium which speakers it may use.</li><li><a href="#creating-a-channel">Creating a channel</a>: a channel is one stream of sound, played on one or more speakers.</li><li><a href="#assigning-speakers-to-the-channel">Assigning speakers to the channel</a>: choose where the channel plays.</li><li><a href="#loading-a-theme">Loading a theme</a>: choose what the channel plays, and start it.</li></ol>
+            <p>Sonorium opens on the <strong>Channels</strong> page, so every part starts there. The theme used in this guide, <strong>A Rainy Day... Or is it?</strong>, comes with Sonorium.</p>
+        </div>
+        <div class="card guide">
+            <h2 id="enabling-speakers">Enabling speakers</h2>
+            <p>Sonorium finds the speakers in your home (from Home Assistant, and on your network in the Docker version), but it only uses the ones you turn on. A speaker that is turned off never shows up when you build a channel, so this is the first thing to set up.</p>
+            <img class="guide-shot" src="screenshots/getting-started-speakers-1.png" alt="Open Settings, then Speakers" loading="lazy">
+            <p><strong>1:</strong> On the <strong>Channels</strong> page, click <strong>Settings</strong> in the menu on the left. The menu opens to show the settings pages.</p>
+            <p><strong>2:</strong> Click <strong>Speakers</strong>.</p>
+            <img class="guide-shot" src="screenshots/getting-started-speakers-2.png" alt="Find the speaker and turn it on" loading="lazy">
+            <p>The <strong>Speakers</strong> page lists every speaker Sonorium knows about, grouped by floor and area (for example "Ground Level · Office"). Each row shows:</p>
+            <ul><li><strong>The dot</strong> on the left: filled in when the speaker is online and can be reached.</li><li><strong>Name:</strong> the speaker's name. Click it to rename the speaker in Sonorium.</li><li><strong>Source:</strong> How the speaker is connected to Sonorium. <strong>HA</strong> means Home Assistant, <strong>Discovered</strong> means Sonorium found it on your network, <strong>Manual</strong> means it was added by hand. There may be more than one entry for this. Finally, a badge shows how Sonorium talks to it, such as <strong>Cast</strong> (Google Cast), <strong>Sonos</strong>, <strong>Linkplay</strong>, or <strong>Airplay</strong>.</li><li><strong>Address:</strong> the speaker's network address or Home Assistant name.</li><li><strong>Area:</strong> This is generally populated when the speaker is discovered in HA. It can be changed in Sonorium; changing it here does not change the area inside of HA. Channels can pick speakers by area.</li><li><strong>Offset:</strong> makes this speaker louder or quieter than the channel's volume, for a speaker that plays louder or softer than the rest.</li><li><strong>Test:</strong> plays a short, quiet chime on the speaker, so you can check you have the right one.</li><li><strong>Use:</strong> the switch that turns the speaker on for Sonorium.</li></ul>
+            <p><strong>3:</strong> Click the <strong>Search speakers</strong> box and type part of the speaker's name. This guide uses a speaker called <strong>Office_C97A</strong>, so "Office" finds it. You can also narrow the list with <strong>All</strong>, <strong>Home Assistant</strong>, <strong>Discovered</strong> and <strong>Manual</strong>, or hide speakers that are offline.</p>
+            <p><strong>4:</strong> Click the <strong>Use</strong> switch on the speaker's row to turn it on.</p>
+            <img class="guide-shot" src="screenshots/getting-started-speakers-3.png" alt="The speaker is turned on" loading="lazy">
+            <p>The switch is now on, and the count at the top of the area (here "3 of 4 on") goes up by one. The speaker is saved straight away; there is no Save button on this page.</p>
+            <p>If a speaker you expect isn't listed, click <strong>Rescan network</strong> to search again, or <strong>Add speaker</strong> to add it by its address.</p>
+        </div>
+        <div class="card guide">
+            <h2 id="creating-a-channel">Creating a channel</h2>
+            <p>A channel is one stream of sound. It plays one theme (or one playlist) on the speakers you give it. You can have several channels at once, for example one for the office and one for the living room, each playing something different.</p>
+            <img class="guide-shot" src="screenshots/getting-started-channel-1.png" alt="Click New Channel" loading="lazy">
+            <p><strong>1:</strong> On the <strong>Channels</strong> page, click <strong>New Channel</strong> in the top right. The <strong>New Channel</strong> window opens.</p>
+            <img class="guide-shot" src="screenshots/getting-started-channel-2.png" alt="Name the channel" loading="lazy">
+            <p>The window has two halves. On the left: the channel's name, what it plays, and its volume. On the right: the speakers it plays on.</p>
+            <p><strong>2:</strong> Click the <strong>Channel name</strong> box and type a name, for example "Office". If you leave it empty, Sonorium names it "Channel" followed by a number, for example "Channel 1".</p>
+            <p>Under <strong>Plays</strong>, <strong>Theme</strong> is already selected. Leave it there for this guide. (<strong>Playlist</strong> plays several themes one after another; see <a href="https://github.com/synssins/sonorium/wiki/Sequences-and-Playlists" target="_blank">Sequences and Playlists</a>.)</p>
+            <p>Keep the window open for the next part.</p>
+        </div>
+        <div class="card guide">
+            <h2 id="assigning-speakers-to-the-channel">Assigning speakers to the channel</h2>
+            <p>The right half of the <strong>New Channel</strong> window lists the speakers you turned on in <a href="#enabling-speakers">Enabling speakers</a>, grouped by floor and area.</p>
+            <img class="guide-shot" src="screenshots/getting-started-assign-1.png" alt="Find and tick the speaker" loading="lazy">
+            <p><strong>3:</strong> Click the <strong>Search speakers</strong> box and type part of the speaker's name, for example "Office".</p>
+            <p><strong>4:</strong> Tick the box next to the speaker.</p>
+            <p>The speaker now shows as a tag under the search box, and the bottom of the list reads "1 speaker selected". To play on more than one speaker, tick more boxes. Ticking a floor or an area selects every speaker in it. To remove a speaker, untick it, or click the <strong>×</strong> on its tag.</p>
+            <p>Keep the window open for the next part.</p>
+        </div>
+        <div class="card guide">
+            <h2 id="loading-a-theme">Loading a theme</h2>
+            <p>A theme is the sound itself: a set of recordings Sonorium mixes together, such as rain, wind and thunder.</p>
+            <img class="guide-shot" src="screenshots/getting-started-theme-1.png" alt="Pick the theme" loading="lazy">
+            <p><strong>5:</strong> In the list of themes on the left, click <strong>A Rainy Day... Or is it?</strong>. The theme's name appears above the list, and a <strong>Theme preset</strong> box appears below it.</p>
+            <img class="guide-shot" src="screenshots/getting-started-theme-2.png" alt="Choose no preset, or the default preset" loading="lazy">
+            <p>A preset is a saved version of the theme's mix: for example, the same storm with the thunder turned off, or with the rain louder. A theme can have several presets.</p>
+            <p><strong>6:</strong> Click the <strong>Theme preset</strong> box. A list of the theme's presets opens.</p>
+            <p><strong>7:</strong> Choose how the theme plays:</p>
+            <ul><li><strong>7a: Default settings</strong> plays the theme as it is, with no preset.</li><li><strong>7b:</strong> the preset marked with a <strong>★</strong> is the theme's default preset. Sonorium picks it for you when you choose the theme, so you only need to change this if you want something else.</li></ul>
+            <p>Presets marked with the sequence icon (a square, a triangle and a circle), such as <strong>Storm builds</strong>, are sequences: they play several presets one after another. See <a href="https://github.com/synssins/sonorium/wiki/Sequences-and-Playlists" target="_blank">Sequences and Playlists</a>.</p>
+            <img class="guide-shot" src="screenshots/getting-started-theme-3.png" alt="Create the channel" loading="lazy">
+            <p><strong>8:</strong> Click <strong>Create Channel</strong>. The window closes and the new channel appears on the <strong>Channels</strong> page.</p>
+            <img class="guide-shot" src="screenshots/getting-started-theme-4.png" alt="Play the channel" loading="lazy">
+            <p><strong>9:</strong> Click <strong>Play</strong>. Sonorium starts the theme on the channel's speakers. It fades in over a few seconds rather than starting at full volume.</p>
+            <p>To stop, click the same button again; it now reads <strong>Stop</strong>.</p>
+            <p>You can change the theme or preset at any time from the boxes on the channel, while it plays. The slider under them is the speakers' volume.</p>
         </div>
 
         <div class="card" style="margin-top: 3rem;">

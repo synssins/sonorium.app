@@ -391,3 +391,10 @@ footer {
     .footer-content { flex-direction: column; text-align: center; }
     .footer-links { flex-wrap: wrap; justify-content: center; gap: 1rem; }
 }
+
+/* Getting Started: First steps (mirrors the wiki) */
+.guide-title { font-size: 1.75rem; margin: 3.5rem 0 1.5rem; }
+.guide { margin-bottom: 2rem; }
+.guide ol { margin: 0.5rem 0 1rem 1.5rem; color: var(--text-secondary); }
+.guide a { color: var(--accent-primary); }
+.guide-shot { display: block; width: 100%; height: auto; margin: 1.25rem 0; border-radius: 8px; border: 1px solid var(--border-color); }
