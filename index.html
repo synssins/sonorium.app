@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sonorium - Multi-Zone Ambient Soundscape Mixer</title>
-    <meta name="description" content="Create immersive ambient audio environments throughout your home. Stream layered soundscapes to any speaker with Sonorium for Home Assistant or Windows.">
+    <meta name="description" content="Create immersive ambient audio environments throughout your home. Stream layered soundscapes to any speaker with Sonorium for Home Assistant, Docker or Windows.">
     <link rel="icon" type="image/png" href="images/icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,18 +56,18 @@
                     <a href="#downloads" class="platform-badge available">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                         Home Assistant
-                        <span class="version-tag" id="addon-version-badge">v1.2.3</span>
+                        <span class="version-tag" id="addon-version-badge">v1.7.0</span>
                     </a>
                     <a href="#downloads" class="platform-badge available">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
                         Windows App
                         <span class="version-tag" id="app-version-badge">Alpha</span>
                     </a>
-                    <div class="platform-badge coming-soon">
+                    <a href="#docker" class="platform-badge available">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                         Docker
-                        <span class="soon-label">Soon</span>
-                    </div>
+                        <span class="version-tag" id="docker-version-badge">v1.7.0</span>
+                    </a>
                 </div>
             </div>
             <div class="hero-image">
@@ -80,7 +80,7 @@
     <section class="downloads" id="downloads">
         <div class="section-header">
             <h2>Download Sonorium</h2>
-            <p>Choose the version that fits your setup. Both are free and open source.</p>
+            <p>Choose the version that fits your setup. All are free and open source.</p>
         </div>
         <div class="downloads-grid">
             <div class="download-card">
@@ -88,7 +88,7 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 </div>
                 <h3>Home Assistant Addon</h3>
-                <div class="version" id="addon-version">v1.2.3</div>
+                <div class="version" id="addon-version">v1.7.0</div>
                 <p>Full-featured addon for Home Assistant. Integrates with your media players, streams to any room, and appears in your sidebar.</p>
                 <a href="https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fsynssins%2Fsonorium" target="_blank" class="btn btn-ha">
                     <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -109,10 +109,23 @@
                 </a>
                 <p class="download-note" id="windows-note">Alpha release • No install required</p>
             </div>
+            <div class="download-card" id="docker">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                </div>
+                <h3>Docker</h3>
+                <div class="version" id="docker-version">v1.7.0</div>
+                <p>Runs on any Docker host, with or without Home Assistant. Finds Google Cast, Sonos, DLNA, AirPlay, LinkPlay and HEOS speakers on your network.</p>
+                <a href="https://github.com/synssins/sonorium#docker" target="_blank" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    Install with Docker
+                </a>
+                <p class="download-note">Image: <a href="https://github.com/synssins/sonorium/pkgs/container/sonorium" target="_blank" style="color: var(--accent-primary);">ghcr.io/synssins/sonorium:latest</a><br>Run <code>docker compose up -d</code>, then open port 8008</p>
+            </div>
         </div>
         <div class="coming-soon-notice">
             <h4>Coming Soon</h4>
-            <p>A Docker image (<code>ghcr.io/synssins/sonorium</code>) runs Sonorium without the Home Assistant add-on system. macOS and Linux apps are in development.</p>
+            <p>macOS and Linux apps are in development.</p>
         </div>
     </section>
 
@@ -136,12 +149,12 @@
             <div class="feature-card">
                 <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20v-6M6 20V10M18 20V4"/></svg></div>
                 <h3>Track Mixer</h3>
-                <p>Fine-tune volume, interval, and playback mode for each track. Put tracks in groups that take turns or crossfade into one continuous bed.</p>
+                <p>Tracks sit in sections by how they play: Background, Intermittent and Ebb &amp; Flow, which rises and falls instead of playing at one level. Groups take turns, crossfade into one continuous bed, or play every file at once.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
                 <h3>Presets</h3>
-                <p>Save track configurations. Switch between "focus" and "sleep" modes instantly. Each channel keeps its own preset, and a preset can bring in sounds from another theme.</p>
+                <p>Save track configurations. Switch between "focus" and "sleep" modes with a smooth glide. Each channel keeps its own preset, and a preset can bring in sounds from another theme.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
@@ -165,8 +178,8 @@
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
-                <h3>Smart Short Files</h3>
-                <p>Short sounds play naturally with gaps instead of looping annoyingly.</p>
+                <h3>Sequences &amp; Playlists</h3>
+                <p>A sequence glides through a theme's presets, like a mild summer storm that becomes a heavy one. A playlist plays themes one after another.</p>
             </div>
         </div>
     </section>
@@ -180,10 +193,10 @@
         <div class="screenshot-gallery">
             <div class="screenshot-item"><img src="screenshots/channels.jpg" alt="Channels"><div class="screenshot-caption">Channels</div></div>
             <div class="screenshot-item"><img src="screenshots/themes.jpg" alt="Themes"><div class="screenshot-caption">Themes</div></div>
-            <div class="screenshot-item"><img src="screenshots/track-mixer.jpg" alt="Track Mixer"><div class="screenshot-caption">Track Mixer</div></div>
-            <div class="screenshot-item"><img src="screenshots/speakers.jpg" alt="Speakers"><div class="screenshot-caption">Speakers</div></div>
-            <div class="screenshot-item"><img src="screenshots/presets.jpg" alt="Presets"><div class="screenshot-caption">Presets</div></div>
-            <div class="screenshot-item"><img src="screenshots/settings.jpg" alt="Settings"><div class="screenshot-caption">Settings</div></div>
+            <div class="screenshot-item"><img src="screenshots/theme-editor.jpg" alt="Edit Theme"><div class="screenshot-caption">Edit Theme</div></div>
+            <div class="screenshot-item"><img src="screenshots/ebb-flow.jpg" alt="Ebb &amp; Flow"><div class="screenshot-caption">Ebb &amp; Flow</div></div>
+            <div class="screenshot-item"><img src="screenshots/sequence-editor.jpg" alt="Edit sequence"><div class="screenshot-caption">Edit sequence</div></div>
+            <div class="screenshot-item"><img src="screenshots/playlists.jpg" alt="Playlists"><div class="screenshot-caption">Playlists</div></div>
         </div>
     </section>
 

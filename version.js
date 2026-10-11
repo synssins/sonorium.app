@@ -10,6 +10,11 @@ async function fetchAddonVersion() {
             const addonBadge = document.getElementById('addon-version-badge');
             if (addonVersion) addonVersion.textContent = version;
             if (addonBadge) addonBadge.textContent = version;
+            // The Docker image is built from the same release, with the same version
+            const dockerVersion = document.getElementById('docker-version');
+            const dockerBadge = document.getElementById('docker-version-badge');
+            if (dockerVersion) dockerVersion.textContent = version;
+            if (dockerBadge) dockerBadge.textContent = version;
         }
     } catch (e) {
         console.log('Could not fetch addon version');
