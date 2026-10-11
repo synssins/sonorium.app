@@ -416,3 +416,10 @@
     .downloads-grid { grid-template-columns: 1fr; }
     .screenshot-gallery { grid-template-columns: 1fr; }
 }
+
+/* Screenshots open larger when clicked */
+.screenshot-item img { cursor: zoom-in; }
+.lightbox { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 2rem; background: rgba(0, 0, 0, .85); cursor: zoom-out; }
+.lightbox[hidden] { display: none; }
+.lightbox img { max-width: 100%; max-height: 100%; border-radius: 8px; box-shadow: 0 10px 40px rgba(0, 0, 0, .6); }
+.lightbox-close { position: absolute; top: 1rem; right: 1.25rem; width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .12); color: #fff; font-size: 1.75rem; line-height: 1; cursor: pointer; }

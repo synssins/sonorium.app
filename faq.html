@@ -67,7 +67,7 @@
                 <ul>
                     <li>Verify speakers are set up as media_player entities in HA</li>
                     <li>Check they aren't disabled in Sonorium Settings</li>
-                    <li>Try <strong>Refresh from HA</strong> (or <strong>Rescan network</strong>) on Settings → Speakers</li>
+                    <li>In Docker, click <strong>Rescan network</strong> on Settings → Speakers</li>
                 </ul>
                 <p>Speakers must support HTTP audio streaming (Chromecast, Sonos, DLNA work great).</p>
             </div></div>
@@ -135,7 +135,7 @@
                     <li><strong>Gap:</strong> after a track finishes, the group waits a random time in this range (minutes) before the next one starts. Different groups don't wait for each other.</li>
                     <li><strong>Intermittent group:</strong> on its turn, a track plays its whole file once, start to finish, then hands over. Background and Ebb &amp; Flow are for the ambience outside Intermittent groups.</li>
                     <li><strong>Merry-go-round:</strong> one file plays, then crossfades into another picked at random, never the same one twice in a row. Crossfade sets the overlap. One file crossfades into itself. Use 3 or more files of the same scene for a bed that never repeats the same way.</li>
-                    <li><strong>Ebb &amp; Flow group:</strong> every file plays at once, each between its own minimum and maximum volume. Each file keeps its own settings; the group's Volume and <em>Duration</em> scale them down. With the group's Pause between plays on, every file pauses between plays, at staggered times, so at least one is always playing. Off, each file follows its own Pause between plays.</li>
+                    <li><strong>Ebb &amp; Flow group:</strong> every file plays at once, each between its minimum and maximum volume. Each file keeps its settings; the group's Volume and <em>Duration</em> scale them down. With the group's Pause between plays on, every file pauses between plays, at staggered times, so at least one is always playing. Off, each file follows its Pause between plays setting.</li>
                     <li><strong>Weight:</strong> each time a track plays, it gets heavier and is less likely to be picked next. The weight wears off as other tracks play. The same track never plays twice in a row.</li>
                     <li><strong>Interval:</strong> how fast a track's weight wears off. Higher comes back sooner; lower plays less often.</li>
                     <li><strong>Deleting a group:</strong> keeps its files; they move back into its section.</li>
@@ -149,10 +149,10 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>Link files from another theme. They play from their own theme's folder without being copied, and a preset turns them on.</p>
+                <p>Link files from another theme. They play from the theme they came from, without being copied, and a preset turns them on.</p>
                 <ul>
                     <li>In the Theme Editor, click <strong>Add from another theme</strong> above the list. Pick a theme, preview its files, tick the ones you want and click <strong>Add</strong>.</li>
-                    <li><strong>Linked file:</strong> plays here but stays in its own theme. It starts in Unassigned. If the file is gone, it shows Missing. Pick its Mode, or drag it into any section or group.</li>
+                    <li><strong>Linked file:</strong> plays here but stays in the theme it came from. It starts in Unassigned. If the file is gone, it shows Missing. Pick its Mode, or drag it into any section or group.</li>
                     <li><strong>Presets:</strong> turn linked files on and other tracks off, like rain that mutes the crickets. A preset that turns a linked file on shows ⚭.</li>
                 </ul>
                 <p>Example: a Campsite theme links rain from a Rainy Day theme. Its "Rain" preset turns the rain on and mutes the crickets. Pick it on a channel and the rain fades in while the crickets fade out.</p>
@@ -177,7 +177,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>Yes. Each channel keeps its own preset, so changing the preset on one channel doesn't change the other. Picking a preset glides the mix to it over 3 seconds.</p>
+                <p>Yes. The preset is chosen per channel, so changing it on one channel doesn't change the other. Picking a preset glides the mix to it over 3 seconds.</p>
             </div></div>
         </div>
 
@@ -192,7 +192,7 @@
                     <li><strong>Sequence:</strong> plays presets of this theme in the order you choose, gliding from one to the next. Marked with the sequence icon (square, triangle, circle). For example, a mild summer storm that becomes a heavy one.</li>
                     <li><strong>Playlist:</strong> themes that play one after another on a channel: each entry is a theme, with a preset or sequence if you want one, played in order or shuffled, for a random time in the playlist's range, once or on repeat.</li>
                 </ul>
-                <p>Make a sequence from <strong>Sequences</strong> in the Theme Editor; it is then listed in the Preset menu after the presets. Make a playlist on the <strong>Playlists</strong> page, then press the playlist button right of a channel's fields to play it. <strong>Next</strong> on the card skips ahead.</p>
+                <p>Make a sequence from <strong>Sequences</strong> in the Theme Editor; it is then listed in the Preset menu after the presets. Make a playlist on the <strong>Playlists</strong> page, then press the playlist button to the right of a channel's boxes to play it. <strong>Next</strong> on the channel skips ahead.</p>
                 <p>In Home Assistant, sequences are options of the channel's Preset select, as "<em>name</em> (sequence)", and each channel has a Playlist select, a Next button and a Step sensor.</p>
             </div></div>
         </div>
@@ -203,8 +203,8 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>Yes. The <strong>headphones</strong> button on a channel plays it on the device you're using, with its own volume slider, even while the speakers are stopped. Start on headphones, add speakers, then press Play: the speakers join the same stream without a break. Stop stops the speakers only.</p>
-                <p>The <strong>speaker</strong> button left of the Volume slider mutes the speakers: the sound sent to them goes silent, on any kind of speaker. It turns red while muted.</p>
+                <p>Yes. The <strong>headphones</strong> button on a channel plays it on the device you're using, with a separate volume slider, even while the speakers are stopped. Start on headphones, add speakers, then press Play: the speakers join the same stream without a break. Stop stops the speakers only.</p>
+                <p>The <strong>speaker</strong> button left of the Volume slider mutes the speakers: the sound sent to them goes silent, on any kind of speaker.</p>
             </div></div>
         </div>
 
