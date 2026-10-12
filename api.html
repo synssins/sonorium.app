@@ -1,0 +1,3362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Reference - Sonorium</title>
+    <meta name="description" content="Sonorium&#x27;s HTTP API: keys, abilities, live events, channels, announcements, themes, presets, sequences, playlists and speakers.">
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .docs-content h2, .docs-content h3, .docs-content h4 { scroll-margin-top: 90px; }
+        .docs-content h4 { font-size: 1rem; margin: 1.25rem 0 0.5rem; }
+        .docs-content .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .docs-content .table-wrap table { margin: 0; }
+        .docs-content td code, .docs-content th code { white-space: nowrap; }
+        .docs-content hr { display: none; }
+        .docs-sidebar { max-height: calc(100vh - 120px); overflow-y: auto; }
+        @media (max-width: 968px) { .docs-sidebar { max-height: none; } }
+        @media (max-width: 600px) {
+            .docs-layout { padding: 1rem; gap: 1.5rem; }
+            .page-header { padding-left: 1rem; padding-right: 1rem; }
+            .docs-content .table-wrap table, .docs-content .table-wrap tbody, .docs-content .table-wrap tr, .docs-content .table-wrap td { display: block; width: 100%; }
+            .docs-content .table-wrap thead { display: none; }
+            .docs-content .table-wrap tr { border: 1px solid var(--border-color); border-radius: 8px; padding: 0.5rem 0.75rem; margin-bottom: 0.75rem; background: var(--bg-card); }
+            .docs-content .table-wrap td { border: none; padding: 0.25rem 0; }
+            .docs-content .table-wrap td::before { content: attr(data-label); display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+            .docs-content .table-wrap td:first-child { color: var(--text-primary); }
+            .docs-content td code { white-space: normal; overflow-wrap: anywhere; }
+        }
+        .docs-content p code, .docs-content li code { overflow-wrap: anywhere; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Sonorium"></a>
+            <div class="nav-links">
+                <a href="index.html#downloads">Downloads</a>
+                <a href="getting-started.html">Get Started</a>
+                <a href="index.html#features">Features</a>
+                <a href="faq.html">FAQ</a>
+                <a href="docs.html">Docs</a>
+                <a href="api.html">API</a>
+                <a href="plugin-development.html">Plugin Development</a>
+                <a href="theme-format.html">Theme Format</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+            <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>API Reference</h1>
+        <p>Control Sonorium from Home Assistant, Node-RED, scripts and other programs.</p>
+    </header>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar">
+            <h3>On this page</h3>
+            <ul>
+                    <li><a href="#base-url-and-ports">Base URL and ports</a></li>
+                    <li><a href="#the-https-certificate">The HTTPS certificate</a></li>
+                    <li><a href="#authentication">Authentication</a></li>
+                    <li><a href="#abilities">Abilities</a></li>
+                    <li><a href="#requests-answers-and-errors">Requests, answers and errors</a></li>
+                    <li><a href="#rate-limits">Rate limits</a></li>
+                    <li><a href="#live-events">Live events</a></li>
+                    <li><a href="#channels">Channels</a></li>
+                    <li><a href="#announcements-sounds-and-volume-ramps">Announcements, sounds and volume ramps</a></li>
+                    <li><a href="#themes">Themes</a></li>
+                    <li><a href="#presets">Presets</a></li>
+                    <li><a href="#sequences">Sequences</a></li>
+                    <li><a href="#playlists">Playlists</a></li>
+                    <li><a href="#speakers-speaker-groups-floors-and-areas">Speakers, speaker groups, floors and areas</a></li>
+                    <li><a href="#settings-status-and-the-server">Settings, status and the server</a></li>
+                    <li><a href="#plugins">Plugins</a></li>
+                    <li><a href="#keys-users-linked-phones-zones-and-links">Keys, users, linked phones, zones and links</a></li>
+                    <li><a href="#audio-streams">Audio streams</a></li>
+                    <li><a href="#examples-home-assistant-node-red-scripts">Examples: Home Assistant, Node-RED, scripts</a></li>
+            </ul>
+            <h3>More</h3>
+            <ul>
+                <li><a href="getting-started.html">Get Started</a></li>
+                <li><a href="docs.html">Docs</a></li>
+                <li><a href="plugin-development.html">Plugin Development</a></li>
+                <li><a href="theme-format.html">Theme Format</a></li>
+            </ul>
+        </aside>
+        <main class="docs-content">
+<p>Sonorium has an HTTP API with JSON bodies. Everything the web UI does goes through it, so anything you can do on a screen, a program can do too: start a channel when the alarm goes off, duck the music for a doorbell chime, change the theme from a wall tablet, follow what plays from a dashboard.</p>
+<p>Who uses it:</p>
+<ul>
+<li><strong>Home Assistant</strong> automations and scripts (<code>rest_command</code>), next to the MQTT entities Sonorium already gives Home Assistant.</li>
+<li><strong>Node-RED</strong> flows (the <code>http request</code> node, and the event stream for triggers).</li>
+<li><strong>Scripts</strong> (curl, Python, PowerShell) and other programs: dashboards, bots, wall panels, ESP32 buttons.</li>
+</ul>
+<p>This page describes Sonorium 1.7.1. The complete reference, with every field the Android app uses, is <a href="https://github.com/synssins/sonorium/blob/main/docs/APP_API.md" target="_blank" rel="noopener">docs/APP_API.md</a> in the repository; sign-in is in <a href="https://github.com/synssins/sonorium/blob/main/docs/AUTH.md" target="_blank" rel="noopener">docs/AUTH.md</a>. To extend Sonorium from the inside, see <a href="plugin-development.html">Plugin Development</a>.</p>
+<hr />
+<h2 id="base-url-and-ports">Base URL and ports</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Protocol</th>
+<th>What it serves</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Port"><strong>8008</strong></td>
+<td data-label="Protocol">HTTP</td>
+<td data-label="What it serves">Web UI, API, audio streams. Speakers fetch their streams here.</td>
+</tr>
+<tr>
+<td data-label="Port"><strong>8808</strong></td>
+<td data-label="Protocol">HTTPS</td>
+<td data-label="What it serves">The same web UI and API, encrypted, with Sonorium's self-signed certificate.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Every API path starts with <code>/api</code>:</p>
+<pre><code>http://192.0.2.20:8008/api/sessions
+https://192.0.2.20:8808/api/sessions
+</code></pre>
+<ul>
+<li><strong>Home Assistant app:</strong> use the Home Assistant machine's address. 8008 and 8808 are the app's <strong>Network</strong> mappings (8008 is port 8080 inside the container); change them on the app's <strong>Network</strong> tab. Home Assistant's sidebar link is for people signed in to Home Assistant; programs use the direct ports.</li>
+<li><strong>Docker:</strong> host networking serves both ports on the host. <code>SONORIUM_HTTPS_PORT</code> changes 8808.</li>
+<li><strong>Docker and Windows/Linux installs</strong> announce <code>sonorium.local</code> on the network (mDNS), so <code>http://sonorium.local:8008</code> works without knowing the address. When another device already has that name, Sonorium is <code>sonorium-2.local</code> (up to <code>sonorium-9.local</code>); the log says which name it got. The Home Assistant app doesn't announce a name.</li>
+</ul>
+<p><code>GET /api/info</code> needs no key and tells you the server's ports, name and certificate:</p>
+<pre><code class="language-sh">curl http://192.0.2.20:8008/api/info
+</code></pre>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;00000000-0000-4000-8000-000000000001&quot;,
+  &quot;name&quot;: &quot;Sonorium&quot;,
+  &quot;version&quot;: &quot;1.7.1&quot;,
+  &quot;api&quot;: 1,
+  &quot;install&quot;: &quot;docker&quot;,
+  &quot;features&quot;: {
+    &quot;connection_settings&quot;: {&quot;available&quot;: true, &quot;enabled&quot;: true, &quot;overridable&quot;: false},
+    &quot;network_speakers&quot;: {&quot;available&quot;: true, &quot;enabled&quot;: true, &quot;overridable&quot;: false},
+    &quot;space_editing&quot;: {&quot;available&quot;: true, &quot;enabled&quot;: true, &quot;overridable&quot;: false},
+    &quot;plugin_packages&quot;: {&quot;available&quot;: true, &quot;enabled&quot;: false, &quot;overridable&quot;: true}
+  },
+  &quot;ports&quot;: {&quot;http&quot;: 8008, &quot;https&quot;: 8808},
+  &quot;host&quot;: &quot;192.0.2.20&quot;,
+  &quot;hostname&quot;: &quot;sonorium.local&quot;,
+  &quot;login_required&quot;: true,
+  &quot;pair&quot;: true,
+  &quot;fingerprint&quot;: &quot;6f310f64a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c&quot;,
+  &quot;plugins&quot;: [&quot;integration&quot;, &quot;users&quot;],
+  &quot;boot_id&quot;: &quot;d10435418d284eea8d9f6cdfbd0251be&quot;,
+  &quot;ui&quot;: {&quot;version&quot;: &quot;1.7.1&quot;, &quot;host_api&quot;: 1}
+}
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>id</code></td>
+<td data-label="Type">string (UUID)</td>
+<td data-label="Meaning">The server's ID. It stays the same for the life of the install.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>version</code></td>
+<td data-label="Type">string</td>
+<td data-label="Meaning">Sonorium's version.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>api</code></td>
+<td data-label="Type">integer</td>
+<td data-label="Meaning">The API version, <code>1</code>. It goes up only for a change that breaks existing callers; new routes and fields don't change it.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>install</code></td>
+<td data-label="Type"><code>addon</code>, <code>docker</code>, <code>windows</code>, <code>linux</code></td>
+<td data-label="Meaning">How Sonorium is installed.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>features.&lt;name&gt;</code></td>
+<td data-label="Type"><code>{available, enabled, overridable}</code></td>
+<td data-label="Meaning">Install features: offered here, switched on now, can be switched on in <strong>Settings › Advanced</strong>.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>ports.http</code>, <code>ports.https</code></td>
+<td data-label="Type">integer; <code>https</code> may be <code>null</code></td>
+<td data-label="Meaning">The ports as the network sees them. <code>null</code>: HTTPS is off.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>host</code></td>
+<td data-label="Type">string</td>
+<td data-label="Meaning">The address speakers use to reach Sonorium.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>hostname</code></td>
+<td data-label="Type">string or null</td>
+<td data-label="Meaning">The mDNS name, or null when there is none.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>login_required</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Meaning">Sign-in is required on the direct ports (the Users plugin's <strong>Require login</strong> is on).</td>
+</tr>
+<tr>
+<td data-label="Field"><code>fingerprint</code></td>
+<td data-label="Type">string or null</td>
+<td data-label="Meaning">SHA-256 of the HTTPS certificate, 64 lowercase hex characters.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>plugins</code></td>
+<td data-label="Type">string[]</td>
+<td data-label="Meaning">The sign-in plugins that are on: <code>users</code> (accounts) and <code>integration</code> (keys).</td>
+</tr>
+<tr>
+<td data-label="Field"><code>boot_id</code></td>
+<td data-label="Type">string</td>
+<td data-label="Meaning">New each time Sonorium starts. The event stream's ids include it.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>ui</code></td>
+<td data-label="Type">object</td>
+<td data-label="Meaning">The web UI's version, and the version of its hooks for the Android app.</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="the-https-certificate">The HTTPS certificate</h2>
+<p>Sonorium makes its HTTPS certificate on first start and keeps it for 20 years (ECDSA P-256, self-signed). No public authority signed it, so a browser warns about it and a program has to be told to trust it. The certificate names <code>sonorium.local</code> to <code>sonorium-9.local</code>, <code>localhost</code>, <code>127.0.0.1</code> and the network addresses the server had when the certificate was made.</p>
+<p>Think of the fingerprint as the certificate's serial number: if the number you see matches the one Sonorium reports, you are talking to your Sonorium.</p>
+<p>To trust it with curl:</p>
+<ol>
+<li>Save the certificate:<pre><code class="language-sh">openssl s_client -connect 192.0.2.20:8808 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; sonorium.pem
+</code></pre>
+</li>
+<li>Print its fingerprint:<pre><code class="language-sh">openssl x509 -in sonorium.pem -outform DER | sha256sum
+</code></pre>
+</li>
+<li>Compare it with <code>fingerprint</code> from <code>GET /api/info</code>. They must be the same.</li>
+<li>Call the API with the saved certificate, using a name the certificate lists:<pre><code class="language-sh">curl --cacert sonorium.pem -H &quot;Authorization: Bearer $KEY&quot; https://sonorium.local:8808/api/sessions
+</code></pre>
+</li>
+</ol>
+<p>On Windows (PowerShell), step 2 is <code>Get-FileHash -Algorithm SHA256</code> on the DER file; the result is uppercase, the same digits.</p>
+<p>Plain HTTP on 8008 is fine on a home network you trust. Keys and passwords sent over 8008 can be read by anyone who can watch that network; use 8808 when that matters.</p>
+<hr />
+<h2 id="authentication">Authentication</h2>
+<p>Who may call the API depends on the <strong>Users</strong> plugin's <strong>Require login</strong> (Settings › Users &amp; devices):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Require login</th>
+<th>A call without a key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Require login">Off (or the Users plugin is off)</td>
+<td data-label="A call without a key">Allowed: Sonorium is open to anyone on the network, as before sign-in existed. A key still limits what its caller may do when one is sent.</td>
+</tr>
+<tr>
+<td data-label="Require login">On</td>
+<td data-label="A call without a key">Refused with 401, except <code>GET /api/info</code>, the sign-in routes and the audio streams.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Webhook triggers and the event stream always need a key or a token, whether Require login is on or off.</p>
+<h3 id="keys">Keys</h3>
+<p>A key is a password for a program. It allows only the items checked on it, and it can be limited to some channels. Keys start with <code>sk_</code>. A key never manages users or keys.</p>
+<p>Making a key (an Admin):</p>
+<ol>
+<li>Open <strong>Settings</strong> in the left menu.</li>
+<li>Click <strong>Keys</strong>.</li>
+<li>Click <strong>New key</strong> (top right).</li>
+<li>Type a <strong>Name</strong>, such as <code>Kitchen tablet</code>.</li>
+<li>Pick <strong>Expires</strong>: <strong>In 7 days</strong>, <strong>In 30 days</strong>, <strong>In 90 days</strong> (the default), <strong>In 1 year</strong> or <strong>Never</strong>.</li>
+<li>Check what the key may do (the boxes are listed under <a href="#abilities">Abilities</a>).</li>
+<li>Under <strong>Channels</strong>, leave <strong>All channels</strong>, or click <strong>Only these…</strong> and check the channels.</li>
+<li>Click <strong>Make key</strong>.</li>
+<li>In <strong>Key issued</strong>, click <strong>Copy</strong>, then <strong>Done</strong>. The key is shown once; Sonorium keeps only a hash of it.</li>
+</ol>
+<p><strong>⋯ › Edit…</strong> changes the name, expiry and boxes; the change applies from the key's next request. <strong>⋯ › Revoke…</strong> stops the key at once.</p>
+<p>Sending a key, any one of:</p>
+<pre><code>Authorization: Bearer sk_EXAMPLE0000000000000000000000000000000000
+X-Sonorium-Token: sk_EXAMPLE0000000000000000000000000000000000
+?token=sk_EXAMPLE0000000000000000000000000000000000
+</code></pre>
+<p>Use a header. The query form is for devices that can only open a URL; Sonorium masks <code>token=</code> in its log.</p>
+<pre><code class="language-sh">KEY=sk_EXAMPLE0000000000000000000000000000000000
+curl -H &quot;Authorization: Bearer $KEY&quot; http://192.0.2.20:8008/api/sessions
+</code></pre>
+<p><code>GET /api/auth/me</code> shows what the key may do:</p>
+<pre><code class="language-json">{&quot;kind&quot;: &quot;key&quot;, &quot;user&quot;: null, &quot;csrf&quot;: null, &quot;reset&quot;: false,
+ &quot;perms&quot;: [&quot;an.send&quot;, &quot;ch.change&quot;, &quot;ch.play&quot;, &quot;ch.view&quot;, &quot;ev.read&quot;, &quot;th.view&quot;],
+ &quot;bypass&quot;: false, &quot;ingress&quot;: false, &quot;web_ui&quot;: true, &quot;words&quot;: [&quot;forest&quot;, &quot;candy&quot;, &quot;award&quot;, &quot;fancy&quot;],
+ &quot;plugins&quot;: [&quot;integration&quot;, &quot;users&quot;], &quot;starting&quot;: false, &quot;closed&quot;: false,
+ &quot;require_login&quot;: true, &quot;has_users&quot;: true, &quot;ha_users&quot;: false, &quot;zones&quot;: false, &quot;needs_setup&quot;: false}
+</code></pre>
+<p>A key made by a Home Assistant user who is later switched off in Home Assistant stops working (401, &quot;The user who made this key is switched off. Make a new key.&quot;).</p>
+<h3 id="other-callers">Other callers</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Caller</th>
+<th>How it is recognised</th>
+<th>What it may do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Caller">Home Assistant's sidebar (Home Assistant app)</td>
+<td data-label="How it is recognised">Home Assistant signs the person in</td>
+<td data-label="What it may do">Their role, from their Home Assistant account (owner and Administrators: Admin; others: User)</td>
+</tr>
+<tr>
+<td data-label="Caller">A linked phone (the Sonorium app)</td>
+<td data-label="How it is recognised"><code>Authorization: Bearer sd_…</code></td>
+<td data-label="What it may do">Its user's role, less managing users, devices and keys</td>
+</tr>
+<tr>
+<td data-label="Caller">A key</td>
+<td data-label="How it is recognised"><code>sk_…</code>, as above</td>
+<td data-label="What it may do">Only the boxes checked on it, and only its channels when it has a list</td>
+</tr>
+<tr>
+<td data-label="Caller">A signed-in browser</td>
+<td data-label="How it is recognised">The <code>sonorium_session</code> cookie</td>
+<td data-label="What it may do">Its user's role</td>
+</tr>
+<tr>
+<td data-label="Caller">Nobody recognised</td>
+<td data-label="How it is recognised"></td>
+<td data-label="What it may do">Open access while Require login is off; else only the public routes</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Browsers and the CSRF token.</strong> A program can sign in like a browser: <code>POST /api/auth/login</code> with <code>{&quot;username&quot;, &quot;password&quot;}</code> sets the <code>sonorium_session</code> cookie (<code>HttpOnly</code>, <code>SameSite=Strict</code>, <code>Secure</code> on HTTPS). Every change (<code>POST</code>, <code>PUT</code>, <code>DELETE</code>) with that cookie must carry the <code>X-CSRF-Token</code> header, whose value is <code>csrf</code> from <code>GET /api/auth/me</code>; without it the answer is 403 <code>{&quot;detail&quot;: &quot;Reload the page and try again&quot;, &quot;csrf&quot;: true}</code>. A session lasts 30 days, or until it is 14 days unused. Calls with a key or a phone token need no CSRF token. For programs, a key is simpler.</p>
+<h3 id="roles">Roles</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Admin</th>
+<th>User</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="">Channels: see, play and stop, change theme, preset, volume and speakers, add and remove</td>
+<td data-label="Admin">Yes</td>
+<td data-label="User">Yes</td>
+</tr>
+<tr>
+<td data-label="">Playlists and sequences: see, run, edit</td>
+<td data-label="Admin">Yes</td>
+<td data-label="User">Yes</td>
+</tr>
+<tr>
+<td data-label="">Themes and presets</td>
+<td data-label="Admin">See, edit, upload, delete</td>
+<td data-label="User">See</td>
+</tr>
+<tr>
+<td data-label="">Speakers</td>
+<td data-label="Admin">Everything</td>
+<td data-label="User">See, mute and volume</td>
+</tr>
+<tr>
+<td data-label="">Settings, plugins, Connection, Users &amp; devices, Keys, announcements</td>
+<td data-label="Admin">Yes</td>
+<td data-label="User">No</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="abilities">Abilities</h2>
+<p>Every route needs one permission. A key has the abilities checked on it; a role is a set of them. The table follows the <strong>New key</strong> dialog.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Box</th>
+<th>Ability</th>
+<th>Allows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Area">Channels</td>
+<td data-label="Box">View</td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="Allows">Read channels, now playing, stream URLs, settings, status, sounds, ramps, audio outputs</td>
+</tr>
+<tr>
+<td data-label="Area">Channels</td>
+<td data-label="Box">Play and stop</td>
+<td data-label="Ability"><code>ch.play</code></td>
+<td data-label="Allows">Play, pause, stop, stop all, listen, report cast devices, leave or rejoin a link</td>
+</tr>
+<tr>
+<td data-label="Area">Channels</td>
+<td data-label="Box">Change theme, preset and volume</td>
+<td data-label="Ability"><code>ch.change</code></td>
+<td data-label="Allows">Theme, preset, volume, name, speakers muted, Announcements on or off, volume ramps</td>
+</tr>
+<tr>
+<td data-label="Area">Channels</td>
+<td data-label="Box">Change speakers</td>
+<td data-label="Ability"><code>ch.speakers</code></td>
+<td data-label="Allows">A channel's speakers or speaker group; sending a channel to an audio output</td>
+</tr>
+<tr>
+<td data-label="Area">Channels</td>
+<td data-label="Box">Add and remove</td>
+<td data-label="Ability"><code>ch.add</code></td>
+<td data-label="Allows">Create and delete channels</td>
+</tr>
+<tr>
+<td data-label="Area">Themes and presets</td>
+<td data-label="Box">View</td>
+<td data-label="Ability"><code>th.view</code></td>
+<td data-label="Allows">Themes, tracks, track audio, groups, presets, categories, theme export</td>
+</tr>
+<tr>
+<td data-label="Area">Themes and presets</td>
+<td data-label="Box">Edit</td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Allows">Track settings, groups, linked files, presets, categories, favorite, rename, metadata</td>
+</tr>
+<tr>
+<td data-label="Area">Themes and presets</td>
+<td data-label="Box">Upload and delete</td>
+<td data-label="Ability"><code>th.upload</code></td>
+<td data-label="Allows">Create, upload into, import and delete themes</td>
+</tr>
+<tr>
+<td data-label="Area">Playlists and sequences</td>
+<td data-label="Box">View</td>
+<td data-label="Ability"><code>pl.view</code></td>
+<td data-label="Allows">Playlists, a theme's sequences and their step settings</td>
+</tr>
+<tr>
+<td data-label="Area">Playlists and sequences</td>
+<td data-label="Box">Run</td>
+<td data-label="Ability"><code>pl.run</code></td>
+<td data-label="Allows">Start or stop a sequence or playlist on a channel, skip to the next</td>
+</tr>
+<tr>
+<td data-label="Area">Playlists and sequences</td>
+<td data-label="Box">Edit</td>
+<td data-label="Ability"><code>pl.edit</code></td>
+<td data-label="Allows">Create, change and delete playlists and sequences</td>
+</tr>
+<tr>
+<td data-label="Area">Speakers</td>
+<td data-label="Box">View</td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="Allows">Speakers, speaker groups, floors and areas, rescans</td>
+</tr>
+<tr>
+<td data-label="Area">Speakers</td>
+<td data-label="Box">Mute and volume</td>
+<td data-label="Ability"><code>sp.mute</code></td>
+<td data-label="Allows">A speaker's volume and mute; a channel's speakers-muted switch</td>
+</tr>
+<tr>
+<td data-label="Area">Speakers</td>
+<td data-label="Box">Change settings</td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="Allows">Speaker settings, enabled speakers, speakers by address, speaker groups, test sound</td>
+</tr>
+<tr>
+<td data-label="Area">Triggers</td>
+<td data-label="Box">Run triggers</td>
+<td data-label="Ability"><code>tr.run</code></td>
+<td data-label="Allows">Every plugin's webhook triggers</td>
+</tr>
+<tr>
+<td data-label="Area">Events</td>
+<td data-label="Box">Read events</td>
+<td data-label="Ability"><code>ev.read</code></td>
+<td data-label="Allows">The event stream and the event catalogue</td>
+</tr>
+<tr>
+<td data-label="Area">Announcements</td>
+<td data-label="Box">Make announcements</td>
+<td data-label="Ability"><code>an.send</code></td>
+<td data-label="Allows"><code>POST /api/announce</code>, sounds over channels</td>
+</tr>
+<tr>
+<td data-label="Area">Plugins</td>
+<td data-label="Box">Use plugin pages and buttons</td>
+<td data-label="Ability"><code>pg.use</code></td>
+<td data-label="Allows">Plugin list, plugin pages and their buttons</td>
+</tr>
+<tr>
+<td data-label="Area">Settings</td>
+<td data-label="Box">View</td>
+<td data-label="Ability"><code>st.view</code></td>
+<td data-label="Allows">Logs, alerts, Home Assistant cards</td>
+</tr>
+<tr>
+<td data-label="Area">Settings</td>
+<td data-label="Box">Change</td>
+<td data-label="Ability"><code>st.change</code></td>
+<td data-label="Allows">Settings, Advanced values, floors and areas, install features, zones and links</td>
+</tr>
+</tbody>
+</table></div>
+<p>Permissions no key can have: <code>admin.users</code> (users), <code>admin.keys</code> (keys and the older trigger and event-stream tokens), <code>admin.plugins</code> (installing and configuring plugins, schedules, command maps), <code>admin.connection</code> (Settings › Connection), <code>self</code> (linking a phone, your own phones) and <code>device</code> (only a linked phone).</p>
+<p><strong>Channel limits.</strong> A key limited to some channels (<strong>Only these…</strong>) sees only those channels in <code>GET /api/sessions</code> and <code>GET /api/now-playing</code>. A channel route for another channel answers 403 <code>{&quot;detail&quot;: &quot;Not allowed for this channel&quot;}</code>. Routes that change channels without naming one (creating a channel, stop all) answer 403 <code>{&quot;detail&quot;: &quot;Only allowed for some channels&quot;}</code>. <code>POST /api/announce</code> with <code>&quot;all&quot;</code> means the key's channels.</p>
+<hr />
+<h2 id="requests-answers-and-errors">Requests, answers and errors</h2>
+<ul>
+<li>Request bodies are JSON objects, sent with <code>Content-Type: application/json</code>. Uploads are <code>multipart/form-data</code>.</li>
+<li>Times are ISO 8601. Most are UTC (<code>+00:00</code>); a channel's <code>created_at</code> and <code>last_played_at</code> are local time without an offset.</li>
+<li>Unknown fields in answers can appear in later versions: ignore what you don't know.</li>
+</ul>
+<p>Errors have an HTTP status and a body:</p>
+<pre><code class="language-json">{&quot;detail&quot;: &quot;Session not found&quot;}
+</code></pre>
+<p>A body that fails validation answers 422 with a list:</p>
+<pre><code class="language-json">{&quot;detail&quot;: [{&quot;type&quot;: &quot;less_than_equal&quot;, &quot;loc&quot;: [&quot;body&quot;, &quot;volume&quot;], &quot;msg&quot;: &quot;Input should be less than or equal to 100&quot;, &quot;input&quot;: 200, &quot;ctx&quot;: {&quot;le&quot;: 100}}]}
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Body</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Status">400</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;…&quot;}</code></td>
+<td data-label="When">A bad value, <code>Invalid JSON body</code>, <code>Expected a JSON object</code></td>
+</tr>
+<tr>
+<td data-label="Status">401</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;This key is not valid. It may have expired or been revoked.&quot;}</code></td>
+<td data-label="When">A wrong, expired or revoked key</td>
+</tr>
+<tr>
+<td data-label="Status">401</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;Sign in first&quot;, &quot;login&quot;: true}</code></td>
+<td data-label="When">No key, and sign-in is required</td>
+</tr>
+<tr>
+<td data-label="Status">401</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;A valid token is needed&quot;}</code></td>
+<td data-label="When">Triggers and the event stream without a key or token</td>
+</tr>
+<tr>
+<td data-label="Status">403</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;Not allowed&quot;}</code></td>
+<td data-label="When">The key lacks the ability; also any <code>/api/…</code> path Sonorium doesn't have</td>
+</tr>
+<tr>
+<td data-label="Status">403</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;Only an admin can do this&quot;}</code></td>
+<td data-label="When">A User's sign-in or phone on an Admin route</td>
+</tr>
+<tr>
+<td data-label="Status">403</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;Not allowed for this channel&quot;}</code></td>
+<td data-label="When">A channel outside a key's channels</td>
+</tr>
+<tr>
+<td data-label="Status">403</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;Not allowed from another site&quot;}</code></td>
+<td data-label="When">A browser request from another web site without a key</td>
+</tr>
+<tr>
+<td data-label="Status">404</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;Session not found&quot;}</code> and similar</td>
+<td data-label="When">Unknown id</td>
+</tr>
+<tr>
+<td data-label="Status">404</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;Not Found&quot;}</code></td>
+<td data-label="When">A route of a plugin that is switched off</td>
+</tr>
+<tr>
+<td data-label="Status">409</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;…&quot;}</code></td>
+<td data-label="When">A conflict: a duplicate name, no free channel slot, nothing to skip, a busy speaker, a group in use</td>
+</tr>
+<tr>
+<td data-label="Status">422</td>
+<td data-label="Body">a list, as above</td>
+<td data-label="When">A field out of range or of the wrong type</td>
+</tr>
+<tr>
+<td data-label="Status">429</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;…&quot;}</code> + <code>Retry-After</code></td>
+<td data-label="When">Rate limited</td>
+</tr>
+<tr>
+<td data-label="Status">502</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;…&quot;}</code></td>
+<td data-label="When">A plugin, a speaker or text to speech failed</td>
+</tr>
+<tr>
+<td data-label="Status">503</td>
+<td data-label="Body"><code>{&quot;detail&quot;: &quot;Sonorium is starting&quot;, &quot;starting&quot;: true}</code></td>
+<td data-label="When">Retry in a few seconds</td>
+</tr>
+</tbody>
+</table></div>
+<p>Theme, category and <code>/api/channels</code> routes answer errors with both keys, <code>{&quot;detail&quot;: &quot;Theme not found&quot;, &quot;error&quot;: &quot;Theme not found&quot;}</code>, with the status chosen from the message: 404 &quot;… not found&quot;, 409 &quot;… already exists&quot;, 503 &quot;… not available&quot;, 500 &quot;Failed …&quot;, else 400.</p>
+<hr />
+<h2 id="rate-limits">Rate limits</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>What</th>
+<th>Limit</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="What">Webhook trigger calls</td>
+<td data-label="Limit">10 in a burst, then 2 a second, per trigger</td>
+<td data-label="Answer">429, <code>Retry-After</code></td>
+</tr>
+<tr>
+<td data-label="What">Wrong trigger tokens</td>
+<td data-label="Limit">10 from one address, then one every 6 s</td>
+<td data-label="Answer">429, <code>Retry-After</code></td>
+</tr>
+<tr>
+<td data-label="What">Sign-in (<code>/api/auth/login</code>, <code>/api/pair/login</code>)</td>
+<td data-label="Limit">5 failures a minute from one address</td>
+<td data-label="Answer">429, <code>Retry-After</code></td>
+</tr>
+<tr>
+<td data-label="What">Phone linking (<code>/api/pair</code>)</td>
+<td data-label="Limit">5 in a burst, then one every 12 s, per address</td>
+<td data-label="Answer">429, <code>Retry-After</code></td>
+</tr>
+<tr>
+<td data-label="What">Event streams open at once</td>
+<td data-label="Limit">20 per server</td>
+<td data-label="Answer">503 <code>Too many event streams open</code></td>
+</tr>
+<tr>
+<td data-label="What">Everything else</td>
+<td data-label="Limit">none</td>
+<td data-label="Answer"></td>
+</tr>
+</tbody>
+</table></div>
+<p>Limits are kept in memory: a restart clears them.</p>
+<hr />
+<h2 id="live-events">Live events</h2>
+<p>Sonorium announces what happens as events: a channel started, its volume changed, a sequence moved to its next step, a speaker went offline. A program follows them as <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events" target="_blank" rel="noopener">Server-Sent Events</a>, a long HTTP answer that never ends, one event at a time, like a news ticker. Use it instead of asking for <code>/api/sessions</code> every few seconds.</p>
+<p><code>GET /api/events/stream</code> · <code>ev.read</code> (<strong>Read events</strong>)</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Query</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Query"><code>types</code></td>
+<td data-label="Default"><code>*</code></td>
+<td data-label="Meaning">Comma-separated patterns: a type (<code>channel.started</code>), a prefix (<code>channel.*</code>) or <code>*</code></td>
+</tr>
+<tr>
+<td data-label="Query"><code>last_event_id</code></td>
+<td data-label="Default"></td>
+<td data-label="Meaning">Replay the events after this id (same as the <code>Last-Event-ID</code> header)</td>
+</tr>
+<tr>
+<td data-label="Query"><code>max_events</code></td>
+<td data-label="Default"><code>0</code></td>
+<td data-label="Meaning">Above 0: close the stream after that many events</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sh">curl -N -H &quot;Authorization: Bearer $KEY&quot; &quot;http://192.0.2.20:8008/api/events/stream?types=channel.*,sound.*&quot;
+</code></pre>
+<p>What arrives:</p>
+<pre><code>retry: 5000
+
+id: d10435418d284eea8d9f6cdfbd0251be:12
+event: channel.started
+data: {&quot;id&quot;: 12, &quot;boot_id&quot;: &quot;d10435418d284eea8d9f6cdfbd0251be&quot;, &quot;type&quot;: &quot;channel.started&quot;, &quot;time&quot;: &quot;2026-10-12T16:17:39.796333+00:00&quot;, &quot;origin&quot;: &quot;sonorium&quot;, &quot;data&quot;: {&quot;channel_id&quot;: &quot;2c62267b&quot;, &quot;name&quot;: &quot;Kitchen&quot;, &quot;theme_id&quot;: &quot;df297db5-a98d-4372-8029-2c49d1e280e4&quot;, &quot;preset_id&quot;: &quot;slow_night_at_the_inn&quot;, &quot;volume&quot;: 40, &quot;speakers&quot;: [&quot;net:dlna:fake-10&quot;]}}
+
+id: d10435418d284eea8d9f6cdfbd0251be:15
+event: channel.changed
+data: {&quot;id&quot;: 15, &quot;boot_id&quot;: &quot;d10435418d284eea8d9f6cdfbd0251be&quot;, &quot;type&quot;: &quot;channel.changed&quot;, &quot;time&quot;: &quot;2026-10-12T16:17:41.983708+00:00&quot;, &quot;origin&quot;: &quot;sonorium&quot;, &quot;data&quot;: {&quot;channel_id&quot;: &quot;2c62267b&quot;, &quot;name&quot;: &quot;Kitchen&quot;, &quot;changes&quot;: {&quot;speakers_muted&quot;: true}}}
+
+: keep-alive
+</code></pre>
+<ul>
+<li>Each event has <code>id</code>, <code>boot_id</code>, <code>type</code>, <code>time</code> (UTC), <code>origin</code> and <code>data</code>. <code>origin</code> is <code>sonorium</code> (the web UI, the API, Home Assistant, timers) or <code>plugin:&lt;id&gt;</code>.</li>
+<li>In events, <code>channel_id</code> is the channel's id (the <code>id</code> of <code>/api/sessions</code>).</li>
+<li>A <code>: keep-alive</code> line comes every 15 s. Treat 45 s of silence as a lost connection.</li>
+<li><code>retry: 5000</code>: reconnect after 5 s. Send the last <code>id:</code> you received as <code>Last-Event-ID</code> (or <code>?last_event_id=</code>) and Sonorium replays the events since then that it still holds (the last 200), then goes on live.</li>
+<li>The id is <code>&lt;boot_id&gt;:&lt;n&gt;</code>. <code>n</code> starts again at 1 when Sonorium restarts. An id from before a restart replays every event of the new run Sonorium still holds; when <code>boot_id</code> changes, read the state again (<code>GET /api/sessions</code>).</li>
+<li>A reader that falls more than 500 events behind loses the oldest.</li>
+<li>Errors: 401 no or wrong key, 400 a bad pattern, 503 too many streams open.</li>
+</ul>
+<p>Browsers' <code>EventSource</code> can't send headers: use <code>?token=</code> there.</p>
+<p>The event stream also accepts an older token made for it alone: <code>POST /api/events/token</code> (Admin) answers <code>{&quot;token&quot;: &quot;…&quot;}</code> once and replaces the previous one; <code>GET /api/events/token</code> says whether one is set; <code>DELETE /api/events/token</code> revokes it. A key with <strong>Read events</strong> does the same job.</p>
+<h3 id="event-catalogue">Event catalogue</h3>
+<p><code>GET /api/events/catalogue</code> (<code>ev.read</code>) returns this list with descriptions. Events of a channel all have <code>channel_id</code> and <code>name</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Event</th>
+<th>When</th>
+<th>Data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Event"><code>sonorium.started</code></td>
+<td data-label="When">Sonorium finished starting; plugins are on</td>
+<td data-label="Data"><code>version</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>channel.created</code></td>
+<td data-label="When">A channel was added</td>
+<td data-label="Data"><code>channel_id</code>, <code>name</code>, <code>theme_id</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>channel.deleted</code></td>
+<td data-label="When">A channel was deleted</td>
+<td data-label="Data"><code>channel_id</code>, <code>name</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>channel.started</code></td>
+<td data-label="When">A channel started playing on its speakers</td>
+<td data-label="Data"><code>theme_id</code>, <code>preset_id</code>, <code>volume</code>, <code>speakers</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>channel.stopped</code></td>
+<td data-label="When">A channel stopped</td>
+<td data-label="Data"><code>reason</code>: <code>stopped</code>, <code>paused</code>, <code>idle</code> (no speaker pulled audio for 90 s), <code>ended</code> (a playlist without repeat finished), <code>schedule</code> (Kid mode's hours ended)</td>
+</tr>
+<tr>
+<td data-label="Event"><code>channel.changed</code></td>
+<td data-label="When">A channel's settings changed</td>
+<td data-label="Data"><code>changes</code>: only what changed, any of <code>theme_id</code>, <code>preset_id</code>, <code>sequence_id</code>, <code>playlist_id</code>, <code>volume</code>, <code>speakers_muted</code>, <code>announcements</code>, <code>name</code>, <code>speakers</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>channel.listening</code></td>
+<td data-label="When">The first listener came, or the last one left</td>
+<td data-label="Data"><code>listening</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>channel.output_added</code> / <code>channel.output_removed</code></td>
+<td data-label="When">A cast device was reported playing the channel, or stopped</td>
+<td data-label="Data"><code>output_id</code>, <code>kind</code>, <code>output_name</code>, <code>address</code>; removed: <code>reason</code> (<code>removed</code>, <code>expired</code>, <code>replaced</code>, <code>stopped</code>, <code>paused</code>, <code>idle</code>, <code>deleted</code>)</td>
+</tr>
+<tr>
+<td data-label="Event"><code>sequence.step</code></td>
+<td data-label="When">A sequence moved to a step (also step 1 when it starts)</td>
+<td data-label="Data"><code>theme_id</code>, <code>sequence_id</code>, <code>step</code>, <code>steps</code>, <code>preset_id</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>playlist.entry</code></td>
+<td data-label="When">A playlist moved to an entry</td>
+<td data-label="Data"><code>playlist_id</code>, <code>position</code>, <code>entries</code>, <code>theme_id</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>sound.started</code> / <code>sound.ended</code></td>
+<td data-label="When">A sound or announcement started or ended over a channel</td>
+<td data-label="Data"><code>sound_id</code>, <code>label</code>, <code>origin</code>; ended: <code>reason</code> (<code>finished</code>, <code>replaced</code>, <code>cancelled</code>, <code>stopped</code>, <code>error</code>), <code>capped</code>, <code>played</code> (seconds)</td>
+</tr>
+<tr>
+<td data-label="Event"><code>ramp.started</code> / <code>ramp.finished</code> / <code>ramp.cancelled</code></td>
+<td data-label="When">A channel's volume ramp</td>
+<td data-label="Data"><code>ramp_id</code>, <code>from</code>, <code>to</code>, <code>seconds</code>, <code>curve</code>, <code>then</code>; <code>level</code>; cancelled: <code>reason</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>zone.switched</code></td>
+<td data-label="When">Zones were switched on or off</td>
+<td data-label="Data"><code>on</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>zone.changed</code></td>
+<td data-label="When">A channel's owner, Kid mode or hours changed</td>
+<td data-label="Data"><code>changes</code>: any of <code>owner</code>, <code>kid_mode</code>, <code>schedule</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>zone.speaker_taken</code></td>
+<td data-label="When">A channel took a speaker another channel was playing on</td>
+<td data-label="Data"><code>speaker_id</code>, <code>from_channel_id</code>, <code>by</code>: <code>home</code> or <code>admin</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>zone.home_changed</code></td>
+<td data-label="When">A speaker has a new home channel</td>
+<td data-label="Data"><code>speaker_id</code>, <code>channel_id</code>, <code>name</code>, <code>reason</code>: <code>deleted</code>, <code>removed</code>, <code>admin</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>zone.schedule_ended</code></td>
+<td data-label="When">Kid mode's hours ended</td>
+<td data-label="Data"><code>channel_id</code>, <code>name</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>link.created</code> / <code>link.changed</code> / <code>link.removed</code></td>
+<td data-label="When">An admin linked channels, changed or removed a link</td>
+<td data-label="Data"><code>link_id</code>, <code>name</code>; created: <code>channels</code>, <code>theme_id</code>, <code>preset_id</code>, <code>playlist_id</code>; changed: <code>changes</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>link.left</code> / <code>link.rejoined</code></td>
+<td data-label="When">A channel left a link or joined it again</td>
+<td data-label="Data"><code>link_id</code>, <code>name</code>, <code>channel_id</code>; rejoined: <code>by</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>speaker.added</code></td>
+<td data-label="When">A speaker appeared</td>
+<td data-label="Data"><code>speaker_id</code>, <code>name</code>, <code>type</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>speaker.removed</code></td>
+<td data-label="When">A speaker is no longer known</td>
+<td data-label="Data"><code>speaker_id</code>, <code>name</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>speaker.unavailable</code> / <code>speaker.available</code></td>
+<td data-label="When">A speaker went offline, or came back</td>
+<td data-label="Data"><code>speaker_id</code>, <code>name</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>theme.created</code></td>
+<td data-label="When">A theme was created, uploaded or imported</td>
+<td data-label="Data"><code>theme_id</code>, <code>folder</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>theme.changed</code></td>
+<td data-label="When">A theme's files changed (saves within a second are one event)</td>
+<td data-label="Data"><code>theme_id</code>, <code>folder</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>theme.deleted</code></td>
+<td data-label="When">A theme was deleted</td>
+<td data-label="Data"><code>theme_id</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>plugin.enabled</code> / <code>plugin.disabled</code></td>
+<td data-label="When">A plugin was switched on or off</td>
+<td data-label="Data"><code>plugin_id</code>, <code>name</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>schedule.fired</code></td>
+<td data-label="When">A plugin's scheduled job ran</td>
+<td data-label="Data"><code>plugin_id</code>, <code>job_id</code>, <code>name</code>, <code>data</code>, <code>scheduled_for</code>, <code>missed</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>trigger.received</code></td>
+<td data-label="When">A webhook trigger was called</td>
+<td data-label="Data"><code>plugin_id</code>, <code>trigger</code>, <code>payload</code>, <code>method</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>command.received</code></td>
+<td data-label="When">A plugin handed over a remote's code</td>
+<td data-label="Data"><code>plugin_id</code>, <code>map_id</code>, <code>code</code>, <code>actions</code>, <code>learned</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>error</code></td>
+<td data-label="When">Something failed that nobody was waiting for</td>
+<td data-label="Data"><code>where</code>, <code>message</code>, <code>plugin_id</code></td>
+</tr>
+<tr>
+<td data-label="Event"><code>plugin.&lt;id&gt;.&lt;name&gt;</code></td>
+<td data-label="When">A plugin's own event</td>
+<td data-label="Data">the plugin's</td>
+</tr>
+</tbody>
+</table></div>
+<p>Not sent as events: playlist and speaker group edits, floor and area changes, settings changes. Read those again when you need them.</p>
+<hr />
+<h2 id="channels">Channels</h2>
+<p>A channel is what you create on the Channels page: a theme, a preset or sequence, speakers and a volume. In the API a channel is a <strong>session</strong> (<code>/api/sessions</code>, <code>session_id</code>, 8 hex characters such as <code>2c62267b</code>). Separately, <code>/api/channels</code> lists numbered stream slots (<code>/stream/channel1</code>…); a channel borrows a slot while it plays. Use <code>/api/sessions</code>.</p>
+<h3 id="the-channel-object">The channel object</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;2c62267b&quot;,
+  &quot;name&quot;: &quot;Kitchen&quot;,
+  &quot;name_source&quot;: &quot;custom&quot;,
+  &quot;theme_id&quot;: &quot;df297db5-a98d-4372-8029-2c49d1e280e4&quot;,
+  &quot;preset_id&quot;: &quot;slow_night_at_the_inn&quot;,
+  &quot;speaker_group_id&quot;: null,
+  &quot;adhoc_selection&quot;: {&quot;include_floors&quot;: [], &quot;include_areas&quot;: [], &quot;include_speakers&quot;: [&quot;net:dlna:fake-10&quot;],
+                      &quot;exclude_areas&quot;: [], &quot;exclude_speakers&quot;: []},
+  &quot;volume&quot;: 35,
+  &quot;is_playing&quot;: false,
+  &quot;speakers&quot;: [&quot;net:dlna:fake-10&quot;],
+  &quot;speaker_summary&quot;: &quot;Kitchen speaker&quot;,
+  &quot;channel_id&quot;: null,
+  &quot;sequence_id&quot;: null,
+  &quot;preset_choice&quot;: &quot;slow_night_at_the_inn&quot;,
+  &quot;playlist_id&quot;: null,
+  &quot;sequence&quot;: null,
+  &quot;playlist&quot;: null,
+  &quot;speakers_muted&quot;: false,
+  &quot;announcements&quot;: true,
+  &quot;listening&quot;: false,
+  &quot;outputs&quot;: [],
+  &quot;recent&quot;: [],
+  &quot;created_at&quot;: &quot;2026-10-12T16:17:39.746583&quot;,
+  &quot;last_played_at&quot;: null
+}
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>id</code></td>
+<td data-label="Type">string</td>
+<td data-label="Meaning">The channel's id</td>
+</tr>
+<tr>
+<td data-label="Field"><code>name</code></td>
+<td data-label="Type">string</td>
+<td data-label="Meaning">Its name</td>
+</tr>
+<tr>
+<td data-label="Field"><code>name_source</code></td>
+<td data-label="Type"><code>custom</code> or <code>auto</code></td>
+<td data-label="Meaning">Typed by someone, or made from its speakers</td>
+</tr>
+<tr>
+<td data-label="Field"><code>theme_id</code>, <code>preset_id</code></td>
+<td data-label="Type">string or null</td>
+<td data-label="Meaning">The theme and preset</td>
+</tr>
+<tr>
+<td data-label="Field"><code>speaker_group_id</code></td>
+<td data-label="Type">string or null</td>
+<td data-label="Meaning">A saved speaker group, or null when <code>adhoc_selection</code> is used</td>
+</tr>
+<tr>
+<td data-label="Field"><code>adhoc_selection</code></td>
+<td data-label="Type">object or null</td>
+<td data-label="Meaning">Floors, areas and speakers to include, areas and speakers to leave out</td>
+</tr>
+<tr>
+<td data-label="Field"><code>volume</code></td>
+<td data-label="Type">integer 0-100</td>
+<td data-label="Meaning">The volume</td>
+</tr>
+<tr>
+<td data-label="Field"><code>is_playing</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Meaning">Playing on its speakers</td>
+</tr>
+<tr>
+<td data-label="Field"><code>speakers</code></td>
+<td data-label="Type">string[]</td>
+<td data-label="Meaning">The speaker ids the selection gives now</td>
+</tr>
+<tr>
+<td data-label="Field"><code>speaker_summary</code></td>
+<td data-label="Type">string</td>
+<td data-label="Meaning">The speakers in words, e.g. <code>&quot;Kitchen speaker&quot;</code>, <code>&quot;No speakers&quot;</code></td>
+</tr>
+<tr>
+<td data-label="Field"><code>channel_id</code></td>
+<td data-label="Type">integer or null</td>
+<td data-label="Meaning">The stream slot while it has one (<code>/stream/channel{N}</code>)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>sequence_id</code>, <code>playlist_id</code></td>
+<td data-label="Type">string or null</td>
+<td data-label="Meaning">The sequence or playlist it runs</td>
+</tr>
+<tr>
+<td data-label="Field"><code>preset_choice</code></td>
+<td data-label="Type">string or null</td>
+<td data-label="Meaning">What the preset box shows: <code>seq:&lt;sequence_id&gt;</code> while a sequence is set, else <code>preset_id</code></td>
+</tr>
+<tr>
+<td data-label="Field"><code>sequence</code>, <code>playlist</code></td>
+<td data-label="Type">object or null</td>
+<td data-label="Meaning">Where the sequence or playlist is (<a href="#sequence-and-playlist-status">below</a>)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>speakers_muted</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Meaning">The speakers get silence; a browser or phone listening still hears the channel</td>
+</tr>
+<tr>
+<td data-label="Field"><code>announcements</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Meaning">Announcements play on this channel</td>
+</tr>
+<tr>
+<td data-label="Field"><code>listening</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Meaning">Someone listens in a browser or the app</td>
+</tr>
+<tr>
+<td data-label="Field"><code>outputs</code></td>
+<td data-label="Type">object[]</td>
+<td data-label="Meaning">Cast devices the app reported playing it</td>
+</tr>
+<tr>
+<td data-label="Field"><code>recent</code></td>
+<td data-label="Type"><code>[{at, text}]</code></td>
+<td data-label="Meaning">The latest changes, newest first</td>
+</tr>
+<tr>
+<td data-label="Field"><code>created_at</code>, <code>last_played_at</code></td>
+<td data-label="Type">string or null</td>
+<td data-label="Meaning">Local times without an offset</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="routes">Routes</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/sessions</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does">Every channel (a key with channels: only those)</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/sessions</code></td>
+<td data-label="Ability"><code>ch.add</code></td>
+<td data-label="What it does">Create a channel (stopped). 201 + the channel</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/sessions/{id}</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does">One channel</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/sessions/{id}</code></td>
+<td data-label="Ability"><code>ch.change</code> (+ <code>ch.speakers</code> to change speakers)</td>
+<td data-label="What it does">Change theme, preset, speakers, name, volume, Announcements; only the fields sent change</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/sessions/{id}</code></td>
+<td data-label="Ability"><code>ch.add</code></td>
+<td data-label="What it does">Delete it. 204, no body</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/sessions/{id}/play</code></td>
+<td data-label="Ability"><code>ch.play</code></td>
+<td data-label="What it does">Play on its speakers</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/sessions/{id}/pause</code></td>
+<td data-label="Ability"><code>ch.play</code></td>
+<td data-label="What it does">Pause</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/sessions/{id}/stop</code></td>
+<td data-label="Ability"><code>ch.play</code></td>
+<td data-label="What it does">Stop (fades out)</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/sessions/stop-all</code></td>
+<td data-label="Ability"><code>ch.play</code></td>
+<td data-label="What it does">Stop every channel</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/sessions/{id}/volume</code></td>
+<td data-label="Ability"><code>ch.change</code></td>
+<td data-label="What it does">Set the volume</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/sessions/{id}/speakers-muted</code></td>
+<td data-label="Ability"><code>ch.change</code> or <code>sp.mute</code></td>
+<td data-label="What it does">Mute or unmute the speakers</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/sessions/{id}/announcements</code></td>
+<td data-label="Ability"><code>ch.change</code></td>
+<td data-label="What it does">Announcements on or off</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/sessions/{id}/playback</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does">Sequence and playlist status</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/sessions/{id}/sequence</code></td>
+<td data-label="Ability"><code>pl.run</code></td>
+<td data-label="What it does">Run a sequence of its theme</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/sessions/{id}/sequence</code></td>
+<td data-label="Ability"><code>pl.run</code></td>
+<td data-label="What it does">Stop the sequence (the current preset stays)</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/sessions/{id}/playlist</code></td>
+<td data-label="Ability"><code>pl.run</code></td>
+<td data-label="What it does">Play a playlist</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/sessions/{id}/playlist</code></td>
+<td data-label="Ability"><code>pl.run</code></td>
+<td data-label="What it does">Stop the playlist (the current theme stays)</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/sessions/{id}/next</code></td>
+<td data-label="Ability"><code>pl.run</code></td>
+<td data-label="What it does">Next playlist entry, or the sequence's next step</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/sessions/{id}/listen</code></td>
+<td data-label="Ability"><code>ch.play</code></td>
+<td data-label="What it does">Start the mix for a listener and get the stream path</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/sessions/{id}/listen</code></td>
+<td data-label="Ability"><code>ch.play</code></td>
+<td data-label="What it does">The listener is gone</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/sessions/{id}/outputs</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does">Cast devices reported playing it</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/sessions/{id}/outputs</code></td>
+<td data-label="Ability"><code>ch.play</code></td>
+<td data-label="What it does">Report a cast device playing it</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/sessions/{id}/outputs/{output_id}</code></td>
+<td data-label="Ability"><code>ch.play</code></td>
+<td data-label="What it does">Heartbeat for a reported device</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/sessions/{id}/outputs/{output_id}</code></td>
+<td data-label="Ability"><code>ch.play</code></td>
+<td data-label="What it does">The device stopped</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/now-playing</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does">What each playing channel's mixer does now</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/channels</code>, <code>/api/channels/{n}</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does">The stream slots</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/channels/{n}/play</code>, <code>/stop</code></td>
+<td data-label="Ability"><code>ch.play</code></td>
+<td data-label="What it does">Older slot routes: they bypass channels. Use <code>/api/sessions</code>.</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/channels/{n}/volume</code></td>
+<td data-label="Ability"><code>ch.change</code></td>
+<td data-label="What it does">Older slot route; it changes nothing</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="creating-and-changing-a-channel">Creating and changing a channel</h3>
+<p><code>POST /api/sessions</code> and <code>PUT /api/sessions/{id}</code> take the same fields; all are optional.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>theme_id</code></td>
+<td data-label="Type">string</td>
+<td data-label="Meaning">A theme's id. A playing channel crossfades to it. With no <code>preset_id</code>, the theme's default preset.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>preset_id</code></td>
+<td data-label="Type">string</td>
+<td data-label="Meaning">A preset of the theme (the channel glides to it over 3 s and a running sequence stops), <code>&quot;&quot;</code> for none, or <code>seq:&lt;sequence_id&gt;</code> to run that sequence</td>
+</tr>
+<tr>
+<td data-label="Field"><code>speaker_group_id</code></td>
+<td data-label="Type">string</td>
+<td data-label="Meaning">Play on a saved speaker group</td>
+</tr>
+<tr>
+<td data-label="Field"><code>adhoc_selection</code></td>
+<td data-label="Type">object</td>
+<td data-label="Meaning"><code>{include_floors, include_areas, include_speakers, exclude_areas, exclude_speakers}</code>, each a list of ids</td>
+</tr>
+<tr>
+<td data-label="Field"><code>custom_name</code></td>
+<td data-label="Type">string</td>
+<td data-label="Meaning">The name</td>
+</tr>
+<tr>
+<td data-label="Field"><code>volume</code></td>
+<td data-label="Type">integer 0-100</td>
+<td data-label="Meaning">The volume (new channels: Settings' default volume)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>announcements</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Meaning">Announcements play on it (default true)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Changing speakers on a playing channel starts and stops speakers as needed. Only speakers switched on in <strong>Settings › Speakers</strong> can play.</p>
+<p>Errors: 404 unknown channel, theme or sequence; 400 a bad value; 409 a sequence without presets; 403 <code>Not allowed to change speakers</code> (no <code>ch.speakers</code>); 422 volume outside 0-100.</p>
+<pre><code class="language-sh">B=http://192.0.2.20:8008/api
+# create
+curl -X POST $B/sessions -H &quot;Authorization: Bearer $KEY&quot; -H &quot;Content-Type: application/json&quot; \
+     -d '{&quot;theme_id&quot;: &quot;df297db5-a98d-4372-8029-2c49d1e280e4&quot;, &quot;custom_name&quot;: &quot;Kitchen&quot;, &quot;volume&quot;: 35,
+          &quot;adhoc_selection&quot;: {&quot;include_speakers&quot;: [&quot;media_player.kitchen&quot;]}}'
+# preset, theme, speaker group
+curl -X PUT $B/sessions/2c62267b -H &quot;Authorization: Bearer $KEY&quot; -H &quot;Content-Type: application/json&quot; -d '{&quot;preset_id&quot;: &quot;slow_night_at_the_inn&quot;}'
+curl -X PUT $B/sessions/2c62267b -H &quot;Authorization: Bearer $KEY&quot; -H &quot;Content-Type: application/json&quot; -d '{&quot;theme_id&quot;: &quot;b851228a-94ca-47b7-aa55-576ceb791adb&quot;}'
+curl -X PUT $B/sessions/2c62267b -H &quot;Authorization: Bearer $KEY&quot; -H &quot;Content-Type: application/json&quot; -d '{&quot;speaker_group_id&quot;: &quot;downstairs&quot;}'
+</code></pre>
+<h3 id="play-stop-and-volume">Play, stop and volume</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Body</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Route"><code>POST /api/sessions/{id}/play</code></td>
+<td data-label="Body">none</td>
+<td data-label="Answer"><code>{&quot;status&quot;: &quot;playing&quot;, &quot;channel_id&quot;: 1, &quot;sequence_id&quot;: null, &quot;playlist_id&quot;: null}</code></td>
+</tr>
+<tr>
+<td data-label="Route"><code>POST /api/sessions/{id}/pause</code></td>
+<td data-label="Body">none</td>
+<td data-label="Answer"><code>{&quot;status&quot;: &quot;paused&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Route"><code>POST /api/sessions/{id}/stop</code></td>
+<td data-label="Body">none</td>
+<td data-label="Answer"><code>{&quot;status&quot;: &quot;stopped&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Route"><code>POST /api/sessions/stop-all</code></td>
+<td data-label="Body">none</td>
+<td data-label="Answer"><code>{&quot;stopped&quot;: 2}</code> (how many)</td>
+</tr>
+<tr>
+<td data-label="Route"><code>POST /api/sessions/{id}/volume</code></td>
+<td data-label="Body"><code>{&quot;volume&quot;: 40}</code> (0-100)</td>
+<td data-label="Answer"><code>{&quot;volume&quot;: 40}</code></td>
+</tr>
+<tr>
+<td data-label="Route"><code>PUT /api/sessions/{id}/speakers-muted</code></td>
+<td data-label="Body"><code>{&quot;muted&quot;: true}</code></td>
+<td data-label="Answer"><code>{&quot;speakers_muted&quot;: true}</code></td>
+</tr>
+<tr>
+<td data-label="Route"><code>PUT /api/sessions/{id}/announcements</code></td>
+<td data-label="Body"><code>{&quot;on&quot;: false}</code></td>
+<td data-label="Answer"><code>{&quot;announcements&quot;: false}</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Play, pause and stop answer at once; fades and speaker commands follow. Play errors: 400 <code>No theme selected</code>, <code>Theme not found</code>, <code>No speakers selected</code>; 404 unknown channel. Watch <code>channel.started</code> and <code>channel.stopped</code> to know when the speakers follow.</p>
+<pre><code class="language-sh">curl -X POST $B/sessions/2c62267b/play   -H &quot;Authorization: Bearer $KEY&quot;
+curl -X POST $B/sessions/2c62267b/volume -H &quot;Authorization: Bearer $KEY&quot; -H &quot;Content-Type: application/json&quot; -d '{&quot;volume&quot;: 40}'
+curl -X POST $B/sessions/2c62267b/stop   -H &quot;Authorization: Bearer $KEY&quot;
+</code></pre>
+<h3 id="sequence-and-playlist-status">Sequence and playlist status</h3>
+<p><code>GET /api/sessions/{id}/playback</code>, and the answer of the sequence, playlist and next routes:</p>
+<pre><code class="language-json">{
+  &quot;session_id&quot;: &quot;2c62267b&quot;,
+  &quot;sequence_id&quot;: &quot;evening_at_the_inn&quot;,
+  &quot;preset_choice&quot;: &quot;seq:evening_at_the_inn&quot;,
+  &quot;playlist_id&quot;: null,
+  &quot;sequence&quot;: {&quot;id&quot;: &quot;evening_at_the_inn&quot;, &quot;name&quot;: &quot;Evening at the inn&quot;, &quot;running&quot;: true, &quot;single_pass&quot;: false,
+               &quot;step&quot;: 1, &quot;steps&quot;: 2, &quot;at_end&quot;: &quot;reverse&quot;, &quot;current_preset_id&quot;: &quot;slow_night_at_the_inn&quot;,
+               &quot;current_preset_name&quot;: &quot;Slow night at the inn&quot;,
+               &quot;next_change_at&quot;: &quot;2026-10-12T16:27:49.085183+00:00&quot;, &quot;seconds_until_change&quot;: 607},
+  &quot;playlist&quot;: null
+}
+</code></pre>
+<p>A running playlist:</p>
+<pre><code class="language-json">&quot;playlist&quot;: {&quot;id&quot;: &quot;e76d8472&quot;, &quot;name&quot;: &quot;Evening&quot;, &quot;running&quot;: true, &quot;entry_index&quot;: 0, &quot;position&quot;: 0, &quot;entries&quot;: 2,
+             &quot;theme_id&quot;: &quot;df297db5-a98d-4372-8029-2c49d1e280e4&quot;, &quot;theme_name&quot;: &quot;Tavern&quot;,
+             &quot;next_change_at&quot;: &quot;2026-10-12T16:57:23.387626+00:00&quot;, &quot;seconds_until_change&quot;: 2381}
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Body</th>
+<th>Errors</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Route"><code>POST /api/sessions/{id}/sequence</code></td>
+<td data-label="Body"><code>{&quot;sequence_id&quot;: &quot;evening_at_the_inn&quot;}</code></td>
+<td data-label="Errors">400 no id, 404 unknown, 409 a sequence without presets</td>
+</tr>
+<tr>
+<td data-label="Route"><code>DELETE /api/sessions/{id}/sequence</code></td>
+<td data-label="Body">none</td>
+<td data-label="Errors">404</td>
+</tr>
+<tr>
+<td data-label="Route"><code>PUT /api/sessions/{id}/playlist</code></td>
+<td data-label="Body"><code>{&quot;playlist_id&quot;: &quot;e76d8472&quot;}</code></td>
+<td data-label="Errors">400, 404, 409</td>
+</tr>
+<tr>
+<td data-label="Route"><code>DELETE /api/sessions/{id}/playlist</code></td>
+<td data-label="Body">none</td>
+<td data-label="Errors">404</td>
+</tr>
+<tr>
+<td data-label="Route"><code>POST /api/sessions/{id}/next</code></td>
+<td data-label="Body">none</td>
+<td data-label="Errors">409 <code>The channel is not playing</code>, 409 <code>No playlist or sequence is running</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>next</code> answers the status plus <code>&quot;skipped&quot;: &quot;playlist&quot;</code> or <code>&quot;sequence&quot;</code>.</p>
+<h3 id="listening-and-cast-devices">Listening and cast devices</h3>
+<p><code>POST /api/sessions/{id}/listen</code> with <code>{&quot;hold_seconds&quot;: 0-300}</code> (default 15) starts the channel's mix without its speakers and answers <code>{&quot;channel_id&quot;: 1, &quot;stream_path&quot;: &quot;/stream/channel1&quot;, &quot;hold_seconds&quot;: 60}</code>. Play <code>http://&lt;host&gt;:8008&lt;stream_path&gt;?local=1</code> while you listen, then <code>DELETE /api/sessions/{id}/listen</code> (<code>{&quot;status&quot;: &quot;ok&quot;}</code>). <code>hold_seconds</code> is how long the mix waits for the listener to reconnect after its connection drops. Errors: 400 <code>No theme selected</code>, <code>Theme not found</code>, <code>hold_seconds must be between 0 and 300</code>; 409 <code>No free channel</code> (every slot is busy).</p>
+<p><code>POST /api/sessions/{id}/outputs</code> reports a cast device the caller sent the stream to, so the channel's card shows it and the mix keeps running: body <code>{&quot;kind&quot;: &quot;cast&quot;, &quot;name&quot;: &quot;Office display&quot;, &quot;address&quot;: &quot;192.0.2.10&quot;, &quot;receiver_id&quot;: &quot;…&quot;}</code> (<code>kind</code>: lowercase, up to 20 characters, default <code>cast</code>; <code>name</code> up to 60, default <code>Cast device</code>; <code>address</code> and <code>receiver_id</code> up to 100). The 201 answer has <code>output_id</code>, <code>stream_url</code>, <code>heartbeat_seconds</code> (60) and <code>expire_seconds</code> (180). Send <code>PUT …/outputs/{output_id}</code> every 60 s; a device not heard from for 180 s is dropped (404 <code>Output not found</code> on the next heartbeat). At most 10 per channel. The full flow is in <a href="https://github.com/synssins/sonorium/blob/main/docs/APP_API.md" target="_blank" rel="noopener">docs/APP_API.md</a> §9.</p>
+<h3 id="now-playing">Now playing</h3>
+<p><code>GET /api/now-playing</code> is the Status page's view of each playing channel: every track's state and the seconds until its next change.</p>
+<pre><code class="language-json">{&quot;at&quot;: 1791821861.802, &quot;channels&quot;: [{
+  &quot;id&quot;: &quot;2c62267b&quot;, &quot;name&quot;: &quot;Kitchen&quot;, &quot;theme_id&quot;: &quot;df297db5-a98d-4372-8029-2c49d1e280e4&quot;,
+  &quot;theme_name&quot;: &quot;Tavern&quot;, &quot;preset_name&quot;: &quot;Slow night at the inn&quot;, &quot;sequence&quot;: null,
+  &quot;speakers_playing&quot;: true, &quot;speakers&quot;: &quot;Kitchen speaker&quot;, &quot;speakers_muted&quot;: false, &quot;listening&quot;: false,
+  &quot;buffer_seconds&quot;: 4.0,
+  &quot;sections&quot;: [
+    {&quot;title&quot;: &quot;Background&quot;, &quot;rows&quot;: [
+      {&quot;type&quot;: &quot;track&quot;, &quot;key&quot;: &quot;fireplace_663&quot;, &quot;name&quot;: &quot;fireplace_663&quot;, &quot;state&quot;: &quot;on&quot;, &quot;mode&quot;: &quot;Background&quot;,
+       &quot;now&quot;: &quot;Playing&quot;, &quot;seconds&quot;: null, &quot;level&quot;: 1.0, &quot;band&quot;: null}]},
+    {&quot;title&quot;: &quot;Intermittent&quot;, &quot;rows&quot;: [
+      {&quot;type&quot;: &quot;track&quot;, &quot;key&quot;: &quot;Wooden_Door_Slamming_723&quot;, &quot;name&quot;: &quot;Wooden_Door_Slamming_723&quot;, &quot;state&quot;: &quot;wait&quot;,
+       &quot;mode&quot;: &quot;Intermittent&quot;, &quot;now&quot;: &quot;Next in {t}&quot;, &quot;seconds&quot;: 205.3, &quot;level&quot;: null, &quot;band&quot;: null}]}]}]}
+</code></pre>
+<p><code>at</code>: the server's time (seconds since 1970). <code>state</code>: <code>on</code>, <code>fade</code>, <code>wait</code>, <code>rest</code>, <code>off</code>. <code>now</code> holds <code>{t}</code> where the countdown <code>seconds</code> goes. <code>level</code> and <code>band</code> are 0-1 (<code>band</code>: an Ebb &amp; Flow track's range). A <code>group</code> row has <code>tracks</code>. <code>buffer_seconds</code>: the speakers' estimated buffer. <code>sequence</code>: <code>{name, step, steps}</code> or null.</p>
+<hr />
+<h2 id="announcements-sounds-and-volume-ramps">Announcements, sounds and volume ramps</h2>
+<p>Sounds play over a channel's mix: the channel's sound ducks (gets quieter), the sound plays, the channel comes back, like a radio presenter talking over the music. Every speaker, browser and cast device of the channel hears it.</p>
+<h3 id="post-apiannounce">POST /api/announce</h3>
+<p><code>an.send</code> (<strong>Make announcements</strong>). A chime, spoken text, or both, on one or more channels. Announcements override zones and quiet hours, and a stopped channel's speakers are started for the announcement and stopped again (the channel doesn't show as playing).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>channels</code></td>
+<td data-label="Type">string, string[] or <code>&quot;all&quot;</code></td>
+<td data-label="Default">required</td>
+<td data-label="Meaning">Channel names (not case-sensitive) or ids</td>
+</tr>
+<tr>
+<td data-label="Field"><code>text</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default"></td>
+<td data-label="Meaning">Spoken with text to speech (also accepted as <code>message</code>)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>url</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default"></td>
+<td data-label="Meaning">An http(s) URL of a chime played first (also accepted as <code>chime</code>)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>volume</code></td>
+<td data-label="Type">number 0-200</td>
+<td data-label="Default">100</td>
+<td data-label="Meaning">100 is the file's level</td>
+</tr>
+<tr>
+<td data-label="Field"><code>duck</code></td>
+<td data-label="Type"><code>true</code>, <code>false</code>, number, or <code>{db, attack, release}</code></td>
+<td data-label="Default"><code>true</code></td>
+<td data-label="Meaning"><code>true</code>: Settings › Advanced's Duck amount, attack and release. A number: that many dB, the rest from Advanced</td>
+</tr>
+<tr>
+<td data-label="Field"><code>provider</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default">the first one</td>
+<td data-label="Meaning">The text to speech provider (<code>homeassistant</code> comes with the Announcements plugin)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>language</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default"></td>
+<td data-label="Meaning">Passed to the provider</td>
+</tr>
+<tr>
+<td data-label="Field"><code>start_stopped</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Default">true</td>
+<td data-label="Meaning">Start stopped channels' speakers for it</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>text</code> or <code>url</code> is required. Channels with <strong>Announcements</strong> off are left out and listed in <code>skipped</code>.</p>
+<pre><code class="language-sh">curl -X POST $B/announce -H &quot;Authorization: Bearer $KEY&quot; -H &quot;Content-Type: application/json&quot; \
+     -d '{&quot;channels&quot;: [&quot;Kitchen&quot;], &quot;url&quot;: &quot;http://192.0.2.20:8008/api/test-tone.mp3&quot;, &quot;volume&quot;: 80}'
+</code></pre>
+<pre><code class="language-json">{&quot;played&quot;: [&quot;2c62267b&quot;], &quot;skipped&quot;: [],
+ &quot;channels&quot;: {&quot;2c62267b&quot;: {&quot;state&quot;: &quot;playing&quot;, &quot;message&quot;: &quot;&quot;}},
+ &quot;chime&quot;: {&quot;sound_id&quot;: &quot;s_6fc8bc18349e&quot;, &quot;length&quot;: 3.0, &quot;capped&quot;: false,
+           &quot;channels&quot;: {&quot;2c62267b&quot;: {&quot;state&quot;: &quot;playing&quot;, &quot;message&quot;: &quot;&quot;}}},
+ &quot;speech&quot;: null, &quot;notice&quot;: null}
+</code></pre>
+<p><code>state</code> per channel: <code>playing</code>, <code>queued</code>, <code>starting</code> (its speakers are being started) or <code>skipped</code> (with <code>message</code>: &quot;The channel is stopped&quot;, &quot;Speakers muted&quot;, &quot;The channel has no speakers&quot;, &quot;Announcements are off&quot;, a zone's reason). <code>notice</code>: why the text wasn't spoken when only the chime played.</p>
+<p>Errors: 400 no <code>text</code> or <code>url</code>, a bad <code>url</code>, a bad <code>duck</code> or <code>volume</code>; 404 <code>No channel to announce on</code> or an unknown channel name; 403 a channel outside the key's channels; 503 <code>No text to speech is available…</code> (text with no provider and no <code>url</code>); 502 the provider failed.</p>
+<p>Text to speech comes from Home Assistant, through the built-in <strong>Announcements</strong> plugin, when Home Assistant is linked (Settings › Connection, or the Home Assistant app). A plugin can add other providers.</p>
+<h3 id="sounds">Sounds</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/sounds</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does">Sounds playing or waiting on each channel</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/sounds</code></td>
+<td data-label="Ability"><code>an.send</code></td>
+<td data-label="What it does">Play a sound over channels</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/sounds/{sound_id}</code></td>
+<td data-label="Ability"><code>an.send</code></td>
+<td data-label="What it does">Cancel it: <code>{&quot;cancelled&quot;: true}</code>; 404 when it isn't playing or waiting</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>POST /api/sounds</code> fields:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>channels</code></td>
+<td data-label="Type">string, string[] or <code>&quot;all&quot;</code></td>
+<td data-label="Default">required</td>
+<td data-label="Meaning">Names or ids, 1-50 channels</td>
+</tr>
+<tr>
+<td data-label="Field"><code>url</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default">required</td>
+<td data-label="Meaning">An http(s) URL of an audio file</td>
+</tr>
+<tr>
+<td data-label="Field"><code>volume</code></td>
+<td data-label="Type">number 0-200</td>
+<td data-label="Default">100</td>
+<td data-label="Meaning"></td>
+</tr>
+<tr>
+<td data-label="Field"><code>duck</code></td>
+<td data-label="Type">as for announce</td>
+<td data-label="Default"><code>true</code></td>
+<td data-label="Meaning"></td>
+</tr>
+<tr>
+<td data-label="Field"><code>policy</code></td>
+<td data-label="Type"><code>now</code>, <code>queue</code>, <code>replace</code></td>
+<td data-label="Default"><code>queue</code></td>
+<td data-label="Meaning"><code>now</code>: at once, over anything playing. <code>queue</code>: after what plays, higher <code>priority</code> first. <code>replace</code>: cuts sounds of the same or lower priority</td>
+</tr>
+<tr>
+<td data-label="Field"><code>priority</code></td>
+<td data-label="Type">integer</td>
+<td data-label="Default">0</td>
+<td data-label="Meaning">Announcements use 10</td>
+</tr>
+<tr>
+<td data-label="Field"><code>max_seconds</code></td>
+<td data-label="Type">number above 0</td>
+<td data-label="Default">Settings › Advanced › Longest sound (60 s)</td>
+<td data-label="Meaning">Cut the sound sooner</td>
+</tr>
+<tr>
+<td data-label="Field"><code>start_stopped</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Default">false</td>
+<td data-label="Meaning">Start a stopped channel's speakers for it; false skips stopped channels</td>
+</tr>
+<tr>
+<td data-label="Field"><code>override</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Default">false</td>
+<td data-label="Meaning">Skip zones and quiet hours</td>
+</tr>
+<tr>
+<td data-label="Field"><code>label</code></td>
+<td data-label="Type">string, up to 80</td>
+<td data-label="Default"></td>
+<td data-label="Meaning">A name for it in events and lists</td>
+</tr>
+<tr>
+<td data-label="Field"><code>announcement</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Default">false</td>
+<td data-label="Meaning">Channels with Announcements off skip it</td>
+</tr>
+</tbody>
+</table></div>
+<p>Answer: <code>{&quot;sound_id&quot;: &quot;s_8e436db9551d&quot;, &quot;length&quot;: 3.0, &quot;capped&quot;: false, &quot;channels&quot;: {&quot;2c62267b&quot;: {&quot;state&quot;: &quot;queued&quot;, &quot;message&quot;: &quot;&quot;}}}</code>. <code>capped</code>: the sound was cut at the longest length.</p>
+<p><code>GET /api/sounds</code>:</p>
+<pre><code class="language-json">{&quot;sounds&quot;: [{&quot;sound_id&quot;: &quot;s_8e436db9551d&quot;, &quot;state&quot;: &quot;queued&quot;, &quot;priority&quot;: 0, &quot;policy&quot;: &quot;queue&quot;, &quot;length&quot;: 3.0,
+             &quot;position&quot;: 0.0, &quot;volume&quot;: 1.0, &quot;duck&quot;: {&quot;db&quot;: 15.0, &quot;attack&quot;: 0.5, &quot;release&quot;: 1.5}, &quot;capped&quot;: false,
+             &quot;label&quot;: &quot;Doorbell&quot;, &quot;origin&quot;: &quot;api&quot;, &quot;channel_id&quot;: &quot;2c62267b&quot;, &quot;name&quot;: &quot;Kitchen&quot;}]}
+</code></pre>
+<p>Network speakers (Cast, Sonos, AirPlay, DLNA) buffer a few seconds of audio, so they play a sound that much later than it was sent.</p>
+<h3 id="volume-ramps">Volume ramps</h3>
+<p>A ramp makes a channel louder or quieter gradually, smooth to the sample: an alarm that rises over 20 minutes, a sleep timer that fades out over an hour. It changes the channel's mix; the speakers' volume stays as it is.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>Body / answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/sessions/{id}/ramp</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="Body / answer"><code>{&quot;channel_id&quot;, &quot;level&quot;, &quot;ramp&quot;: {id, level, from, to, curve, elapsed, seconds, then} or null}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/sessions/{id}/ramp</code></td>
+<td data-label="Ability"><code>ch.change</code></td>
+<td data-label="Body / answer">Start one (below) → <code>{&quot;ramp_id&quot;, &quot;channel_id&quot;, &quot;from&quot;, &quot;to&quot;, &quot;seconds&quot;, &quot;curve&quot;, &quot;then&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/sessions/{id}/ramp?reset=false</code></td>
+<td data-label="Ability"><code>ch.change</code></td>
+<td data-label="Body / answer">Cancel: holds the level reached; <code>reset=true</code> goes back to full level → <code>{&quot;cancelled&quot;, &quot;ramp_id&quot;, &quot;level&quot;, &quot;reset&quot;}</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>to</code></td>
+<td data-label="Type">number 0-4</td>
+<td data-label="Default">required</td>
+<td data-label="Meaning">0 silent, 1 the mix as it is, up to 4 (+12 dB)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>seconds</code></td>
+<td data-label="Type">number, 0 or more</td>
+<td data-label="Default">required</td>
+<td data-label="Meaning">How long</td>
+</tr>
+<tr>
+<td data-label="Field"><code>from</code></td>
+<td data-label="Type">number 0-4</td>
+<td data-label="Default">the level now</td>
+<td data-label="Meaning">Where it starts</td>
+</tr>
+<tr>
+<td data-label="Field"><code>curve</code></td>
+<td data-label="Type"><code>db</code>, <code>linear</code>, <code>ease</code>, <code>exp</code></td>
+<td data-label="Default"><code>db</code></td>
+<td data-label="Meaning"><code>db</code> sounds even to the ear</td>
+</tr>
+<tr>
+<td data-label="Field"><code>then</code></td>
+<td data-label="Type"><code>stop</code>, <code>pause</code> or null</td>
+<td data-label="Default">null</td>
+<td data-label="Meaning">Stop or pause the channel when it ends</td>
+</tr>
+<tr>
+<td data-label="Field"><code>start</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Default">false</td>
+<td data-label="Meaning">Play the channel first if it is stopped</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sh"># a 30-minute sleep timer
+curl -X POST $B/sessions/2c62267b/ramp -H &quot;Authorization: Bearer $KEY&quot; -H &quot;Content-Type: application/json&quot; \
+     -d '{&quot;to&quot;: 0, &quot;seconds&quot;: 1800, &quot;then&quot;: &quot;stop&quot;}'
+</code></pre>
+<p>A finished ramp holds its level until the channel stops or another ramp starts. Errors: 400 a level outside 0-4, negative seconds, an unknown curve or <code>then</code>; 404 unknown channel.</p>
+<h3 id="audio-outputs">Audio outputs</h3>
+<p>Plugins can add audio outputs (a sound card, a Bluetooth speaker) that a channel is sent to besides its speakers.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/audio-outputs</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does"><code>{&quot;types&quot;: [{id, title, plugin_id, available, message}]}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/audio-outputs/{type}/devices</code></td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="What it does"><code>{&quot;devices&quot;: [{id, name, …}]}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/sessions/{id}/audio-outputs</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does"><code>{&quot;attachments&quot;: [{attachment_id, channel_id, type, device, options, running, latency, error}]}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/sessions/{id}/audio-outputs</code></td>
+<td data-label="Ability"><code>ch.speakers</code></td>
+<td data-label="What it does"><code>{&quot;type&quot;, &quot;device&quot;, &quot;options&quot;}</code> → 201, the attachment; the mix starts if needed</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/sessions/{id}/audio-outputs/{attachment_id}</code></td>
+<td data-label="Ability"><code>ch.speakers</code></td>
+<td data-label="What it does"><code>{&quot;removed&quot;: true}</code>; 404 unknown</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="themes">Themes</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/themes</code></td>
+<td data-label="Ability"><code>th.view</code></td>
+<td data-label="What it does">Every theme (summary below)</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/refresh</code></td>
+<td data-label="Ability"><code>th.view</code></td>
+<td data-label="What it does">Rescan the theme folders → <code>{&quot;status&quot;: &quot;ok&quot;, &quot;themes_count&quot;: 3, &quot;message&quot;: &quot;Refreshed 3 themes&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/themes/{id}</code></td>
+<td data-label="Ability"><code>th.view</code></td>
+<td data-label="What it does"><code>{&quot;id&quot;, &quot;name&quot;, &quot;track_count&quot;, &quot;url&quot;, &quot;tracks&quot;: [{&quot;name&quot;}]}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/themes/{id}/tracks</code></td>
+<td data-label="Ability"><code>th.view</code></td>
+<td data-label="What it does"><code>{theme_id, theme_name, short_file_threshold, tracks: [track]}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/themes/{id}/tracks/{track}/audio</code></td>
+<td data-label="Ability"><code>th.view</code></td>
+<td data-label="What it does">The audio file (supports <code>Range</code>)</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/themes/{id}/groups</code></td>
+<td data-label="Ability"><code>th.view</code></td>
+<td data-label="What it does"><code>{&quot;groups&quot;: [...]}</code>: each group's settings and tracks</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/themes/{id}/export</code></td>
+<td data-label="Ability"><code>th.view</code></td>
+<td data-label="What it does">The theme as a <code>.zip</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/categories</code></td>
+<td data-label="Ability"><code>th.view</code></td>
+<td data-label="What it does"><code>{&quot;categories&quot;: [&quot;Weather&quot;, &quot;Christmas&quot;, &quot;Fantasy&quot;]}</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Theme summary (<code>GET /api/themes</code>):</p>
+<pre><code class="language-json">{&quot;id&quot;: &quot;df297db5-a98d-4372-8029-2c49d1e280e4&quot;, &quot;name&quot;: &quot;Tavern&quot;, &quot;total_tracks&quot;: 8, &quot;enabled_tracks&quot;: 8,
+ &quot;url&quot;: &quot;http://192.0.2.20:8008/stream/df297db5-a98d-4372-8029-2c49d1e280e4&quot;,
+ &quot;description&quot;: &quot;A night at a medieval inn.&quot;, &quot;icon&quot;: &quot;🍺&quot;, &quot;is_favorite&quot;: false, &quot;has_audio&quot;: true,
+ &quot;categories&quot;: [&quot;Fantasy&quot;], &quot;short_file_threshold&quot;: 15.0, &quot;problems&quot;: []}
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>icon</code></td>
+<td data-label="Meaning">An emoji, or <code>&quot;&quot;</code></td>
+</tr>
+<tr>
+<td data-label="Field"><code>url</code></td>
+<td data-label="Meaning">A stream of the theme with the settings saved in it, for previews. Channels play <code>/stream/channel{N}</code>.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>has_audio</code></td>
+<td data-label="Meaning">false for an empty theme folder</td>
+</tr>
+<tr>
+<td data-label="Field"><code>problems</code></td>
+<td data-label="Meaning">Sentences about a broken <code>metadata.json</code> or <code>presets.json</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Track (<code>GET /api/themes/{id}/tracks</code>):</p>
+<pre><code class="language-json">{&quot;name&quot;: &quot;fireplace_663&quot;, &quot;presence&quot;: 1.0, &quot;muted&quot;: false, &quot;is_enabled&quot;: true, &quot;duration_seconds&quot;: 16.2,
+ &quot;is_short_file&quot;: false, &quot;volume&quot;: 1.0, &quot;playback_mode&quot;: &quot;continuous&quot;, &quot;seamless_loop&quot;: false, &quot;exclusive&quot;: false,
+ &quot;fade_in&quot;: 0.0, &quot;fade_out&quot;: 0.0, &quot;volume_low&quot;: 0.2, &quot;pause_between&quot;: false, &quot;pause_min&quot;: 30.0, &quot;pause_max&quot;: 300.0,
+ &quot;rise&quot;: 0.0, &quot;group&quot;: null, &quot;intrusion_group&quot;: false}
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>name</code></td>
+<td data-label="Type">string</td>
+<td data-label="Meaning">The track key (file name without extension; <code>Group/file</code> inside a group)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>playback_mode</code></td>
+<td data-label="Type">string</td>
+<td data-label="Meaning"><code>continuous</code> (Background), <code>sparse</code> (Intermittent), <code>presence</code> (Ebb &amp; Flow), <code>unassigned</code> (not placed: not played)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>volume</code>, <code>presence</code>, <code>volume_low</code>, <code>rise</code></td>
+<td data-label="Type">number 0-1</td>
+<td data-label="Meaning">Volume; how often it is heard (Intermittent) or how long (Ebb &amp; Flow); Ebb &amp; Flow's lower volume; Ebb &amp; Flow's rise</td>
+</tr>
+<tr>
+<td data-label="Field"><code>muted</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Meaning">Muted</td>
+</tr>
+<tr>
+<td data-label="Field"><code>seamless_loop</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Meaning">Loops without a crossfade</td>
+</tr>
+<tr>
+<td data-label="Field"><code>exclusive</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Meaning">Plays alone among exclusive tracks</td>
+</tr>
+<tr>
+<td data-label="Field"><code>fade_in</code>, <code>fade_out</code></td>
+<td data-label="Type">seconds, 0-30</td>
+<td data-label="Meaning">The file's fades</td>
+</tr>
+<tr>
+<td data-label="Field"><code>pause_between</code>, <code>pause_min</code>, <code>pause_max</code></td>
+<td data-label="Type">boolean, seconds</td>
+<td data-label="Meaning">Ebb &amp; Flow: play once, pause, come back</td>
+</tr>
+<tr>
+<td data-label="Field"><code>group</code></td>
+<td data-label="Type">string or null</td>
+<td data-label="Meaning">Its group</td>
+</tr>
+</tbody>
+</table></div>
+<p>The track settings, groups and theme files are explained on <a href="docs.html#Track-Settings">Track Settings</a> and in <a href="https://github.com/synssins/sonorium/blob/main/docs/THEME_FORMAT.md" target="_blank" rel="noopener">docs/THEME_FORMAT.md</a>.</p>
+<h3 id="editing-themes-admin">Editing themes (Admin)</h3>
+<p>Changes to a theme apply to every channel playing it.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>Body → answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/tracks/{track}/presence</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;presence&quot;: 0-1}</code> → <code>{&quot;status&quot;: &quot;ok&quot;, &quot;track&quot;, &quot;presence&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/tracks/{track}/volume</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;volume&quot;: 0-1}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/tracks/{track}/muted</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;muted&quot;: true}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/tracks/{track}/playback_mode</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;playback_mode&quot;: &quot;continuous&quot; | &quot;sparse&quot; | &quot;presence&quot; | &quot;unassigned&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/tracks/{track}/seamless_loop</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;seamless_loop&quot;: true}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/tracks/{track}/exclusive</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;exclusive&quot;: true}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/tracks/{track}/fades</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;fade_in&quot;: s, &quot;fade_out&quot;: s}</code> (either) → both</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/tracks/{track}/ebb</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer">any of <code>{&quot;volume_low&quot;: 0-1, &quot;pause_between&quot;: bool, &quot;pause_min&quot;: s, &quot;pause_max&quot;: s}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/{id}/tracks/reset</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer">Every track back to its defaults → <code>{&quot;status&quot;: &quot;ok&quot;, &quot;theme_id&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/{id}/tracks/{track}/move</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;group&quot;: &quot;Lute&quot;}</code> or <code>{&quot;group&quot;: null}</code> (top level) → <code>{&quot;track&quot;: new key}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/{id}/groups</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;name&quot;: &quot;Lute&quot;}</code> → 201 <code>{&quot;name&quot;}</code> (a new subfolder)</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/groups/{group}</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer">any of <code>presence</code>, <code>volume</code> (0-1), <code>muted</code>, <code>gap_min</code>, <code>gap_max</code> (s), <code>mode</code> (<code>intermittent</code>, <code>merry_go_round</code>, <code>ebb_flow</code>), <code>crossfade</code> (s, 1-60 by default), <code>pause_between</code>, <code>rise</code>; <code>null</code> resets one</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/{id}/groups/{group}/rename</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;name&quot;}</code> → <code>{&quot;name&quot;, &quot;tracks&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/themes/{id}/groups/{group}</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer">Tracks move to the top level</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/themes/{id}/links/source/{source_id}</code></td>
+<td data-label="Ability"><code>th.view</code></td>
+<td data-label="Body → answer">Tracks of another theme that can be linked</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/{id}/links</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;theme&quot;: source id, &quot;tracks&quot;: [keys], &quot;group&quot;: name or null}</code> → 201 <code>{&quot;links&quot;: [...]}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/{id}/links/{key}/copy-in</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;group&quot;: name or null}</code>: copy a linked file into this theme → <code>{&quot;track&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/themes/{id}/links/{key}</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer">Remove a linked file (never the file itself) → <code>{&quot;removed&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/rename</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;name&quot;}</code> (the display name; the folder stays)</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/metadata</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer">any of <code>{&quot;description&quot;, &quot;icon&quot;, &quot;short_file_threshold&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/{id}/favorite</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer">Toggles → <code>{&quot;theme_id&quot;, &quot;is_favorite&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/{id}/categories</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;categories&quot;: [&quot;Weather&quot;]}</code> → <code>{&quot;theme_id&quot;, &quot;categories&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/categories</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer"><code>{&quot;name&quot;}</code> → <code>{&quot;status&quot;: &quot;ok&quot;, &quot;category&quot;, &quot;categories&quot;}</code>; 409 exists</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/categories/{name}</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="Body → answer">→ <code>{&quot;status&quot;: &quot;ok&quot;, &quot;deleted&quot;, &quot;categories&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/create</code></td>
+<td data-label="Ability"><code>th.upload</code></td>
+<td data-label="Body → answer"><code>{&quot;name&quot;, &quot;description&quot;?, &quot;icon&quot;?}</code>: an empty theme</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/{id}/upload</code></td>
+<td data-label="Ability"><code>th.upload</code></td>
+<td data-label="Body → answer">multipart <code>file</code> (an audio file), optional <code>group</code>; a new track starts Unassigned</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/import</code></td>
+<td data-label="Ability"><code>th.upload</code></td>
+<td data-label="Body → answer">multipart <code>file</code>: a theme <code>.zip</code> (as exported)</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/themes/{id}</code></td>
+<td data-label="Ability"><code>th.upload</code></td>
+<td data-label="Body → answer">Delete the theme and its files</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="presets">Presets</h2>
+<p>A preset is a saved set of a theme's track and group settings.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/themes/{id}/presets</code></td>
+<td data-label="Ability"><code>th.view</code></td>
+<td data-label="What it does">The theme's presets and sequences (below)</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/themes/{id}/presets/{pid}</code></td>
+<td data-label="Ability"><code>th.view</code></td>
+<td data-label="What it does"><code>{&quot;id&quot;, &quot;name&quot;, &quot;tracks&quot;: {key: settings}, &quot;groups&quot;: {...}}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/themes/{id}/presets/{pid}/export</code></td>
+<td data-label="Ability"><code>th.view</code></td>
+<td data-label="What it does"><code>{&quot;name&quot;, &quot;tracks&quot;}</code> for sharing</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/{id}/presets</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="What it does"><code>{&quot;name&quot;}</code>: save the theme's current settings as a preset → <code>{&quot;status&quot;: &quot;ok&quot;, &quot;preset_id&quot;, &quot;name&quot;, &quot;is_default&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/presets/{pid}</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="What it does">Overwrite it with the theme's current settings</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/{id}/presets/{pid}/load</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="What it does">Apply it to the theme's own settings</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/presets/{pid}/default</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="What it does">Make it the default → <code>{&quot;status&quot;: &quot;ok&quot;, &quot;preset_id&quot;, &quot;is_default&quot;: true}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/presets/{pid}/rename</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="What it does"><code>{&quot;name&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/themes/{id}/presets/{pid}</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="What it does">→ <code>{&quot;status&quot;: &quot;ok&quot;, &quot;preset_id&quot;}</code>; another preset becomes the default</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/{id}/presets/import</code></td>
+<td data-label="Ability"><code>th.edit</code></td>
+<td data-label="What it does"><code>{&quot;preset_json&quot;: &quot;&lt;the export as text&gt;&quot;, &quot;name&quot;?}</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>To play a preset on a channel, set it on the channel: <code>PUT /api/sessions/{id}</code> <code>{&quot;preset_id&quot;: &quot;…&quot;}</code>.</p>
+<pre><code class="language-json">{&quot;theme_id&quot;: &quot;df297db5-a98d-4372-8029-2c49d1e280e4&quot;,
+ &quot;presets&quot;: [{&quot;id&quot;: &quot;slow_night_at_the_inn&quot;, &quot;name&quot;: &quot;Slow night at the inn&quot;, &quot;is_default&quot;: true,
+              &quot;track_count&quot;: 8, &quot;has_intrusion&quot;: false},
+             {&quot;id&quot;: &quot;busy_night&quot;, &quot;name&quot;: &quot;Busy night&quot;, &quot;is_default&quot;: false, &quot;track_count&quot;: 8, &quot;has_intrusion&quot;: false}],
+ &quot;default_has_intrusion&quot;: false,
+ &quot;sequences&quot;: [{&quot;id&quot;: &quot;evening_at_the_inn&quot;, &quot;name&quot;: &quot;Evening at the inn&quot;, &quot;presets&quot;: [&quot;slow_night_at_the_inn&quot;, &quot;busy_night&quot;],
+                &quot;at_end&quot;: &quot;reverse&quot;, &quot;hold_min&quot;: 600.0, &quot;hold_max&quot;: 900.0, &quot;ramp&quot;: 30.0, &quot;owner&quot;: null,
+                &quot;transitions&quot;: {}, &quot;while_steps&quot;: [], &quot;effective&quot;: {&quot;hold_min&quot;: 600.0, &quot;hold_max&quot;: 900.0, &quot;ramp&quot;: 30.0},
+                &quot;pass_min&quot;: 1230.0, &quot;pass_max&quot;: 1830.0, &quot;choice&quot;: &quot;seq:evening_at_the_inn&quot;, &quot;has_intrusion&quot;: false}]}
+</code></pre>
+<p>A channel's preset box lists <code>presets</code>, then <code>sequences</code> (by <code>choice</code>).</p>
+<hr />
+<h2 id="sequences">Sequences</h2>
+<p>A sequence runs presets of one theme in order, holding each for a while and gliding to the next.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/themes/{id}/sequences</code></td>
+<td data-label="Ability"><code>pl.view</code></td>
+<td data-label="What it does"><code>{theme_id, sequence_defaults: {hold_min, hold_max, ramp}, sequences: [sequence]}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/themes/{id}/sequences/{sid}</code></td>
+<td data-label="Ability"><code>pl.view</code></td>
+<td data-label="What it does">One sequence</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/themes/{id}/sequences</code></td>
+<td data-label="Ability"><code>pl.edit</code></td>
+<td data-label="What it does">Create → 201</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/sequences/{sid}</code></td>
+<td data-label="Ability"><code>pl.edit</code></td>
+<td data-label="What it does">Change any field; channels running it continue with the new version</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/themes/{id}/sequences/{sid}</code></td>
+<td data-label="Ability"><code>pl.edit</code></td>
+<td data-label="What it does">→ <code>{&quot;status&quot;: &quot;ok&quot;, &quot;sequence_id&quot;, &quot;stopped_on&quot;: [channel ids]}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET, PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/sequence_defaults</code></td>
+<td data-label="Ability"><code>pl.view</code>, <code>pl.edit</code></td>
+<td data-label="What it does"><code>{theme_id, hold_min, hold_max, ramp}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET, PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/sequences/{sid}/transitions/{preset}</code></td>
+<td data-label="Ability"><code>pl.view</code>, <code>pl.edit</code></td>
+<td data-label="What it does">A step's transition settings</td>
+</tr>
+<tr>
+<td data-label="Method">GET, PUT</td>
+<td data-label="Path"><code>/api/themes/{id}/sequences/{sid}/while/{preset}</code></td>
+<td data-label="Ability"><code>pl.view</code>, <code>pl.edit</code></td>
+<td data-label="What it does">Track changes while a step plays</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/themes/{id}/transition_tracks</code></td>
+<td data-label="Ability"><code>pl.view</code></td>
+<td data-label="What it does">Tracks a transition can use</td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>name</code></td>
+<td data-label="Type">string, up to 100</td>
+<td data-label="Meaning">Required, unique in the theme (409 otherwise)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>presets</code></td>
+<td data-label="Type">string[]</td>
+<td data-label="Meaning">At least one preset id of the theme</td>
+</tr>
+<tr>
+<td data-label="Field"><code>at_end</code></td>
+<td data-label="Type"><code>reverse</code>, <code>restart</code>, <code>stop</code></td>
+<td data-label="Meaning">After the last step (default <code>reverse</code>)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>hold_min</code>, <code>hold_max</code></td>
+<td data-label="Type">seconds, 0 to 604800</td>
+<td data-label="Meaning">How long a step plays, picked between them; null = the theme's default (300, 900)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>ramp</code></td>
+<td data-label="Type">seconds</td>
+<td data-label="Meaning">The glide to the next step; null = the default (30)</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sh">curl -X POST $B/themes/df297db5-a98d-4372-8029-2c49d1e280e4/sequences -H &quot;Authorization: Bearer $KEY&quot; \
+     -H &quot;Content-Type: application/json&quot; \
+     -d '{&quot;name&quot;: &quot;Evening at the inn&quot;, &quot;presets&quot;: [&quot;slow_night_at_the_inn&quot;, &quot;busy_night&quot;], &quot;at_end&quot;: &quot;reverse&quot;, &quot;hold_min&quot;: 600, &quot;hold_max&quot;: 900, &quot;ramp&quot;: 30}'
+</code></pre>
+<pre><code class="language-json">{&quot;id&quot;: &quot;evening_at_the_inn&quot;, &quot;name&quot;: &quot;Evening at the inn&quot;, &quot;presets&quot;: [&quot;slow_night_at_the_inn&quot;, &quot;busy_night&quot;],
+ &quot;at_end&quot;: &quot;reverse&quot;, &quot;hold_min&quot;: 600.0, &quot;hold_max&quot;: 900.0, &quot;ramp&quot;: 30.0, &quot;owner&quot;: null, &quot;transitions&quot;: {},
+ &quot;while_steps&quot;: [], &quot;effective&quot;: {&quot;hold_min&quot;: 600.0, &quot;hold_max&quot;: 900.0, &quot;ramp&quot;: 30.0}, &quot;pass_min&quot;: 1230.0, &quot;pass_max&quot;: 1830.0}
+</code></pre>
+<p><code>effective</code> is what plays once defaults are applied; <code>pass_min</code> and <code>pass_max</code> are the shortest and longest time one pass through the steps lasts, glides included. Run it with <code>POST /api/sessions/{id}/sequence</code>, or <code>PUT /api/sessions/{id}</code> <code>{&quot;preset_id&quot;: &quot;seq:evening_at_the_inn&quot;}</code>. The transition and while-step bodies are in <a href="https://github.com/synssins/sonorium/blob/main/docs/PLAYBACK.md" target="_blank" rel="noopener">docs/PLAYBACK.md</a>.</p>
+<hr />
+<h2 id="playlists">Playlists</h2>
+<p>A playlist plays themes one after another, each for a while.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/playlists</code></td>
+<td data-label="Ability"><code>pl.view</code></td>
+<td data-label="What it does"><code>{&quot;playlists&quot;: [playlist]}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/playlists/{id}</code></td>
+<td data-label="Ability"><code>pl.view</code></td>
+<td data-label="What it does">One playlist; 404 <code>Playlist not found</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/playlists</code></td>
+<td data-label="Ability"><code>pl.edit</code></td>
+<td data-label="What it does">Create → 201</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/playlists/{id}</code></td>
+<td data-label="Ability"><code>pl.edit</code></td>
+<td data-label="What it does">Change any field; playing channels continue with the new version</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/playlists/{id}</code></td>
+<td data-label="Ability"><code>pl.edit</code></td>
+<td data-label="What it does">→ <code>{&quot;status&quot;: &quot;ok&quot;, &quot;playlist_id&quot;, &quot;stopped_on&quot;: [channel ids]}</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>name</code></td>
+<td data-label="Type">string, up to 100</td>
+<td data-label="Default">required</td>
+<td data-label="Meaning">Unique (409 otherwise)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>entries</code></td>
+<td data-label="Type">object[], 1-500</td>
+<td data-label="Default">required</td>
+<td data-label="Meaning"><code>{&quot;theme_id&quot;, &quot;preset_id&quot;?, &quot;sequence_id&quot;?}</code>: a preset or a sequence, not both</td>
+</tr>
+<tr>
+<td data-label="Field"><code>order</code></td>
+<td data-label="Type"><code>in_order</code>, <code>shuffle</code></td>
+<td data-label="Default"><code>in_order</code></td>
+<td data-label="Meaning"></td>
+</tr>
+<tr>
+<td data-label="Field"><code>repeat</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Default"></td>
+<td data-label="Meaning">Start again after the last entry; without it the channel stops (<code>channel.stopped</code>, reason <code>ended</code>)</td>
+</tr>
+<tr>
+<td data-label="Field"><code>play_min</code>, <code>play_max</code></td>
+<td data-label="Type">seconds, 1 to 604800</td>
+<td data-label="Default">1800, 3600</td>
+<td data-label="Meaning">How long each entry plays, picked between them</td>
+</tr>
+<tr>
+<td data-label="Field"><code>fit_sequences</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Default">false</td>
+<td data-label="Meaning">An entry with a sequence plays for whole passes of the sequence</td>
+</tr>
+<tr>
+<td data-label="Field"><code>owner</code></td>
+<td data-label="Type">null</td>
+<td data-label="Default">null</td>
+<td data-label="Meaning">Always null</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sh">curl -X POST $B/playlists -H &quot;Authorization: Bearer $KEY&quot; -H &quot;Content-Type: application/json&quot; \
+     -d '{&quot;name&quot;: &quot;Evening&quot;, &quot;entries&quot;: [{&quot;theme_id&quot;: &quot;df297db5-a98d-4372-8029-2c49d1e280e4&quot;}, {&quot;theme_id&quot;: &quot;b851228a-94ca-47b7-aa55-576ceb791adb&quot;}], &quot;order&quot;: &quot;in_order&quot;, &quot;repeat&quot;: true}'
+curl -X PUT $B/sessions/2c62267b/playlist -H &quot;Authorization: Bearer $KEY&quot; -H &quot;Content-Type: application/json&quot; -d '{&quot;playlist_id&quot;: &quot;e76d8472&quot;}'
+</code></pre>
+<pre><code class="language-json">{&quot;id&quot;: &quot;e76d8472&quot;, &quot;name&quot;: &quot;Evening&quot;,
+ &quot;entries&quot;: [{&quot;theme_id&quot;: &quot;df297db5-a98d-4372-8029-2c49d1e280e4&quot;, &quot;preset_id&quot;: null, &quot;sequence_id&quot;: null},
+             {&quot;theme_id&quot;: &quot;b851228a-94ca-47b7-aa55-576ceb791adb&quot;, &quot;preset_id&quot;: null, &quot;sequence_id&quot;: null}],
+ &quot;order&quot;: &quot;in_order&quot;, &quot;repeat&quot;: true, &quot;play_min&quot;: 1800.0, &quot;play_max&quot;: 3600.0, &quot;fit_sequences&quot;: false, &quot;owner&quot;: null}
+</code></pre>
+<p>Errors: 400 with the reason (<code>name is required</code>, <code>unknown theme '…'</code>, <code>an entry has a preset or a sequence, not both</code>, <code>play_min must not be more than play_max</code>, …), 409 a duplicate name.</p>
+<hr />
+<h2 id="speakers-speaker-groups-floors-and-areas">Speakers, speaker groups, floors and areas</h2>
+<h3 id="speakers">Speakers</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/speakers</code></td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="What it does">Every speaker (below)</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/speakers/hierarchy</code></td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="What it does"><code>{&quot;floors&quot;: [{floor, areas: [{area, speakers}]}], &quot;unassigned_areas&quot;, &quot;unassigned_speakers&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/speakers/refresh</code></td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="What it does">Read Home Assistant's speakers again and, without Home Assistant, scan the network</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/network-speakers</code></td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="What it does">Speakers found on the network: <code>{&quot;speakers&quot;, &quot;total_speakers&quot;, &quot;last_scan&quot;, &quot;found&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/network-speakers/refresh</code></td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="What it does">Scan the network now</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/speakers/resolve</code></td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="What it does">A selection → <code>{&quot;speakers&quot;: [ids], &quot;count&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/speakers/{id}/settings</code></td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="What it does"><code>{&quot;speaker_id&quot;, &quot;settings&quot;: {name, room, volume_offset, play_via}, &quot;speaker&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/speakers/{id}/settings</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does">any of <code>{&quot;name&quot;, &quot;room&quot;, &quot;volume_offset&quot;: -20..20, &quot;play_via&quot;: &quot;ha&quot; or a network speaker id}</code>; null resets one</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/speakers/{id}/test</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does">A 3 s chime at 20 % → <code>{&quot;speaker_id&quot;, &quot;playing&quot;: true, &quot;seconds&quot;}</code>; 409 busy, 502 failed</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/speakers/{id}/volume</code></td>
+<td data-label="Ability"><code>sp.mute</code></td>
+<td data-label="What it does"><code>{&quot;volume&quot;: 0-100}</code> → <code>{&quot;speaker_id&quot;, &quot;volume&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/speakers/{id}/muted</code></td>
+<td data-label="Ability"><code>sp.mute</code></td>
+<td data-label="What it does"><code>{&quot;muted&quot;: true}</code> → <code>{&quot;speaker_id&quot;, &quot;muted&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/settings/speakers</code></td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="What it does"><code>{&quot;enabled_speakers&quot;: [ids], &quot;hierarchy&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/settings/speakers</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does"><code>{&quot;enabled_speakers&quot;: [ids]}</code>: exactly these are on</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/settings/speakers/enable</code>, <code>/disable</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does"><code>{&quot;entity_id&quot;}</code>: one speaker on or off</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/settings/speakers/enable-all</code>, <code>/disable-all</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does">All on or off</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/speakers/manual/check</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does">Same body as below: what answers there, without adding it → <code>{&quot;found&quot;: true, &quot;message&quot;, …}</code> or <code>{&quot;found&quot;: false, &quot;message&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/speakers/manual</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does"><code>{&quot;address&quot;, &quot;type&quot;: &quot;auto&quot; | &quot;cast&quot; | &quot;sonos&quot; | &quot;dlna&quot; | &quot;airplay&quot; | &quot;linkplay&quot; | &quot;heos&quot;, &quot;name&quot;?, &quot;room&quot;?, &quot;port&quot;?}</code> → 201; 400 when nothing answers</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/speakers/manual/{id}</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does">Remove a speaker added by address</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/debug/speakers</code></td>
+<td data-label="Ability"><code>st.view</code></td>
+<td data-label="What it does">Diagnostic dump of speaker discovery</td>
+</tr>
+<tr>
+<td data-label="Method">GET, PUT</td>
+<td data-label="Path"><code>/api/settings/speaker-areas</code></td>
+<td data-label="Ability"><code>sp.view</code>, <code>sp.set</code></td>
+<td data-label="What it does">Older custom areas: <code>{&quot;custom_areas&quot;: {name: [speaker ids]}}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/settings/speaker-areas/create</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does"><code>{&quot;name&quot;, &quot;speakers&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT, DELETE</td>
+<td data-label="Path"><code>/api/settings/speaker-areas/{name}</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does">Change or remove one</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/settings/speaker-areas/{name}/add-speaker</code>, <code>/remove-speaker</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does"><code>{&quot;entity_id&quot;}</code></td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-json">{&quot;entity_id&quot;: &quot;net:chromecast:a944ea78-85c9-670a-b8bb-295712de07b1&quot;, &quot;name&quot;: &quot;Office display&quot;,
+ &quot;area_id&quot;: null, &quot;area_name&quot;: null, &quot;floor_id&quot;: null, &quot;floor_name&quot;: null,
+ &quot;ip_address&quot;: &quot;192.0.2.10&quot;, &quot;source&quot;: [&quot;discovered&quot;], &quot;type&quot;: &quot;cast&quot;, &quot;online&quot;: true,
+ &quot;address&quot;: &quot;192.0.2.10&quot;, &quot;original_name&quot;: &quot;Office display&quot;, &quot;default_area_id&quot;: null,
+ &quot;volume_offset&quot;: 0, &quot;merged&quot;: [], &quot;play_via&quot;: &quot;ha&quot;}
+</code></pre>
+<p><code>entity_id</code> is the speaker's id everywhere: <code>media_player.…</code> for Home Assistant's, <code>net:&lt;type&gt;:&lt;id&gt;</code> for one Sonorium found. <code>PUT …/volume</code> and <code>…/muted</code> act on the speaker now (a network speaker without mute is set to volume 0 and back); after that, <code>GET /api/speakers</code> lists <code>volume</code> and <code>muted</code> for it until Sonorium restarts. Errors: 404 <code>Speaker not found</code>, 422 out of range, 502 <code>The speaker didn't take the change</code>.</p>
+<h3 id="speaker-groups">Speaker groups</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/groups</code></td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="What it does">Every group</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/groups/{id}</code></td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="What it does">One group; 404 <code>Group not found</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/groups/{id}/resolve</code></td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="What it does"><code>{&quot;speakers&quot;, &quot;count&quot;, &quot;summary&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/groups</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does"><code>{&quot;name&quot;, &quot;icon&quot;?, &quot;include_floors&quot;?, &quot;include_areas&quot;?, &quot;include_speakers&quot;?, &quot;exclude_areas&quot;?, &quot;exclude_speakers&quot;?}</code> → 201</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/groups/{id}</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does">Any of those</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/groups/{id}</code></td>
+<td data-label="Ability"><code>sp.set</code></td>
+<td data-label="What it does">204; 409 while channels use it</td>
+</tr>
+</tbody>
+</table></div>
+<p>Group: <code>{id, name, icon (&quot;mdi:speaker-group&quot; by default), include_floors, include_areas, include_speakers, exclude_areas, exclude_speakers, speakers, speaker_count, summary, created_at, updated_at}</code>. A floor or area in a group includes speakers added there later.</p>
+<h3 id="floors-and-areas">Floors and areas</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/spaces</code></td>
+<td data-label="Ability"><code>sp.view</code></td>
+<td data-label="What it does"><code>{&quot;editable&quot;, &quot;floors&quot;: [{id, name, source, local_id, speakers, areas}], &quot;unassigned_areas&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/spaces/floors</code>, <code>/api/spaces/areas</code></td>
+<td data-label="Ability"><code>st.change</code></td>
+<td data-label="What it does"><code>{&quot;name&quot;, &quot;floor_id&quot;?}</code> → the new <code>/api/spaces</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/spaces/floors/{id}</code>, <code>/api/spaces/areas/{id}</code></td>
+<td data-label="Ability"><code>st.change</code></td>
+<td data-label="What it does"><code>{&quot;name&quot;?, &quot;floor_id&quot;?}</code></td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/spaces/floors/{id}</code>, <code>/api/spaces/areas/{id}</code></td>
+<td data-label="Ability"><code>st.change</code></td>
+<td data-label="What it does"></td>
+</tr>
+</tbody>
+</table></div>
+<p>On the Home Assistant app, floors and areas come from Home Assistant: <code>editable</code> is false and changes answer 404 <code>Floors and areas are managed in Home Assistant</code>.</p>
+<hr />
+<h2 id="settings-status-and-the-server">Settings, status and the server</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/info</code></td>
+<td data-label="Ability">public</td>
+<td data-label="What it does">The server (<a href="#base-url-and-ports">above</a>)</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/auth/me</code></td>
+<td data-label="Ability">public</td>
+<td data-label="What it does">Who you are and your abilities</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/status</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does"><code>{&quot;version&quot;, &quot;current_theme&quot;, &quot;themes&quot;, &quot;v2_enabled&quot;, &quot;sessions&quot;, &quot;speaker_groups&quot;, &quot;channels&quot;, &quot;active_channels&quot;, &quot;playlist_sessions&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/install</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does"><code>{&quot;install&quot;, &quot;label&quot;, &quot;version&quot;, &quot;features&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/install/features</code></td>
+<td data-label="Ability"><code>st.change</code></td>
+<td data-label="What it does"><code>{&quot;&lt;feature&gt;&quot;: bool, &quot;restart&quot;: bool}</code>: switch on a feature that is off by default (<code>overridable</code>); it applies after a restart (<code>&quot;restart&quot;: true</code> restarts now)</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/settings</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does">Settings (below)</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/settings</code></td>
+<td data-label="Ability"><code>st.change</code></td>
+<td data-label="What it does">Any of them</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/settings/playback-values</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does">Settings › Advanced's values: <code>{&quot;values&quot;, &quot;defaults&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/settings/playback-values</code></td>
+<td data-label="Ability"><code>st.change</code></td>
+<td data-label="What it does"><code>{key: number or null}</code> (null = default)</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/stream/url</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does"><code>{&quot;base&quot;: &quot;http://192.0.2.20:8008&quot;, &quot;channels&quot;: {channel id: stream URL}}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/logs?after={seq}</code></td>
+<td data-label="Ability"><code>st.view</code></td>
+<td data-label="What it does"><code>{&quot;entries&quot;: [{time, level, source, message, seq}]}</code>, newer than <code>seq</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/logs/download</code></td>
+<td data-label="Ability"><code>st.view</code></td>
+<td data-label="What it does">The log as a file</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/alerts</code></td>
+<td data-label="Ability"><code>st.view</code></td>
+<td data-label="What it does">The alert bar's alerts: <code>{&quot;alerts&quot;: [...]}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/alerts/{id}/dismiss</code></td>
+<td data-label="Ability"><code>st.view</code></td>
+<td data-label="What it does"><code>{&quot;dismissed&quot;: true}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/ha-cards</code>, <code>/api/ha-cards/download</code></td>
+<td data-label="Ability"><code>st.view</code></td>
+<td data-label="What it does">The Home Assistant dashboard cards</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/connection</code></td>
+<td data-label="Ability"><code>admin.connection</code></td>
+<td data-label="What it does">Settings › Connection: <code>{&quot;standalone&quot;, &quot;ha_url&quot;, &quot;ha_token_set&quot;, &quot;ha_connected&quot;, &quot;mqtt_host&quot;, &quot;mqtt_port&quot;, &quot;mqtt_username&quot;, &quot;mqtt_password_set&quot;, &quot;mqtt_connected&quot;, &quot;stream_url&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/connection</code></td>
+<td data-label="Ability"><code>admin.connection</code></td>
+<td data-label="What it does">Any of <code>ha_url</code>, <code>ha_token</code>, <code>mqtt_host</code>, <code>mqtt_port</code>, <code>mqtt_username</code>, <code>mqtt_password</code>, <code>stream_url</code>; an empty token or password keeps the saved one. Sonorium restarts to apply them → <code>{&quot;status&quot;: &quot;ok&quot;, &quot;restarting&quot;: true}</code>. 404 on the Home Assistant app</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/connection/test</code></td>
+<td data-label="Ability"><code>admin.connection</code></td>
+<td data-label="What it does">Try the values</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/connection/ha</code>, <code>/api/connection/mqtt</code></td>
+<td data-label="Ability"><code>admin.connection</code></td>
+<td data-label="What it does">Forget the Home Assistant or MQTT connection</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/test-tone.mp3</code></td>
+<td data-label="Ability">public</td>
+<td data-label="What it does">The speaker test chime (3 s), useful as a test sound</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/openapi.json</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does">The machine-readable route list (FastAPI)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Settings:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>default_volume</code></td>
+<td data-label="Type">integer 0-100</td>
+<td data-label="Default">60</td>
+<td data-label="Meaning">A new channel's volume</td>
+</tr>
+<tr>
+<td data-label="Field"><code>crossfade_duration</code></td>
+<td data-label="Type">number 0-10</td>
+<td data-label="Default">3.0</td>
+<td data-label="Meaning">Seconds of crossfade when the theme changes</td>
+</tr>
+<tr>
+<td data-label="Field"><code>max_groups</code></td>
+<td data-label="Type">integer 1-50</td>
+<td data-label="Default">20</td>
+<td data-label="Meaning">The most speaker groups</td>
+</tr>
+<tr>
+<td data-label="Field"><code>entity_prefix</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default"><code>sonorium</code></td>
+<td data-label="Meaning">Home Assistant entity id prefix</td>
+</tr>
+<tr>
+<td data-label="Field"><code>show_in_sidebar</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Default">true</td>
+<td data-label="Meaning">Show Sonorium in Home Assistant's sidebar</td>
+</tr>
+<tr>
+<td data-label="Field"><code>auto_create_quick_play</code></td>
+<td data-label="Type">boolean</td>
+<td data-label="Default">true</td>
+<td data-label="Meaning"></td>
+</tr>
+<tr>
+<td data-label="Field"><code>master_gain</code></td>
+<td data-label="Type">integer 0-100</td>
+<td data-label="Default">60</td>
+<td data-label="Meaning">Overall level of every mix</td>
+</tr>
+</tbody>
+</table></div>
+<p>Advanced values (<code>values</code>, seconds unless noted): <code>sparse_min_interval</code> 180, <code>sparse_max_interval</code> 1800, <code>sparse_interval_variance</code> 0.3 (a fraction), <code>group_gap</code> 120, <code>loop_crossfade</code> 1.5, <code>group_crossfade_min</code> 1, <code>group_crossfade_max</code> 60, <code>track_fade</code> 6, <code>switch_fade</code> 3, <code>ebb_long_rest</code> 0.12 (a chance), <code>ebb_turn</code> 0.35 (a chance), <code>short_file_threshold</code> 15, <code>sound_max_length</code> 60 (0 = no limit), <code>duck_amount</code> 15 (dB), <code>duck_attack</code> 0.5, <code>duck_release</code> 1.5, <code>wake_wait</code> 20, <code>wake_lead</code> 1, <code>wake_tail</code> 1. A PUT answers 400 for an unknown key, a negative number, a chance above 1 or a minimum above its maximum. What each does: <a href="docs.html#Advanced-Settings">Advanced Settings</a>.</p>
+<hr />
+<h2 id="plugins">Plugins</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/plugins</code></td>
+<td data-label="Ability"><code>pg.use</code> or <code>admin.plugins</code></td>
+<td data-label="What it does">Every plugin: <code>{id, name, version, description, author, enabled, builtin, auth_provider, settings, ui_schema, settings_schema, api_version, compatible, problem}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/plugins/{id}</code></td>
+<td data-label="Ability"><code>pg.use</code> or <code>admin.plugins</code></td>
+<td data-label="What it does">One plugin</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/plugin-framework</code></td>
+<td data-label="Ability"><code>pg.use</code> or <code>admin.plugins</code></td>
+<td data-label="What it does"><code>{&quot;api_version&quot;: &quot;1.1&quot;, &quot;capabilities&quot;, &quot;offered&quot;, &quot;tts_providers&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/extensions</code></td>
+<td data-label="Ability"><code>pg.use</code></td>
+<td data-label="What it does">Pages and Connection rows of plugins that are on</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/plugins/{id}/pages/{page}</code></td>
+<td data-label="Ability"><code>pg.use</code></td>
+<td data-label="What it does">A plugin page</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/plugins/{id}/pages/{page}/actions/{action}</code></td>
+<td data-label="Ability"><code>pg.use</code></td>
+<td data-label="What it does">A page button: <code>{&quot;values&quot;: {…}, &quot;row&quot;: id or null}</code> → <code>{&quot;success&quot;, &quot;message&quot;, &quot;refresh&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/plugins/{id}/action</code></td>
+<td data-label="Ability"><code>pg.use</code></td>
+<td data-label="What it does">A settings-form button: <code>{&quot;action&quot;, &quot;data&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET, POST</td>
+<td data-label="Path"><code>/api/triggers/{plugin}/{trigger}</code></td>
+<td data-label="Ability"><code>tr.run</code> or the trigger's token</td>
+<td data-label="What it does">Call a webhook trigger → 202 <code>{&quot;accepted&quot;: true, &quot;event_id&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/plugins/{id}/enable</code>, <code>/disable</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">Switch on or off</td>
+</tr>
+<tr>
+<td data-label="Method">GET, PUT</td>
+<td data-label="Path"><code>/api/plugins/{id}/settings</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does"><code>{&quot;settings&quot;: {name: value}}</code>; checked against the plugin's fields (400 otherwise)</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/plugins/upload</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">multipart <code>file</code>: a plugin <code>.zip</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/plugins/catalog</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">The Catalog, with <code>installed</code>, <code>installed_version</code>, <code>update_available</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/plugins/install-from-catalog</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does"><code>{&quot;plugin_id&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/plugins/reload</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">Load every plugin again</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/plugins/{id}</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">Uninstall</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/plugins/{id}/packages</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">The Python packages it needs and their state</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/plugins/{id}/triggers</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">Its triggers, their URLs, which tokens are set</td>
+</tr>
+<tr>
+<td data-label="Method">POST, DELETE</td>
+<td data-label="Path"><code>/api/plugins/{id}/triggers/token</code></td>
+<td data-label="Ability"><code>admin.keys</code></td>
+<td data-label="What it does">Make (<code>{}</code> the plugin's, <code>{&quot;trigger&quot;: id}</code> one trigger's) or revoke (<code>?trigger=</code>) a trigger token</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/schedules</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">Every plugin's jobs and the scheduler's time zone</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/schedules/settings</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does"><code>{&quot;timezone&quot;: &quot;Europe/London&quot;}</code> (<code>&quot;&quot;</code> = the system's)</td>
+</tr>
+<tr>
+<td data-label="Method">GET, POST</td>
+<td data-label="Path"><code>/api/plugins/{id}/schedules</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">Its jobs; add or replace one</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/plugins/{id}/schedules/{job}</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">Remove a job</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/plugins/{id}/schedules/{job}/enabled</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does"><code>{&quot;enabled&quot;: bool}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET, PUT</td>
+<td data-label="Path"><code>/api/plugins/{id}/connections/{conn}</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">A plugin's Connection row: fields, values (no secrets), status; save</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/plugins/{id}/connections/{conn}/test</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">Try it</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/command-actions</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">What a command map entry can do</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/plugins/{id}/command-maps</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">Its command maps</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/plugins/{id}/command-maps/{map}</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does"><code>{&quot;entries&quot;: [...]}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/plugins/{id}/command-maps/{map}/learn</code>, <code>/test</code></td>
+<td data-label="Ability"><code>admin.plugins</code></td>
+<td data-label="What it does">Wait for the next code; run a code (<code>{&quot;code&quot;}</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Everything a plugin can do, and how these routes fit together, is on <a href="plugin-development.html">Plugin Development</a>.</p>
+<hr />
+<h2 id="keys-users-linked-phones-zones-and-links">Keys, users, linked phones, zones and links</h2>
+<p>These routes come from the built-in <strong>Integration</strong> (keys) and <strong>Users</strong> (accounts, zones) plugins; while a plugin is off, its routes answer 404.</p>
+<h3 id="keys-integration-plugin-admin">Keys (Integration plugin, Admin)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/keys</code></td>
+<td data-label="What it does"><code>{&quot;keys&quot;: [key], &quot;areas&quot;: [the boxes], &quot;expiry&quot;: [&quot;7d&quot;, &quot;30d&quot;, &quot;90d&quot;, &quot;1y&quot;, &quot;never&quot;]}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/keys</code></td>
+<td data-label="What it does"><code>{&quot;name&quot;: up to 60, &quot;abilities&quot;: [...], &quot;channels&quot;: [ids] or null, &quot;expires&quot;: &quot;90d&quot;}</code> → the key with <code>&quot;key&quot;: &quot;sk_…&quot;</code> (shown once)</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/keys/{id}</code></td>
+<td data-label="What it does">Any of <code>name</code>, <code>abilities</code>, <code>channels</code>, <code>expires</code> (<code>&quot;keep&quot;</code> keeps it)</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/keys/{id}</code></td>
+<td data-label="What it does">Revoke → <code>{&quot;revoked&quot;: true}</code></td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-json">{&quot;key&quot;: &quot;sk_EXAMPLE0000000000000000000000000000000000&quot;, &quot;id&quot;: &quot;t_f41a4d7cd4daac05&quot;, &quot;name&quot;: &quot;Kitchen only&quot;,
+ &quot;abilities&quot;: [&quot;ch.view&quot;, &quot;ch.play&quot;, &quot;an.send&quot;], &quot;chips&quot;: [&quot;Channels: view, play and stop&quot;, &quot;Make announcements&quot;],
+ &quot;channels&quot;: [&quot;2c62267b&quot;], &quot;expires&quot;: &quot;2026-11-11T16:17:42.405703+00:00&quot;,
+ &quot;created&quot;: &quot;2026-10-12T16:17:42.405741+00:00&quot;, &quot;created_by&quot;: &quot;admin&quot;, &quot;last_used&quot;: null}
+</code></pre>
+<p>Unknown abilities are dropped; 400 <code>Give the key a name.</code>, <code>Unknown expiry</code>; 404 <code>No such key.</code></p>
+<h3 id="users-and-sign-in-users-plugin">Users and sign-in (Users plugin)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Permission</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/auth/login</code></td>
+<td data-label="Permission">public</td>
+<td data-label="What it does"><code>{&quot;username&quot;, &quot;password&quot;}</code>: sign in a browser (cookie)</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/auth/logout</code></td>
+<td data-label="Permission">public</td>
+<td data-label="What it does">Sign out</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/auth/setup</code></td>
+<td data-label="Permission">public</td>
+<td data-label="What it does">The first admin account, while there is none</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/auth/code-login</code></td>
+<td data-label="Permission">public</td>
+<td data-label="What it does"><code>{&quot;username&quot;, &quot;code&quot;}</code>: sign in with a sign-in code from the app</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/auth/new-password</code></td>
+<td data-label="Permission">public (signed in)</td>
+<td data-label="What it does">Choose a new password</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/auth/require-login</code></td>
+<td data-label="Permission"><code>admin.users</code></td>
+<td data-label="What it does"><code>{&quot;on&quot;: bool}</code></td>
+</tr>
+<tr>
+<td data-label="Method">GET, POST</td>
+<td data-label="Path"><code>/api/users</code></td>
+<td data-label="Permission"><code>admin.users</code></td>
+<td data-label="What it does">List users; add one <code>{&quot;username&quot;, &quot;password&quot;, &quot;role&quot;: &quot;admin&quot; | &quot;user&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/users/{id}</code></td>
+<td data-label="Permission"><code>admin.users</code></td>
+<td data-label="What it does"><code>{&quot;role&quot;}</code> and/or <code>{&quot;can_leave_link&quot;: bool}</code></td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/users/{id}/password</code></td>
+<td data-label="Permission"><code>admin.users</code></td>
+<td data-label="What it does">Set a password (409 for a Home Assistant user)</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/users/{id}/sign-out</code></td>
+<td data-label="Permission"><code>admin.users</code></td>
+<td data-label="What it does">Sign out their browsers</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/users/{id}/sessions/{session}</code></td>
+<td data-label="Permission"><code>admin.users</code></td>
+<td data-label="What it does">Sign out one browser</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/users/{id}</code></td>
+<td data-label="Permission"><code>admin.users</code></td>
+<td data-label="What it does">Remove a user</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="linked-phones">Linked phones</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Permission</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/link</code></td>
+<td data-label="Permission"><code>self</code></td>
+<td data-label="What it does">A Link App code and QR code</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/pair</code></td>
+<td data-label="Permission">public, HTTPS only</td>
+<td data-label="What it does">The app trades the code for a phone token</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/pair/login</code></td>
+<td data-label="Permission">public, HTTPS only</td>
+<td data-label="What it does">The app signs in with a username and password</td>
+</tr>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/devices</code></td>
+<td data-label="Permission"><code>self</code></td>
+<td data-label="What it does">Your phones (an Admin: everyone's)</td>
+</tr>
+<tr>
+<td data-label="Method">DELETE</td>
+<td data-label="Path"><code>/api/devices/{id}</code></td>
+<td data-label="Permission"><code>self</code></td>
+<td data-label="What it does">Unlink a phone</td>
+</tr>
+<tr>
+<td data-label="Method">GET, PUT, DELETE</td>
+<td data-label="Path"><code>/api/devices/self</code></td>
+<td data-label="Permission"><code>device</code></td>
+<td data-label="What it does">A phone's record, new name, unlinking itself</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/devices/recovery-code</code></td>
+<td data-label="Permission"><code>device</code></td>
+<td data-label="What it does">A sign-in code for a forgotten password</td>
+</tr>
+</tbody>
+</table></div>
+<p>These are for the Sonorium app; <a href="https://github.com/synssins/sonorium/blob/main/docs/APP_API.md" target="_blank" rel="noopener">docs/APP_API.md</a> §4-5 has every field.</p>
+<h3 id="zones-and-links-users-plugin">Zones and links (Users plugin)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Ability</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method">GET</td>
+<td data-label="Path"><code>/api/zones</code></td>
+<td data-label="Ability"><code>ch.view</code></td>
+<td data-label="What it does">Zones on or off, owners, Kid mode, speakers' homes, links</td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/zones/switch</code></td>
+<td data-label="Ability"><code>st.change</code></td>
+<td data-label="What it does"><code>{&quot;on&quot;: bool}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/zones/{channel_id}</code></td>
+<td data-label="Ability"><code>st.change</code></td>
+<td data-label="What it does"><code>{&quot;owner&quot;, &quot;kid_mode&quot;, &quot;schedule&quot;: {&quot;start&quot;: &quot;HH:MM&quot;, &quot;end&quot;: &quot;HH:MM&quot;}}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT</td>
+<td data-label="Path"><code>/api/zones/homes/{speaker_id}</code></td>
+<td data-label="Ability"><code>st.change</code></td>
+<td data-label="What it does"><code>{&quot;channel_id&quot;}</code>: the speaker's home channel</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/links</code></td>
+<td data-label="Ability"><code>st.change</code></td>
+<td data-label="What it does"><code>{&quot;name&quot;, &quot;channels&quot;, &quot;theme_id&quot;, &quot;preset_id&quot;}</code> or <code>{&quot;name&quot;, &quot;channels&quot;, &quot;playlist_id&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method">PUT, DELETE</td>
+<td data-label="Path"><code>/api/links/{link_id}</code></td>
+<td data-label="Ability"><code>st.change</code></td>
+<td data-label="What it does">Change or unlink</td>
+</tr>
+<tr>
+<td data-label="Method">POST</td>
+<td data-label="Path"><code>/api/links/{link_id}/leave</code>, <code>/rejoin</code></td>
+<td data-label="Ability"><code>ch.play</code></td>
+<td data-label="What it does"><code>{&quot;channel_id&quot;}</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>While Zones are on, a refused change to a channel answers 403 (not yours, Kid mode, outside the hours) or 409 (a speaker in use, a linked channel), with the reason in <code>detail</code>. See <a href="docs.html#Sign-in-and-Users">Sign-in and Users</a>.</p>
+<hr />
+<h2 id="audio-streams">Audio streams</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Path</th>
+<th>What it plays</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Path"><code>/stream/channel{N}</code></td>
+<td data-label="What it plays">A channel's stream slot (N = 1 to <code>max_channels</code>, 6 by default). N is the channel's <code>channel_id</code>, or comes from <code>stream_path</code> of <code>listen</code>.</td>
+</tr>
+<tr>
+<td data-label="Path"><code>/stream/channel{N}?local=1</code></td>
+<td data-label="What it plays">The same, as a listener: keeps the mix running without speakers, and is heard while the speakers are muted</td>
+</tr>
+<tr>
+<td data-label="Path"><code>/stream/{theme_id}</code></td>
+<td data-label="What it plays">A theme with the settings saved in it (previews)</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>No key: speakers can't sign in. Anyone on the network can listen to a channel that plays; changing anything needs the API.</li>
+<li>MP3, 44.1 kHz, mono, 128 kbps, chunked, no length and no seeking. Each listener joins at the live point.</li>
+<li>A slot that isn't playing answers 200 with no audio. <code>POST /api/sessions/{id}/listen</code> starts it first.</li>
+<li>Use port 8008: Cast devices and most speakers refuse a self-signed HTTPS address.</li>
+</ul>
+<hr />
+<h2 id="examples-home-assistant-node-red-scripts">Examples: Home Assistant, Node-RED, scripts</h2>
+<h3 id="home-assistant-a-rest_command">Home Assistant: a rest_command</h3>
+<p>Sonorium's MQTT entities already cover play, stop, volume, theme and preset (<a href="docs.html#MQTT-Entities">MQTT Entities</a>). The API adds what entities don't: announcements with options, ramps, playlists. In <code>configuration.yaml</code> (the key is in <code>secrets.yaml</code> as <code>sonorium_key: &quot;Bearer sk_…&quot;</code>):</p>
+<pre><code class="language-yaml">rest_command:
+  sonorium_announce:
+    url: &quot;http://192.0.2.20:8008/api/announce&quot;
+    method: post
+    headers:
+      Authorization: !secret sonorium_key
+    content_type: &quot;application/json&quot;
+    payload: '{&quot;channels&quot;: {{ channels | tojson }}, &quot;text&quot;: {{ text | tojson }}, &quot;volume&quot;: 90}'
+  sonorium_sleep_timer:
+    url: &quot;http://192.0.2.20:8008/api/sessions/{{ channel_id }}/ramp&quot;
+    method: post
+    headers:
+      Authorization: !secret sonorium_key
+    content_type: &quot;application/json&quot;
+    payload: '{&quot;to&quot;: 0, &quot;seconds&quot;: {{ minutes * 60 }}, &quot;then&quot;: &quot;stop&quot;}'
+</code></pre>
+<p>In an automation:</p>
+<pre><code class="language-yaml">action: rest_command.sonorium_announce
+data:
+  channels: [&quot;Kitchen&quot;, &quot;Living Room&quot;]
+  text: &quot;The laundry is done&quot;
+</code></pre>
+<p>The key needs <strong>Make announcements</strong>, and <strong>Channels: Change theme, preset and volume</strong> for the ramp.</p>
+<h3 id="node-red">Node-RED</h3>
+<ol>
+<li>Drag an <strong>http request</strong> node into the flow and double-click it.</li>
+<li>Set <strong>Method</strong> to <code>POST</code>.</li>
+<li>Set <strong>URL</strong> to <code>http://192.0.2.20:8008/api/sessions/2c62267b/play</code>.</li>
+<li>Check <strong>Use authentication</strong>.</li>
+<li>Set <strong>Type</strong> to <strong>bearer authentication</strong>.</li>
+<li>Paste the key into <strong>Token</strong>.</li>
+<li>Click <strong>Done</strong>.</li>
+<li>Connect an <strong>inject</strong> node to it.</li>
+<li>Click <strong>Deploy</strong>.</li>
+</ol>
+<p>An <strong>http request</strong> node ends when the answer ends, so it can't follow the event stream. Install a Server-Sent Events client node from <strong>Manage palette</strong> and point it at <code>http://192.0.2.20:8008/api/events/stream?types=channel.*&amp;token=sk_EXAMPLE…</code>.</p>
+<h3 id="python">Python</h3>
+<pre><code class="language-python">import json
+import urllib.request
+
+BASE = &quot;http://192.0.2.20:8008/api&quot;
+KEY = &quot;sk_EXAMPLE0000000000000000000000000000000000&quot;
+
+
+def call(method, path, body=None):
+    data = None if body is None else json.dumps(body).encode()
+    request = urllib.request.Request(BASE + path, data=data, method=method,
+                                     headers={&quot;Authorization&quot;: f&quot;Bearer {KEY}&quot;, &quot;Content-Type&quot;: &quot;application/json&quot;})
+    with urllib.request.urlopen(request) as answer:
+        text = answer.read()
+        return json.loads(text) if text else None
+
+
+kitchen = next(c for c in call(&quot;GET&quot;, &quot;/sessions&quot;) if c[&quot;name&quot;] == &quot;Kitchen&quot;)
+call(&quot;POST&quot;, f&quot;/sessions/{kitchen['id']}/volume&quot;, {&quot;volume&quot;: 30})
+call(&quot;POST&quot;, f&quot;/sessions/{kitchen['id']}/play&quot;)
+</code></pre>
+<h3 id="powershell">PowerShell</h3>
+<pre><code class="language-powershell">$key = &quot;sk_EXAMPLE0000000000000000000000000000000000&quot;
+$headers = @{ Authorization = &quot;Bearer $key&quot; }
+$channels = Invoke-RestMethod -Uri &quot;http://192.0.2.20:8008/api/sessions&quot; -Headers $headers
+Invoke-RestMethod -Method Post -Uri &quot;http://192.0.2.20:8008/api/sessions/$($channels[0].id)/stop&quot; -Headers $headers
+</code></pre>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo"><img src="images/icon.png" alt="Sonorium"><span>Sonorium</span></div>
+            <div class="footer-links">
+                <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
+                <a href="docs.html">Docs</a>
+                <a href="faq.html">FAQ</a>
+                <a href="privacy/">Privacy</a>
+            </div>
+            <div class="footer-credit">Fork of <a href="https://github.com/fmtr/amniotic" target="_blank">Amniotic</a> by fmtr</div>
+        </div>
+    </footer>
+</body>
+</html>

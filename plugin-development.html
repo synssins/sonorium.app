@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plugin Development - Sonorium</title>
+    <meta name="description" content="Write a Sonorium plugin: settings, events, actions, scheduler, webhook triggers, pages, sounds, ramps, audio outputs, MQTT and Home Assistant.">
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .docs-content h2, .docs-content h3, .docs-content h4 { scroll-margin-top: 90px; }
+        .docs-content h4 { font-size: 1rem; margin: 1.25rem 0 0.5rem; }
+        .docs-content .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .docs-content .table-wrap table { margin: 0; }
+        .docs-content td code, .docs-content th code { white-space: nowrap; }
+        .docs-content hr { display: none; }
+        .docs-sidebar { max-height: calc(100vh - 120px); overflow-y: auto; }
+        @media (max-width: 968px) { .docs-sidebar { max-height: none; } }
+        @media (max-width: 600px) {
+            .docs-layout { padding: 1rem; gap: 1.5rem; }
+            .page-header { padding-left: 1rem; padding-right: 1rem; }
+            .docs-content .table-wrap table, .docs-content .table-wrap tbody, .docs-content .table-wrap tr, .docs-content .table-wrap td { display: block; width: 100%; }
+            .docs-content .table-wrap thead { display: none; }
+            .docs-content .table-wrap tr { border: 1px solid var(--border-color); border-radius: 8px; padding: 0.5rem 0.75rem; margin-bottom: 0.75rem; background: var(--bg-card); }
+            .docs-content .table-wrap td { border: none; padding: 0.25rem 0; }
+            .docs-content .table-wrap td::before { content: attr(data-label); display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+            .docs-content .table-wrap td:first-child { color: var(--text-primary); }
+            .docs-content td code { white-space: normal; overflow-wrap: anywhere; }
+        }
+        .docs-content p code, .docs-content li code { overflow-wrap: anywhere; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Sonorium"></a>
+            <div class="nav-links">
+                <a href="index.html#downloads">Downloads</a>
+                <a href="getting-started.html">Get Started</a>
+                <a href="index.html#features">Features</a>
+                <a href="faq.html">FAQ</a>
+                <a href="docs.html">Docs</a>
+                <a href="api.html">API</a>
+                <a href="plugin-development.html">Plugin Development</a>
+                <a href="theme-format.html">Theme Format</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+            <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Plugin Development</h1>
+        <p>Add features to Sonorium with a folder and a Python file.</p>
+    </header>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar">
+            <h3>On this page</h3>
+            <ul>
+                    <li><a href="#what-a-plugin-can-do">What a plugin can do</a></li>
+                    <li><a href="#a-first-plugin-doorbell">A first plugin: Doorbell</a></li>
+                    <li><a href="#folder-layout-and-manifest">Folder layout and manifest</a></li>
+                    <li><a href="#the-plugin-class">The plugin class</a></li>
+                    <li><a href="#lifecycle">Lifecycle</a></li>
+                    <li><a href="#settings">Settings</a></li>
+                    <li><a href="#events">Events</a></li>
+                    <li><a href="#actions">Actions</a></li>
+                    <li><a href="#scheduler">Scheduler</a></li>
+                    <li><a href="#webhook-triggers">Webhook triggers</a></li>
+                    <li><a href="#pages">Pages</a></li>
+                    <li><a href="#connections">Connections</a></li>
+                    <li><a href="#sounds-and-announcements">Sounds and announcements</a></li>
+                    <li><a href="#text-to-speech">Text to speech</a></li>
+                    <li><a href="#volume-ramps">Volume ramps</a></li>
+                    <li><a href="#audio-outputs">Audio outputs</a></li>
+                    <li><a href="#command-maps">Command maps</a></li>
+                    <li><a href="#mqtt">MQTT</a></li>
+                    <li><a href="#home-assistant">Home Assistant</a></li>
+                    <li><a href="#themes-from-a-plugin">Themes from a plugin</a></li>
+                    <li><a href="#python-packages-and-programs">Python packages and programs</a></li>
+                    <li><a href="#api-version-and-capabilities">API version and capabilities</a></li>
+                    <li><a href="#packaging-installing-and-updating">Packaging, installing and updating</a></li>
+                    <li><a href="#storage-and-security">Storage and security</a></li>
+                    <li><a href="#testing">Testing</a></li>
+            </ul>
+            <h3>More</h3>
+            <ul>
+                <li><a href="getting-started.html">Get Started</a></li>
+                <li><a href="docs.html">Docs</a></li>
+                <li><a href="api.html">API</a></li>
+                <li><a href="theme-format.html">Theme Format</a></li>
+            </ul>
+        </aside>
+        <main class="docs-content">
+<p>A plugin adds a feature to Sonorium without changing Sonorium: a doorbell chime, an alarm clock, a connector to another home system, a remote control, an importer. It is a folder with a Python file. Sonorium loads it and offers it a set of services: follow what happens (events), act on channels (actions), run at set times (the scheduler), be called by other devices (webhook triggers), add pages and settings to the web UI, play sounds over channels, ramp volume, add audio outputs, take commands from remotes, and use MQTT, Home Assistant and text to speech.</p>
+<p>Think of Sonorium as a phone and a plugin as an app. The app doesn't open the phone and rewire it; it asks the phone's services for the camera or the speaker. Those services are documented here and keep working across Sonorium versions: names and fields are only added, never renamed or removed.</p>
+<p>This page describes the plugin API of Sonorium 1.7.1 (plugin API <strong>1.1</strong>). The repository's guide is <a href="https://github.com/synssins/sonorium/blob/main/docs/PLUGIN_DEVELOPMENT.md" target="_blank" rel="noopener">docs/PLUGIN_DEVELOPMENT.md</a>, with a second example in <a href="https://github.com/synssins/sonorium/tree/main/docs/examples/trigger_play_channel" target="_blank" rel="noopener">docs/examples/trigger_play_channel</a>. Installing and managing plugins as a user is on <a href="docs.html#Plugins">Plugins</a>; the HTTP routes are on <a href="api.html#plugins">API Reference</a>.</p>
+<hr />
+<h2 id="what-a-plugin-can-do">What a plugin can do</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>What it gives</th>
+<th>In the plugin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Service">Settings</td>
+<td data-label="What it gives">A form under the plugin in <strong>Settings › Plugins</strong>, saved as it changes</td>
+<td data-label="In the plugin"><code>get_settings_schema()</code>, <code>get_setting()</code></td>
+</tr>
+<tr>
+<td data-label="Service">Events</td>
+<td data-label="What it gives">Follow what happens in Sonorium; publish the plugin's own events</td>
+<td data-label="In the plugin"><code>self.subscribe()</code>, <code>self.emit()</code></td>
+</tr>
+<tr>
+<td data-label="Service">Actions</td>
+<td data-label="What it gives">Everything the web UI does with channels</td>
+<td data-label="In the plugin"><code>self.actions</code></td>
+</tr>
+<tr>
+<td data-label="Service">Scheduler</td>
+<td data-label="What it gives">Jobs at set times, kept across restarts</td>
+<td data-label="In the plugin"><code>self.schedule()</code>, <code>on_schedule()</code></td>
+</tr>
+<tr>
+<td data-label="Service">Webhook triggers</td>
+<td data-label="What it gives">URLs other devices call, with tokens</td>
+<td data-label="In the plugin"><code>get_triggers()</code>, <code>on_trigger()</code></td>
+</tr>
+<tr>
+<td data-label="Service">Pages</td>
+<td data-label="What it gives">Entries in the left menu, drawn by Sonorium from data</td>
+<td data-label="In the plugin"><code>get_pages()</code>, <code>get_page()</code>, <code>page_action()</code></td>
+</tr>
+<tr>
+<td data-label="Service">Connections</td>
+<td data-label="What it gives">A row in <strong>Settings › Connection</strong> with fields, secrets and a test</td>
+<td data-label="In the plugin"><code>get_connections()</code>, <code>connection_values()</code></td>
+</tr>
+<tr>
+<td data-label="Service">Sounds and announcements</td>
+<td data-label="What it gives">Sounds over channels with ducking; announcements</td>
+<td data-label="In the plugin"><code>self.audio</code></td>
+</tr>
+<tr>
+<td data-label="Service">Text to speech</td>
+<td data-label="What it gives">Provide or use voices for announcements</td>
+<td data-label="In the plugin"><code>self.audio.register_tts()</code>, <code>self.audio.tts()</code></td>
+</tr>
+<tr>
+<td data-label="Service">Volume ramps</td>
+<td data-label="What it gives">Gradual volume changes on a channel</td>
+<td data-label="In the plugin"><code>self.ramps</code></td>
+</tr>
+<tr>
+<td data-label="Service">Audio outputs</td>
+<td data-label="What it gives">New places a channel can play: a sound card, a Bluetooth speaker</td>
+<td data-label="In the plugin"><code>self.audio_outputs</code></td>
+</tr>
+<tr>
+<td data-label="Service">Command maps</td>
+<td data-label="What it gives">Remote buttons and other codes, mapped by the user to actions</td>
+<td data-label="In the plugin"><code>get_command_maps()</code>, <code>self.commands</code></td>
+</tr>
+<tr>
+<td data-label="Service">MQTT</td>
+<td data-label="What it gives">Publish and subscribe on Sonorium's broker</td>
+<td data-label="In the plugin"><code>self.mqtt</code></td>
+</tr>
+<tr>
+<td data-label="Service">Home Assistant</td>
+<td data-label="What it gives">Home Assistant's REST API through Sonorium's connection</td>
+<td data-label="In the plugin"><code>self.homeassistant</code></td>
+</tr>
+<tr>
+<td data-label="Service">Themes</td>
+<td data-label="What it gives">Create themes and add files, presets and groups to them</td>
+<td data-label="In the plugin"><code>self.new_theme()</code>, <code>self.open_theme()</code></td>
+</tr>
+<tr>
+<td data-label="Service">Packages</td>
+<td data-label="What it gives">Python packages from PyPI and programs per platform</td>
+<td data-label="In the plugin">manifest <code>requirements</code>, <code>binaries</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="a-first-plugin-doorbell">A first plugin: Doorbell</h2>
+<p>A doorbell button (an ESP32, a Zigbee button through Home Assistant, a shell script) calls a URL; Sonorium plays a chime over the chosen channels, ducking what plays. The plugin has settings, a webhook trigger, an event subscription, an event of the plugin and a page with a button.</p>
+<h3 id="the-files">The files</h3>
+<pre><code>doorbell/
+├── manifest.json
+└── plugin.py
+</code></pre>
+<p><code>doorbell/manifest.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;doorbell&quot;,
+  &quot;name&quot;: &quot;Doorbell&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;Plays a chime over channels when the doorbell trigger is called.&quot;,
+  &quot;author&quot;: &quot;Your name&quot;,
+  &quot;entry_point&quot;: &quot;plugin.py&quot;,
+  &quot;plugin_class&quot;: &quot;Doorbell&quot;,
+  &quot;api_version&quot;: &quot;1.1&quot;,
+  &quot;requires&quot;: [&quot;triggers&quot;, &quot;pages&quot;, &quot;audio.sounds&quot;]
+}
+</code></pre>
+<p><code>doorbell/plugin.py</code>:</p>
+<pre><code class="language-python">&quot;&quot;&quot;Doorbell: a webhook trigger that plays a chime over Sonorium's channels.&quot;&quot;&quot;
+from __future__ import annotations
+
+from datetime import datetime, timezone
+
+from sonorium.plugins.actions import ActionError
+from sonorium.plugins.base import BasePlugin
+
+
+class Doorbell(BasePlugin):
+    id = &quot;doorbell&quot;
+    name = &quot;Doorbell&quot;
+    version = &quot;1.0.0&quot;
+    description = &quot;Plays a chime over channels when the doorbell trigger is called.&quot;
+    author = &quot;Your name&quot;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.rings: list[dict] = []          # newest first, kept in memory for the page
+
+    # Settings: drawn as a form under the plugin in Settings &gt; Plugins
+    def get_settings_schema(self) -&gt; dict:
+        return {
+            &quot;chime_url&quot;: {&quot;type&quot;: &quot;url&quot;, &quot;label&quot;: &quot;Chime&quot;, &quot;required&quot;: True,
+                          &quot;help&quot;: &quot;An http(s) address of an MP3 or WAV file&quot;},
+            &quot;channels&quot;: {&quot;type&quot;: &quot;string&quot;, &quot;label&quot;: &quot;Channels&quot;, &quot;default&quot;: &quot;all&quot;,
+                         &quot;help&quot;: &quot;Channel names or ids, separated by commas, or all&quot;},
+            &quot;volume&quot;: {&quot;type&quot;: &quot;number&quot;, &quot;label&quot;: &quot;Volume&quot;, &quot;min&quot;: 0, &quot;max&quot;: 200, &quot;default&quot;: 100},
+        }
+
+    # Lifecycle: subscriptions made here are removed when the plugin is disabled
+    async def on_enable(self) -&gt; None:
+        self.subscribe(&quot;sound.ended&quot;, self.on_sound_ended)
+
+    async def on_sound_ended(self, event) -&gt; None:
+        if event.data.get(&quot;origin&quot;) != f&quot;plugin:{self.id}&quot;:
+            return                            # a sound someone else played
+        for ring in self.rings:
+            if ring[&quot;sound_id&quot;] == event.data.get(&quot;sound_id&quot;):
+                ring[&quot;result&quot;] = event.data.get(&quot;reason&quot;, &quot;&quot;)
+
+    # Webhook trigger: POST or GET /api/triggers/doorbell/ring
+    def get_triggers(self) -&gt; list[dict]:
+        return [{&quot;id&quot;: &quot;ring&quot;, &quot;title&quot;: &quot;Ring&quot;, &quot;methods&quot;: [&quot;POST&quot;, &quot;GET&quot;],
+                 &quot;description&quot;: &quot;Play the chime. Optional payload: door (a name shown on the page).&quot;}]
+
+    async def on_trigger(self, trigger: str, payload: dict, context: dict) -&gt; None:
+        await self.ring(str(payload.get(&quot;door&quot;) or &quot;Front door&quot;), context.get(&quot;client&quot;, &quot;&quot;))
+
+    async def ring(self, door: str, source: str) -&gt; dict:
+        url = self.get_setting(&quot;chime_url&quot;)
+        if not url:
+            raise ActionError(&quot;invalid&quot;, &quot;Set the chime in the plugin's settings first&quot;)
+        wanted = str(self.get_setting(&quot;channels&quot;) or &quot;all&quot;).strip()
+        channels = &quot;all&quot; if wanted.lower() == &quot;all&quot; else [c.strip() for c in wanted.split(&quot;,&quot;) if c.strip()]
+        result = await self.audio.announce(channels, sound=url, volume=self.get_setting(&quot;volume&quot;))
+        sound_id = (result.get(&quot;chime&quot;) or {}).get(&quot;sound_id&quot;, &quot;&quot;)
+        self.rings.insert(0, {&quot;id&quot;: sound_id or str(len(self.rings)), &quot;sound_id&quot;: sound_id, &quot;door&quot;: door,
+                              &quot;at&quot;: datetime.now(timezone.utc).isoformat(), &quot;from&quot;: source,
+                              &quot;channels&quot;: len(result.get(&quot;played&quot;) or []), &quot;result&quot;: &quot;playing&quot;})
+        del self.rings[20:]
+        self.emit(&quot;rang&quot;, {&quot;door&quot;: door, &quot;channels&quot;: result.get(&quot;played&quot;) or []})
+        return result
+
+    # A page in the left menu (Plugins section)
+    def get_pages(self) -&gt; list[dict]:
+        return [{&quot;id&quot;: &quot;rings&quot;, &quot;title&quot;: &quot;Doorbell&quot;, &quot;icon&quot;: &quot;mdi:doorbell&quot;}]
+
+    async def get_page(self, page_id: str) -&gt; dict:
+        return {
+            &quot;title&quot;: &quot;Doorbell&quot;,
+            &quot;intro&quot;: &quot;The latest rings since Sonorium started.&quot;,
+            &quot;actions&quot;: [{&quot;action&quot;: &quot;test&quot;, &quot;label&quot;: &quot;Ring now&quot;, &quot;style&quot;: &quot;primary&quot;}],
+            &quot;refresh&quot;: 10,
+            &quot;sections&quot;: [{
+                &quot;id&quot;: &quot;rings&quot;, &quot;title&quot;: &quot;Latest rings&quot;,
+                &quot;items&quot;: [
+                    {&quot;type&quot;: &quot;table&quot;, &quot;id&quot;: &quot;rings&quot;, &quot;empty&quot;: &quot;No rings yet&quot;,
+                     &quot;columns&quot;: [{&quot;key&quot;: &quot;at&quot;, &quot;label&quot;: &quot;When&quot;, &quot;format&quot;: &quot;datetime&quot;},
+                                 {&quot;key&quot;: &quot;door&quot;, &quot;label&quot;: &quot;Door&quot;},
+                                 {&quot;key&quot;: &quot;channels&quot;, &quot;label&quot;: &quot;Channels&quot;, &quot;format&quot;: &quot;number&quot;},
+                                 {&quot;key&quot;: &quot;result&quot;, &quot;label&quot;: &quot;Result&quot;}],
+                     &quot;rows&quot;: self.rings},
+                    {&quot;type&quot;: &quot;button&quot;, &quot;action&quot;: &quot;clear&quot;, &quot;label&quot;: &quot;Clear the list&quot;, &quot;style&quot;: &quot;secondary&quot;,
+                     &quot;confirm&quot;: &quot;Clear the list of rings?&quot;},
+                ],
+            }],
+        }
+
+    async def page_action(self, page_id: str, action: str, data: dict) -&gt; dict:
+        if action == &quot;test&quot;:
+            try:
+                result = await self.ring(&quot;Test&quot;, &quot;Ring now&quot;)
+            except ActionError as e:
+                return {&quot;success&quot;: False, &quot;message&quot;: e.message}
+            return {&quot;success&quot;: True, &quot;message&quot;: f&quot;Ringing on {len(result.get('played') or [])} channels&quot;}
+        if action == &quot;clear&quot;:
+            self.rings.clear()
+            return {&quot;success&quot;: True, &quot;message&quot;: &quot;Cleared&quot;}
+        return await super().page_action(page_id, action, data)
+</code></pre>
+<p>What each part does:</p>
+<ul>
+<li><code>get_settings_schema()</code> makes three fields under the plugin in <strong>Settings › Plugins</strong>: the chime's address, the channels, the volume.</li>
+<li><code>on_enable()</code> subscribes to <code>sound.ended</code>, so the page can show how each ring ended. The subscription is removed when the plugin is switched off.</li>
+<li><code>get_triggers()</code> declares one webhook trigger, <code>ring</code>, served at <code>/api/triggers/doorbell/ring</code>. <code>on_trigger()</code> runs after Sonorium has checked the caller's token and answered 202.</li>
+<li><code>ring()</code> sends an announcement with <code>self.audio.announce()</code>: a chime, no text, on the channels from the settings. Announcements start a stopped channel's speakers for their length and override zones and quiet hours.</li>
+<li><code>self.emit(&quot;rang&quot;, …)</code> publishes <code>plugin.doorbell.rang</code>, which other plugins and programs can follow.</li>
+<li><code>get_pages()</code>, <code>get_page()</code> and <code>page_action()</code> add <strong>Doorbell</strong> to the left menu: a table of rings, a <strong>Ring now</strong> button and <strong>Clear the list</strong>.</li>
+</ul>
+<h3 id="install-it">Install it</h3>
+<ol>
+<li>Zip the folder, so the zip holds <code>doorbell/manifest.json</code> and <code>doorbell/plugin.py</code>.
+<ul>
+<li>Linux and macOS: <code>zip -r doorbell.zip doorbell</code></li>
+<li>Windows (PowerShell): <code>Compress-Archive -Path doorbell -DestinationPath doorbell.zip</code></li>
+</ul>
+</li>
+<li>Open <strong>Settings</strong> in the left menu.</li>
+<li>Click <strong>Plugins</strong>.</li>
+<li>Click <strong>Upload plugin</strong> (top right).</li>
+<li>Pick <code>doorbell.zip</code>. <strong>Doorbell</strong> appears under <strong>Installed</strong>, switched off.</li>
+<li>Click the <strong>On</strong> switch on the Doorbell row.</li>
+<li>Click the arrow at the left of the row to show its settings.</li>
+<li>Type the chime's address in <strong>Chime</strong>. Any MP3 or WAV file reachable over http(s) works; Sonorium's own test chime is <code>http://192.0.2.20:8008/api/test-tone.mp3</code>.</li>
+<li>Type the channel names in <strong>Channels</strong> (for example <code>Kitchen, Living Room</code>), or leave <code>all</code>.</li>
+</ol>
+<p>From a terminal instead. Installing and configuring plugins needs an Admin, and keys can't have that permission, so these calls work while <strong>Require login</strong> is off (or with a signed-in Admin's cookie and CSRF token, see <a href="api.html#other-callers">API Reference</a>):</p>
+<pre><code class="language-sh">B=http://192.0.2.20:8008/api
+curl -F &quot;file=@doorbell.zip&quot; $B/plugins/upload
+curl -X PUT $B/plugins/doorbell/enable
+curl -X PUT $B/plugins/doorbell/settings -H &quot;Content-Type: application/json&quot; \
+     -d '{&quot;settings&quot;: {&quot;chime_url&quot;: &quot;http://192.0.2.20:8008/api/test-tone.mp3&quot;, &quot;channels&quot;: &quot;Kitchen&quot;, &quot;volume&quot;: 80}}'
+</code></pre>
+<h3 id="ring-it">Ring it</h3>
+<p>A trigger needs a key or a token. Either:</p>
+<ul>
+<li>a key with <strong>Run triggers</strong> (<strong>Settings › Keys › New key</strong>, see <a href="api.html#keys">API Reference</a>), which opens every trigger of every plugin; or</li>
+<li>a token for this trigger alone: <code>POST /api/plugins/doorbell/triggers/token</code> with <code>{&quot;trigger&quot;: &quot;ring&quot;}</code> (Admin). It answers <code>{&quot;token&quot;: &quot;…&quot;, &quot;trigger&quot;: &quot;ring&quot;}</code> once.</li>
+</ul>
+<pre><code class="language-sh">TOKEN=EXAMPLEtoken0000000000000000000000000000000
+curl -X POST http://192.0.2.20:8008/api/triggers/doorbell/ring \
+     -H &quot;Authorization: Bearer $TOKEN&quot; -H &quot;Content-Type: application/json&quot; -d '{&quot;door&quot;: &quot;Back door&quot;}'
+</code></pre>
+<pre><code class="language-json">{&quot;accepted&quot;: true, &quot;event_id&quot;: 44}
+</code></pre>
+<p>A device that can only open a URL sends the same as a GET:</p>
+<pre><code>http://192.0.2.20:8008/api/triggers/doorbell/ring?door=Garage&amp;token=EXAMPLEtoken0000000000000000000000000000000
+</code></pre>
+<h3 id="see-it-run">See it run</h3>
+<ul>
+<li>The chime plays on the channels. A stopped channel's speakers start for it, then stop again.</li>
+<li><strong>Doorbell</strong> is in the left menu, in the <strong>Plugins</strong> section. Its table lists each ring; <strong>Result</strong> changes from <code>playing</code> to <code>finished</code> when the chime has played. <strong>Ring now</strong> rings it from the page.</li>
+<li>The event stream shows the call, the plugin's event and the end of the chime:</li>
+</ul>
+<pre><code>event: trigger.received
+data: {&quot;id&quot;: 44, &quot;type&quot;: &quot;trigger.received&quot;, &quot;origin&quot;: &quot;sonorium&quot;, &quot;data&quot;: {&quot;plugin_id&quot;: &quot;doorbell&quot;, &quot;trigger&quot;: &quot;ring&quot;, &quot;payload&quot;: {&quot;door&quot;: &quot;Back door&quot;}, &quot;method&quot;: &quot;POST&quot;}, ...}
+
+event: plugin.doorbell.rang
+data: {&quot;id&quot;: 45, &quot;type&quot;: &quot;plugin.doorbell.rang&quot;, &quot;origin&quot;: &quot;plugin:doorbell&quot;, &quot;data&quot;: {&quot;door&quot;: &quot;Back door&quot;, &quot;channels&quot;: [&quot;2c62267b&quot;]}, ...}
+
+event: sound.ended
+data: {&quot;id&quot;: 61, &quot;type&quot;: &quot;sound.ended&quot;, &quot;origin&quot;: &quot;sonorium&quot;, &quot;data&quot;: {&quot;sound_id&quot;: &quot;s_27ad7fdc1282&quot;, &quot;channel_id&quot;: &quot;2c62267b&quot;, &quot;name&quot;: &quot;Kitchen&quot;, &quot;label&quot;: &quot;Chime&quot;, &quot;origin&quot;: &quot;plugin:doorbell&quot;, &quot;reason&quot;: &quot;finished&quot;, &quot;capped&quot;: false, &quot;played&quot;: 3.0}, ...}
+</code></pre>
+<p>Note the two origins on <code>sound.ended</code>: the event's <code>origin</code> is <code>sonorium</code> (the mixer published it), while <code>data.origin</code> says who played the sound. That is why <code>on_sound_ended()</code> checks <code>event.data[&quot;origin&quot;]</code>.</p>
+<hr />
+<h2 id="folder-layout-and-manifest">Folder layout and manifest</h2>
+<pre><code>my_plugin/
+├── manifest.json      what the plugin is
+├── plugin.py          the plugin class (or the file named in entry_point)
+└── ...                anything else it needs: modules, images, bin/
+</code></pre>
+<p>Installed plugins live in the <code>plugins</code> folder of Sonorium's config folder (<code>/config/sonorium/plugins/</code> on the Home Assistant app and Docker), kept across updates. A folder whose name starts with <code>.</code> is skipped, and so is one without <code>plugin.py</code>.</p>
+<p><code>manifest.json</code>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Key"><code>id</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default">the folder name</td>
+<td data-label="Meaning">Letters, digits, <code>_</code> and <code>-</code>. Used in URLs, settings and event names. An upload keeps only lowercase letters, digits and <code>_</code>, so use those.</td>
+</tr>
+<tr>
+<td data-label="Key"><code>name</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default">the id in title case</td>
+<td data-label="Meaning">Shown in <strong>Settings › Plugins</strong></td>
+</tr>
+<tr>
+<td data-label="Key"><code>version</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default"></td>
+<td data-label="Meaning">Required. <code>MAJOR.MINOR.PATCH</code>, optionally <code>-pre</code> (<code>1.0.0</code>, <code>2.1.0-beta</code>). An upload without one, or with another format, is refused.</td>
+</tr>
+<tr>
+<td data-label="Key"><code>description</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default"><code>&quot;&quot;</code></td>
+<td data-label="Meaning">Shown in <strong>Settings › Plugins</strong></td>
+</tr>
+<tr>
+<td data-label="Key"><code>author</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default"><code>Unknown</code></td>
+<td data-label="Meaning">Shown in <strong>Settings › Plugins</strong></td>
+</tr>
+<tr>
+<td data-label="Key"><code>entry_point</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default"><code>plugin.py</code></td>
+<td data-label="Meaning">The Python file Sonorium loads</td>
+</tr>
+<tr>
+<td data-label="Key"><code>plugin_class</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default">the first <code>BasePlugin</code> subclass in the file</td>
+<td data-label="Meaning">The class name</td>
+</tr>
+<tr>
+<td data-label="Key"><code>api_version</code></td>
+<td data-label="Type">string</td>
+<td data-label="Default"><code>&quot;1.0&quot;</code></td>
+<td data-label="Meaning">The plugin API it was written for, <code>MAJOR.MINOR</code> (<a href="#api-version-and-capabilities">below</a>)</td>
+</tr>
+<tr>
+<td data-label="Key"><code>requires</code></td>
+<td data-label="Type">string[]</td>
+<td data-label="Default"><code>[]</code></td>
+<td data-label="Meaning">Capabilities it can't work without</td>
+</tr>
+<tr>
+<td data-label="Key"><code>settings_schema</code></td>
+<td data-label="Type">object</td>
+<td data-label="Default"></td>
+<td data-label="Meaning">Settings fields, when the class doesn't define <code>get_settings_schema()</code></td>
+</tr>
+<tr>
+<td data-label="Key"><code>triggers</code>, <code>pages</code>, <code>connections</code>, <code>command_maps</code></td>
+<td data-label="Type">array</td>
+<td data-label="Default"></td>
+<td data-label="Meaning">Declarations, when the class doesn't define the matching <code>get_…()</code></td>
+</tr>
+<tr>
+<td data-label="Key"><code>requirements</code></td>
+<td data-label="Type">string[]</td>
+<td data-label="Default"></td>
+<td data-label="Meaning">Python packages from PyPI (<a href="#python-packages-and-programs">below</a>)</td>
+</tr>
+<tr>
+<td data-label="Key"><code>binaries</code></td>
+<td data-label="Type">object</td>
+<td data-label="Default"></td>
+<td data-label="Meaning">Programs per platform, with their SHA-256</td>
+</tr>
+</tbody>
+</table></div>
+<p>Without <code>manifest.json</code>, Sonorium makes one from the folder name (version <code>1.0.0</code>). Write one anyway: the version decides updates.</p>
+<p>Import only from <code>sonorium.plugins.*</code> (<code>base</code>, <code>actions</code>, <code>events</code>, <code>scheduler</code>, <code>theme_api</code>) and, for an audio output, <code>sonorium.core.audio_outputs</code> (<code>OutputType</code>, <code>Sink</code>). Everything else in Sonorium is internal and changes without notice.</p>
+<hr />
+<h2 id="the-plugin-class">The plugin class</h2>
+<pre><code class="language-python">from sonorium.plugins.base import BasePlugin
+
+
+class MyPlugin(BasePlugin):
+    id = &quot;my_plugin&quot;
+    name = &quot;My Plugin&quot;
+    version = &quot;1.0.0&quot;
+    description = &quot;What it does, in one line.&quot;
+    author = &quot;Your name&quot;
+</code></pre>
+<p>Sonorium creates one instance: <code>MyPlugin(plugin_dir, settings, audio_path)</code>. Call <code>super().__init__(*args, **kwargs)</code> first when you define <code>__init__</code>.</p>
+<p>Attributes and properties Sonorium sets:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Name"><code>self.plugin_dir</code></td>
+<td data-label="Type"><code>Path</code></td>
+<td data-label="Meaning">The plugin's folder</td>
+</tr>
+<tr>
+<td data-label="Name"><code>self.settings</code></td>
+<td data-label="Type">dict</td>
+<td data-label="Meaning">The saved settings, with defaults for those not set</td>
+</tr>
+<tr>
+<td data-label="Name"><code>self.audio_path</code></td>
+<td data-label="Type"><code>Path</code></td>
+<td data-label="Meaning">The themes folder</td>
+</tr>
+<tr>
+<td data-label="Name"><code>self.enabled</code></td>
+<td data-label="Type">bool</td>
+<td data-label="Meaning">Switched on</td>
+</tr>
+<tr>
+<td data-label="Name"><code>self.actions</code></td>
+<td data-label="Type"></td>
+<td data-label="Meaning"><a href="#actions">Actions</a></td>
+</tr>
+<tr>
+<td data-label="Name"><code>self.audio</code>, <code>self.ramps</code>, <code>self.audio_outputs</code>, <code>self.commands</code>, <code>self.mqtt</code>, <code>self.homeassistant</code></td>
+<td data-label="Type"></td>
+<td data-label="Meaning">The 1.1 services</td>
+</tr>
+</tbody>
+</table></div>
+<p>Methods a plugin may define (all optional):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Called</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method"><code>async on_load()</code></td>
+<td data-label="Called">The plugin was loaded</td>
+<td data-label="Returns"></td>
+</tr>
+<tr>
+<td data-label="Method"><code>async on_enable()</code></td>
+<td data-label="Called">Switched on (also at start-up when it was on)</td>
+<td data-label="Returns"></td>
+</tr>
+<tr>
+<td data-label="Method"><code>async on_disable()</code></td>
+<td data-label="Called">Switched off</td>
+<td data-label="Returns"></td>
+</tr>
+<tr>
+<td data-label="Method"><code>async on_unload()</code></td>
+<td data-label="Called">Sonorium unloads it (reload, uninstall, shutdown)</td>
+<td data-label="Returns"></td>
+</tr>
+<tr>
+<td data-label="Method"><code>get_settings_schema()</code></td>
+<td data-label="Called">To draw the settings form and check values</td>
+<td data-label="Returns"><code>{name: field}</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>async on_settings_changed(settings)</code></td>
+<td data-label="Called">After settings were saved</td>
+<td data-label="Returns"></td>
+</tr>
+<tr>
+<td data-label="Method"><code>get_ui_schema()</code></td>
+<td data-label="Called">To draw buttons under the settings form</td>
+<td data-label="Returns"><code>{&quot;actions&quot;: [{&quot;id&quot;, &quot;label&quot;, &quot;primary&quot;}]}</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>async handle_action(action, data)</code></td>
+<td data-label="Called">One of those buttons was clicked</td>
+<td data-label="Returns"><code>{&quot;success&quot;, &quot;message&quot;, &quot;data&quot;?}</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>async on_schedule(job)</code></td>
+<td data-label="Called">A job is due</td>
+<td data-label="Returns"></td>
+</tr>
+<tr>
+<td data-label="Method"><code>get_triggers()</code></td>
+<td data-label="Called">To list its webhook triggers</td>
+<td data-label="Returns"><code>[{&quot;id&quot;, &quot;title&quot;, &quot;description&quot;, &quot;methods&quot;}]</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>async on_trigger(trigger, payload, context)</code></td>
+<td data-label="Called">A trigger was called</td>
+<td data-label="Returns"></td>
+</tr>
+<tr>
+<td data-label="Method"><code>get_pages()</code></td>
+<td data-label="Called">To list its menu entries</td>
+<td data-label="Returns"><code>[{&quot;id&quot;, &quot;title&quot;, &quot;icon&quot;}]</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>async get_page(page_id)</code></td>
+<td data-label="Called">A page is opened (and on each refresh)</td>
+<td data-label="Returns">the page</td>
+</tr>
+<tr>
+<td data-label="Method"><code>async page_action(page_id, action, data)</code></td>
+<td data-label="Called">A page button or row action</td>
+<td data-label="Returns"><code>{&quot;success&quot;, &quot;message&quot;, &quot;refresh&quot;?, &quot;data&quot;?}</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>get_connections()</code></td>
+<td data-label="Called">To list its Connection rows</td>
+<td data-label="Returns"><code>[{&quot;id&quot;, &quot;title&quot;, &quot;description&quot;, &quot;icon&quot;, &quot;fields&quot;, &quot;test&quot;}]</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>async test_connection(connection_id, values)</code></td>
+<td data-label="Called"><strong>Test</strong> was clicked</td>
+<td data-label="Returns"><code>{&quot;success&quot;, &quot;message&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>connection_status(connection_id)</code></td>
+<td data-label="Called">To show the row's status</td>
+<td data-label="Returns"><code>{&quot;state&quot;, &quot;message&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>async on_connection_changed(connection_id, values)</code></td>
+<td data-label="Called">A connection was saved</td>
+<td data-label="Returns"></td>
+</tr>
+<tr>
+<td data-label="Method"><code>get_command_maps()</code></td>
+<td data-label="Called">To list its command maps</td>
+<td data-label="Returns"><code>[{&quot;id&quot;, &quot;title&quot;, &quot;codes&quot;}]</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>async on_theme_created(theme_id, theme_path)</code></td>
+<td data-label="Called">A theme was created (a new theme, an import, or a plugin action)</td>
+<td data-label="Returns"></td>
+</tr>
+<tr>
+<td data-label="Method"><code>async on_theme_deleted(theme_id)</code></td>
+<td data-label="Called">A theme was deleted</td>
+<td data-label="Returns"></td>
+</tr>
+</tbody>
+</table></div>
+<p>Helpers it inherits:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method"><code>get_setting(key, default=None)</code></td>
+<td data-label="Does">One setting</td>
+</tr>
+<tr>
+<td data-label="Method"><code>update_settings(values)</code></td>
+<td data-label="Does">Change settings in memory (they are saved by the settings route)</td>
+</tr>
+<tr>
+<td data-label="Method"><code>subscribe(patterns, handler)</code></td>
+<td data-label="Does"><a href="#events">Events</a></td>
+</tr>
+<tr>
+<td data-label="Method"><code>emit(name, data=None)</code></td>
+<td data-label="Does">Publish <code>plugin.&lt;id&gt;.&lt;name&gt;</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>schedule(…)</code>, <code>unschedule(job_id)</code>, <code>scheduled_jobs()</code></td>
+<td data-label="Does"><a href="#scheduler">Scheduler</a></td>
+</tr>
+<tr>
+<td data-label="Method"><code>connection_values(connection_id)</code></td>
+<td data-label="Does">A connection's saved values, secrets included</td>
+</tr>
+<tr>
+<td data-label="Method"><code>binary(name)</code></td>
+<td data-label="Does">A program it ships, for this platform, or None</td>
+</tr>
+<tr>
+<td data-label="Method"><code>list_themes()</code>, <code>new_theme(name, …)</code>, <code>open_theme(theme_id)</code></td>
+<td data-label="Does"><a href="#themes-from-a-plugin">Themes</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>Everything runs on Sonorium's event loop: write <code>async</code> code, and run slow blocking work with <code>await asyncio.to_thread(...)</code> so playback controls stay responsive. Log with the standard <code>logging</code> module (logger <code>sonorium</code>); the lines appear in <strong>Settings › Logs</strong>.</p>
+<hr />
+<h2 id="lifecycle">Lifecycle</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Step">Start-up or reload</td>
+<td data-label="What happens">Sonorium reads <code>manifest.json</code>, checks <code>api_version</code> and <code>requires</code> before loading any code, loads the class, creates the instance, calls <code>on_load()</code>.</td>
+</tr>
+<tr>
+<td data-label="Step">Switched on</td>
+<td data-label="What happens"><code>on_enable()</code>. Start things here. A plugin that raises in <code>on_enable()</code> stays off.</td>
+</tr>
+<tr>
+<td data-label="Step">Switched off</td>
+<td data-label="What happens"><code>on_disable()</code>. Sonorium removes its event subscriptions, MQTT subscriptions, audio output types, text to speech providers and sound gates; its pages and triggers stop answering (409 for triggers). Jobs stay and skip their runs.</td>
+</tr>
+<tr>
+<td data-label="Step">Uninstalled</td>
+<td data-label="What happens"><code>on_unload()</code>; its folder, scheduled jobs, trigger tokens, saved connection values, command maps and Python packages are removed.</td>
+</tr>
+<tr>
+<td data-label="Step">Upload of the same id</td>
+<td data-label="What happens">The folder is replaced and plugins are reloaded. Settings, jobs, tokens and connection values are kept.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Time limits: an event handler 30 s, a scheduled job 5 minutes, a trigger handler 60 s, <code>get_page()</code> 10 s, <code>page_action()</code> and <code>on_connection_changed()</code> 30 s, <code>test_connection()</code> 20 s, text to speech 60 s. A handler that raises or runs over is logged and published as an <code>error</code> event; a page call answers 502 <code>The plugin failed: …</code>. Nothing a plugin does holds up playback or other plugins.</p>
+<hr />
+<h2 id="settings">Settings</h2>
+<p>Settings are values the user sets once. Sonorium draws them under the plugin in <strong>Settings › Plugins</strong> (the arrow at the left of the row) and saves each one as it changes.</p>
+<pre><code class="language-python">def get_settings_schema(self):
+    return {
+        &quot;channel&quot;: {&quot;type&quot;: &quot;string&quot;, &quot;label&quot;: &quot;Channel&quot;, &quot;default&quot;: &quot;&quot;},
+        &quot;volume&quot;: {&quot;type&quot;: &quot;number&quot;, &quot;label&quot;: &quot;Volume&quot;, &quot;min&quot;: 0, &quot;max&quot;: 100, &quot;default&quot;: 40},
+        &quot;voice&quot;: {&quot;type&quot;: &quot;select&quot;, &quot;label&quot;: &quot;Voice&quot;, &quot;options&quot;: [{&quot;value&quot;: &quot;en&quot;, &quot;label&quot;: &quot;English&quot;}, &quot;de&quot;]},
+    }
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Value</th>
+<th>Extra keys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Type"><code>string</code></td>
+<td data-label="Value">text</td>
+<td data-label="Extra keys"><code>placeholder</code></td>
+</tr>
+<tr>
+<td data-label="Type"><code>url</code></td>
+<td data-label="Value">empty or an http(s) URL</td>
+<td data-label="Extra keys"><code>placeholder</code></td>
+</tr>
+<tr>
+<td data-label="Type"><code>number</code></td>
+<td data-label="Value">an int or float (not a boolean)</td>
+<td data-label="Extra keys"><code>min</code>, <code>max</code></td>
+</tr>
+<tr>
+<td data-label="Type"><code>boolean</code></td>
+<td data-label="Value">true or false</td>
+<td data-label="Extra keys"></td>
+</tr>
+<tr>
+<td data-label="Type"><code>select</code></td>
+<td data-label="Value">one of the options</td>
+<td data-label="Extra keys"><code>options</code>: <code>[{&quot;value&quot;, &quot;label&quot;}]</code> or plain values</td>
+</tr>
+</tbody>
+</table></div>
+<p>Every field may have <code>label</code>, <code>help</code>, <code>default</code> and <code>required</code>. A field of an unknown type is left out (and logged). <code>PUT /api/plugins/{id}/settings</code> with <code>{&quot;settings&quot;: {…}}</code> checks each value against its field: an unknown name or a wrong value answers 400 and nothing is saved. Then <code>on_settings_changed(settings)</code> runs, with <code>self.settings</code> already updated.</p>
+<p><code>get_ui_schema()</code> can add buttons under the form; each calls <code>handle_action(action, data)</code> (<code>POST /api/plugins/{id}/action</code> with <code>{&quot;action&quot;, &quot;data&quot;}</code>). A result with <code>&quot;refresh_themes&quot;: true</code> makes Sonorium rescan the themes. New plugins usually use a <a href="#pages">page</a> instead.</p>
+<hr />
+<h2 id="events">Events</h2>
+<p>Sonorium announces what happens as events: a type, a time, an origin and data. A plugin subscribes to the types it needs, like following a few accounts on a news feed.</p>
+<pre><code class="language-python">import logging
+
+async def on_enable(self):
+    self.subscribe(&quot;channel.started&quot;, self.on_started)          # one type
+    self.subscribe([&quot;speaker.*&quot;, &quot;error&quot;], self.on_trouble)     # a prefix, or several
+
+async def on_started(self, event):
+    # event.type, event.data, event.time (ISO 8601, UTC), event.origin, event.id
+    logging.getLogger(&quot;sonorium&quot;).info(&quot;%s started&quot;, event.data[&quot;name&quot;])
+</code></pre>
+<ul>
+<li>A pattern is a type (<code>channel.started</code>), a prefix (<code>channel.*</code>) or <code>*</code>.</li>
+<li><code>subscribe()</code> returns a subscription; its <code>close()</code> removes it before the plugin is switched off.</li>
+<li>An <code>async</code> handler runs on the event loop; a plain function runs in a worker thread.</li>
+<li>Each subscription has a queue of 256 events: a slow handler falls behind and then loses the oldest. A handler that raises or runs over 30 s is logged and reported as an <code>error</code> event.</li>
+<li><code>event.origin</code> is <code>sonorium</code> (the web UI, the API, Home Assistant, timers) or <code>plugin:&lt;id&gt;</code> for changes a plugin made through its actions. Check it to ignore your own changes. Events published by the mixer (<code>sound.*</code>, <code>ramp.*</code>) carry the requester in <code>data.origin</code>.</li>
+</ul>
+<p><code>self.emit(name, data)</code> publishes <code>plugin.&lt;id&gt;.&lt;name&gt;</code>; <code>name</code> is lowercase letters, digits, <code>_</code>, <code>-</code> and <code>.</code>, up to 64 characters. Other plugins can subscribe to it, and programs see it on the event stream.</p>
+<p>The list of event types and their data is on <a href="api.html#event-catalogue">API Reference › Event catalogue</a>.</p>
+<hr />
+<h2 id="actions">Actions</h2>
+<p><code>self.actions</code> is what a plugin may do with channels. Each method is <code>async</code>, returns plain data and does what the same change in the web UI does (events, Home Assistant entities, fades). A failure raises <code>ActionError</code> (<code>from sonorium.plugins.actions import ActionError</code>) with <code>.code</code> (<code>not_found</code>, <code>invalid</code>, <code>conflict</code>, <code>unavailable</code>) and <code>.message</code>. Changes made here have the origin <code>plugin:&lt;id&gt;</code>, and they act as an Admin (zones don't refuse them).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method"><code>list_channels()</code></td>
+<td data-label="Returns">channel[]</td>
+<td data-label="Does">Every channel</td>
+</tr>
+<tr>
+<td data-label="Method"><code>get_channel(channel_id)</code></td>
+<td data-label="Returns">channel</td>
+<td data-label="Does">One channel; <code>not_found</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>create_channel(theme_id=None, speakers=None, speaker_group_id=None, name=None, preset_id=None, volume=None)</code></td>
+<td data-label="Returns">channel</td>
+<td data-label="Does">A new channel, stopped. <code>speakers</code>: speaker ids</td>
+</tr>
+<tr>
+<td data-label="Method"><code>start_channel(channel_id)</code></td>
+<td data-label="Returns">channel</td>
+<td data-label="Does">Play on its speakers; <code>invalid</code> without a theme or speakers</td>
+</tr>
+<tr>
+<td data-label="Method"><code>stop_channel(channel_id)</code></td>
+<td data-label="Returns">channel</td>
+<td data-label="Does">Stop (fades out)</td>
+</tr>
+<tr>
+<td data-label="Method"><code>pause_channel(channel_id)</code></td>
+<td data-label="Returns">channel</td>
+<td data-label="Does">Pause</td>
+</tr>
+<tr>
+<td data-label="Method"><code>stop_all()</code></td>
+<td data-label="Returns">int</td>
+<td data-label="Does">Stop every channel; how many</td>
+</tr>
+<tr>
+<td data-label="Method"><code>set_theme(channel_id, theme_id, preset_id=None)</code></td>
+<td data-label="Returns">channel</td>
+<td data-label="Does">Change the theme (crossfades while playing); no preset: the theme's default</td>
+</tr>
+<tr>
+<td data-label="Method"><code>set_preset(channel_id, preset_id)</code></td>
+<td data-label="Returns">channel</td>
+<td data-label="Does">Glide to a preset of its theme; <code>&quot;&quot;</code> = none</td>
+</tr>
+<tr>
+<td data-label="Method"><code>set_speakers(channel_id, speakers=[…])</code> or <code>set_speakers(channel_id, speaker_group_id=…)</code></td>
+<td data-label="Returns">channel</td>
+<td data-label="Does">Which speakers play it</td>
+</tr>
+<tr>
+<td data-label="Method"><code>set_volume(channel_id, volume)</code></td>
+<td data-label="Returns">channel</td>
+<td data-label="Does">0-100</td>
+</tr>
+<tr>
+<td data-label="Method"><code>mute_speakers(channel_id, muted=True)</code></td>
+<td data-label="Returns">channel</td>
+<td data-label="Does">Silence what the speakers get (listeners keep hearing it)</td>
+</tr>
+<tr>
+<td data-label="Method"><code>start_sequence(channel_id, sequence_id)</code> / <code>stop_sequence(channel_id)</code></td>
+<td data-label="Returns">channel</td>
+<td data-label="Does">Run or stop a sequence of its theme</td>
+</tr>
+<tr>
+<td data-label="Method"><code>set_playlist(channel_id, playlist_id)</code> / <code>clear_playlist(channel_id)</code></td>
+<td data-label="Returns">channel</td>
+<td data-label="Does">Play or stop a playlist</td>
+</tr>
+<tr>
+<td data-label="Method"><code>next_step(channel_id)</code></td>
+<td data-label="Returns"><code>&quot;playlist&quot;</code>, <code>&quot;sequence&quot;</code> or <code>&quot;end&quot;</code></td>
+<td data-label="Does">Next entry or step; <code>conflict</code> when it isn't playing or nothing runs</td>
+</tr>
+<tr>
+<td data-label="Method"><code>list_themes()</code></td>
+<td data-label="Returns"><code>[{&quot;id&quot;, &quot;name&quot;}]</code></td>
+<td data-label="Does">Themes, by name</td>
+</tr>
+<tr>
+<td data-label="Method"><code>list_presets(theme_id)</code></td>
+<td data-label="Returns"><code>[{&quot;id&quot;, &quot;name&quot;, &quot;is_default&quot;}]</code></td>
+<td data-label="Does">A theme's presets</td>
+</tr>
+<tr>
+<td data-label="Method"><code>list_sequences(theme_id)</code></td>
+<td data-label="Returns"><code>[{&quot;id&quot;, &quot;name&quot;, &quot;presets&quot;}]</code></td>
+<td data-label="Does">A theme's sequences</td>
+</tr>
+<tr>
+<td data-label="Method"><code>list_playlists()</code></td>
+<td data-label="Returns"><code>[{&quot;id&quot;, &quot;name&quot;, &quot;entries&quot;}]</code></td>
+<td data-label="Does">Playlists (<code>entries</code>: how many)</td>
+</tr>
+<tr>
+<td data-label="Method"><code>list_speakers()</code></td>
+<td data-label="Returns"><code>[{&quot;id&quot;, &quot;name&quot;, &quot;type&quot;, &quot;online&quot;, &quot;area_id&quot;, &quot;area_name&quot;, &quot;enabled&quot;}]</code></td>
+<td data-label="Does">Speakers</td>
+</tr>
+<tr>
+<td data-label="Method"><code>list_speaker_groups()</code></td>
+<td data-label="Returns"><code>[{&quot;id&quot;, &quot;name&quot;}]</code></td>
+<td data-label="Does">Speaker groups</td>
+</tr>
+<tr>
+<td data-label="Method"><code>play_sound(channels, source, volume=100, duck=True, policy=&quot;queue&quot;, priority=0, start_stopped=False)</code></td>
+<td data-label="Returns">play result</td>
+<td data-label="Does">A sound over channels (<a href="#sounds-and-announcements"><code>self.audio.play()</code></a> has every option)</td>
+</tr>
+<tr>
+<td data-label="Method"><code>cancel_sound(sound_id)</code></td>
+<td data-label="Returns">bool</td>
+<td data-label="Does">Stop a sound</td>
+</tr>
+</tbody>
+</table></div>
+<p>A channel here:</p>
+<pre><code class="language-json">{&quot;id&quot;: &quot;2c62267b&quot;, &quot;name&quot;: &quot;Kitchen&quot;, &quot;theme_id&quot;: &quot;df297db5-a98d-4372-8029-2c49d1e280e4&quot;, &quot;theme_name&quot;: &quot;Tavern&quot;,
+ &quot;preset_id&quot;: &quot;slow_night_at_the_inn&quot;, &quot;sequence_id&quot;: null, &quot;playlist_id&quot;: null, &quot;volume&quot;: 40, &quot;is_playing&quot;: true,
+ &quot;speakers_muted&quot;: false, &quot;announcements&quot;: true, &quot;speakers&quot;: [&quot;media_player.kitchen&quot;], &quot;speaker_group_id&quot;: null,
+ &quot;entity_slug&quot;: &quot;kitchen&quot;}
+</code></pre>
+<p><code>entity_slug</code> is the part of the channel's Home Assistant entity ids after <code>sonorium_</code>.</p>
+<pre><code class="language-python">channel = await self.actions.create_channel(theme_id=&quot;df297db5-a98d-4372-8029-2c49d1e280e4&quot;,
+                                            speakers=[&quot;media_player.bedroom&quot;], name=&quot;Wake up&quot;, volume=20)
+await self.actions.start_channel(channel[&quot;id&quot;])
+</code></pre>
+<hr />
+<h2 id="scheduler">Scheduler</h2>
+<p>A plugin registers <strong>jobs</strong>; Sonorium keeps them in a file, so they survive restarts, and calls the plugin when one is due. Like an alarm clock that remembers its alarms through a power cut.</p>
+<pre><code class="language-python">async def on_enable(self):
+    self.schedule(&quot;wake&quot;, &quot;weekly&quot;, {&quot;time&quot;: &quot;07:00&quot;, &quot;days&quot;: [&quot;mon&quot;, &quot;tue&quot;, &quot;wed&quot;, &quot;thu&quot;, &quot;fri&quot;]},
+                  name=&quot;Weekday wake-up&quot;, data={&quot;channel&quot;: &quot;Bedroom&quot;}, missed=&quot;skip&quot;)
+
+async def on_schedule(self, job):
+    channel = next(c for c in await self.actions.list_channels() if c[&quot;name&quot;] == job[&quot;data&quot;][&quot;channel&quot;])
+    await self.actions.start_channel(channel[&quot;id&quot;])
+</code></pre>
+<p><code>self.schedule(job_id, kind, spec, *, name=&quot;&quot;, data=None, missed=&quot;skip&quot;, callback=None, timezone=None)</code> adds a job, or replaces the job with the same id, and returns it. A bad job raises <code>ScheduleError</code> (<code>from sonorium.plugins.scheduler import ScheduleError</code>).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Spec</th>
+<th>Runs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Kind"><code>once</code></td>
+<td data-label="Spec"><code>{&quot;at&quot;: &quot;2026-12-24T07:30&quot;}</code></td>
+<td data-label="Runs">Once, then the job is removed</td>
+</tr>
+<tr>
+<td data-label="Kind"><code>daily</code></td>
+<td data-label="Spec"><code>{&quot;time&quot;: &quot;07:30&quot;}</code></td>
+<td data-label="Runs">Every day</td>
+</tr>
+<tr>
+<td data-label="Kind"><code>weekly</code></td>
+<td data-label="Spec"><code>{&quot;time&quot;: &quot;07:30&quot;, &quot;days&quot;: [&quot;mon&quot;, &quot;fri&quot;]}</code></td>
+<td data-label="Runs">On those days (<code>sun</code> … <code>sat</code>)</td>
+</tr>
+<tr>
+<td data-label="Kind"><code>cron</code></td>
+<td data-label="Spec"><code>{&quot;cron&quot;: &quot;30 7 * * 1-5&quot;}</code></td>
+<td data-label="Runs">Minute, hour, day of month, month, day of week (0 or 7 = Sunday; names like <code>mon</code>, <code>jan</code> work)</td>
+</tr>
+<tr>
+<td data-label="Kind"><code>interval</code></td>
+<td data-label="Spec"><code>{&quot;seconds&quot;: 900, &quot;start&quot;: &quot;2026-10-12T08:00&quot;}</code></td>
+<td data-label="Runs">Every N seconds (at least 10), counted from <code>start</code> when given</td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Option"><code>job_id</code></td>
+<td data-label="Meaning">Letters, digits, <code>_</code>, <code>-</code>, <code>.</code>; up to 64. At most 200 jobs per plugin.</td>
+</tr>
+<tr>
+<td data-label="Option"><code>name</code></td>
+<td data-label="Meaning">Shown in lists</td>
+</tr>
+<tr>
+<td data-label="Option"><code>data</code></td>
+<td data-label="Meaning">Any JSON object; it comes back as <code>job[&quot;data&quot;]</code></td>
+</tr>
+<tr>
+<td data-label="Option"><code>missed</code></td>
+<td data-label="Meaning">A run due while Sonorium was off: <code>skip</code> (default) moves on to the next time; <code>run_once</code> runs it once at start-up with <code>job[&quot;missed&quot;] = True</code>. A run due within the last 60 s runs as usual.</td>
+</tr>
+<tr>
+<td data-label="Option"><code>timezone</code></td>
+<td data-label="Meaning">An IANA name such as <code>Europe/London</code>. Default: the scheduler's (<code>PUT /api/schedules/settings</code>), else the <code>TZ</code> environment variable, else the system's</td>
+</tr>
+<tr>
+<td data-label="Option"><code>callback</code></td>
+<td data-label="Meaning">A function to call instead of <code>on_schedule()</code>. It lasts while the plugin runs: set it again in <code>on_enable()</code>; the job itself is kept regardless.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Times without an offset are local to the time zone. On a daylight-saving change, a time in the skipped hour runs at the same clock time after the change, and a time that happens twice runs once.</p>
+<p>The job (<code>self.scheduled_jobs()</code>, <code>GET /api/plugins/{id}/schedules</code>):</p>
+<pre><code class="language-json">{&quot;id&quot;: &quot;evening&quot;, &quot;plugin_id&quot;: &quot;doorbell&quot;, &quot;name&quot;: &quot;Evening chime&quot;, &quot;kind&quot;: &quot;weekly&quot;,
+ &quot;spec&quot;: {&quot;time&quot;: &quot;18:30&quot;, &quot;days&quot;: [&quot;mon&quot;, &quot;fri&quot;]}, &quot;data&quot;: {&quot;door&quot;: &quot;Kitchen&quot;}, &quot;missed&quot;: &quot;skip&quot;,
+ &quot;enabled&quot;: true, &quot;timezone&quot;: null, &quot;created&quot;: &quot;2026-10-12T16:21:09.246207+00:00&quot;,
+ &quot;next_run&quot;: &quot;2026-10-12T23:30:00+00:00&quot;, &quot;last_run&quot;: null, &quot;last_status&quot;: null, &quot;last_error&quot;: null}
+</code></pre>
+<p><code>last_status</code>: <code>ok</code>, <code>error</code>, <code>missed</code> or <code>skipped</code>. <code>on_schedule(job)</code> gets these fields plus <code>scheduled_for</code> and <code>missed</code>. <code>self.unschedule(job_id)</code> removes a job (True if it existed). Jobs of a plugin that is off skip to their next time. Each run publishes <code>schedule.fired</code>; a job that raises or runs over 5 minutes is recorded in <code>last_error</code> and published as <code>error</code>.</p>
+<p>Over HTTP (Admin): <code>GET /api/schedules</code>, <code>PUT /api/schedules/settings {&quot;timezone&quot;}</code>, <code>GET|POST /api/plugins/{id}/schedules</code> (<code>{&quot;id&quot;, &quot;kind&quot;, &quot;spec&quot;, &quot;name&quot;, &quot;data&quot;, &quot;missed&quot;, &quot;timezone&quot;, &quot;enabled&quot;}</code>), <code>DELETE /api/plugins/{id}/schedules/{job}</code>, <code>PUT /api/plugins/{id}/schedules/{job}/enabled {&quot;enabled&quot;: bool}</code>.</p>
+<hr />
+<h2 id="webhook-triggers">Webhook triggers</h2>
+<p>A trigger is a URL that a device or another system calls to make the plugin act: a motion sensor, an ESP32 button, an IR receiver, a Home Assistant automation.</p>
+<pre><code class="language-python">def get_triggers(self):
+    return [{&quot;id&quot;: &quot;play&quot;, &quot;title&quot;: &quot;Play&quot;, &quot;methods&quot;: [&quot;POST&quot;, &quot;GET&quot;],
+             &quot;description&quot;: &quot;Play a channel. Payload: channel, volume.&quot;}]
+
+async def on_trigger(self, trigger, payload, context):
+    # context: {&quot;method&quot;: &quot;POST&quot;, &quot;client&quot;: &quot;192.0.2.31&quot;, &quot;event_id&quot;: 44}
+    ...
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Declaration key</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Declaration key"><code>id</code></td>
+<td data-label="Default">required</td>
+<td data-label="Meaning">Letters, digits, <code>_</code>, <code>-</code>; up to 64</td>
+</tr>
+<tr>
+<td data-label="Declaration key"><code>title</code></td>
+<td data-label="Default">the id</td>
+<td data-label="Meaning">Shown in lists</td>
+</tr>
+<tr>
+<td data-label="Declaration key"><code>description</code></td>
+<td data-label="Default"><code>&quot;&quot;</code></td>
+<td data-label="Meaning">What it does and its payload</td>
+</tr>
+<tr>
+<td data-label="Declaration key"><code>methods</code></td>
+<td data-label="Default"><code>[&quot;POST&quot;]</code></td>
+<td data-label="Meaning"><code>POST</code>, <code>GET</code> or both</td>
+</tr>
+</tbody>
+</table></div>
+<p>Sonorium serves each trigger at:</p>
+<pre><code>POST /api/triggers/{plugin_id}/{trigger}        JSON object or form fields = payload
+GET  /api/triggers/{plugin_id}/{trigger}?k=v    query values = payload (as text)
+</code></pre>
+<p>Sonorium answers <code>202 {&quot;accepted&quot;: true, &quot;event_id&quot;: n}</code> at once and runs <code>on_trigger()</code> afterwards, so a slow handler never keeps the device waiting. <code>token</code> is removed from the payload.</p>
+<p><strong>Tokens.</strong> Every call needs one of:</p>
+<ul>
+<li>a key with <strong>Run triggers</strong> (opens every trigger of every plugin);</li>
+<li>the plugin's token (opens all its triggers): <code>POST /api/plugins/{id}/triggers/token</code> with <code>{}</code>;</li>
+<li>one trigger's token (opens only that one; give each device a separate token): the same with <code>{&quot;trigger&quot;: &quot;play&quot;}</code>.</li>
+</ul>
+<p>A token is 32 random bytes, shown once; making a new one replaces the old one. <code>DELETE /api/plugins/{id}/triggers/token[?trigger=play]</code> revokes it; <code>GET /api/plugins/{id}/triggers</code> lists the triggers, their URLs and which tokens are set. Send it as <code>Authorization: Bearer …</code>, <code>X-Sonorium-Token: …</code> or <code>?token=…</code>. Triggers need a token or a key even while sign-in is off.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Answer</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Answer">202</td>
+<td data-label="Why">Accepted</td>
+</tr>
+<tr>
+<td data-label="Answer">400</td>
+<td data-label="Why">A bad plugin or trigger id; a body that isn't a JSON object</td>
+</tr>
+<tr>
+<td data-label="Answer">401</td>
+<td data-label="Why">No token or a wrong one (also for a plugin that doesn't exist)</td>
+</tr>
+<tr>
+<td data-label="Answer">404</td>
+<td data-label="Why">The plugin has no such trigger</td>
+</tr>
+<tr>
+<td data-label="Answer">405</td>
+<td data-label="Why">The trigger doesn't take this method (<code>Use POST or GET</code>)</td>
+</tr>
+<tr>
+<td data-label="Answer">409</td>
+<td data-label="Why">The plugin is switched off</td>
+</tr>
+<tr>
+<td data-label="Answer">413</td>
+<td data-label="Why">A body over 16 KB</td>
+</tr>
+<tr>
+<td data-label="Answer">429</td>
+<td data-label="Why">More than 10 calls in a burst, then 2 a second, per trigger; or more than 10 wrong tokens from one address (then one every 6 s). <code>Retry-After</code> says when.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Each accepted call publishes <code>trigger.received</code>.</p>
+<p>From an ESP32 (Arduino), when a button is pressed:</p>
+<pre><code class="language-cpp">#include &lt;WiFi.h&gt;
+#include &lt;HTTPClient.h&gt;
+
+const char* URL = &quot;http://192.0.2.20:8008/api/triggers/doorbell/ring&quot;;
+const char* TOKEN = &quot;EXAMPLEtoken0000000000000000000000000000000&quot;;
+
+void ring() {
+  HTTPClient http;
+  http.begin(URL);
+  http.addHeader(&quot;Authorization&quot;, String(&quot;Bearer &quot;) + TOKEN);
+  http.addHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+  int code = http.POST(&quot;{\&quot;door\&quot;: \&quot;Front door\&quot;}&quot;);   // 202 = accepted
+  http.end();
+}
+</code></pre>
+<p>From a Home Assistant automation, with a <code>rest_command</code> whose URL is the trigger's and whose <code>Authorization</code> header is <code>Bearer</code> and the token.</p>
+<hr />
+<h2 id="pages">Pages</h2>
+<p>A plugin can add entries to the left menu, each with a page. The plugin describes the page as data (sections of text, fields, tables, buttons) and Sonorium draws it in the app's style, so a plugin page looks and works like the rest of the app. A plugin can't send HTML or scripts.</p>
+<pre><code class="language-python">def get_pages(self):
+    return [{&quot;id&quot;: &quot;alarms&quot;, &quot;title&quot;: &quot;Alarms&quot;, &quot;icon&quot;: &quot;mdi:alarm&quot;}]
+
+async def get_page(self, page_id):
+    return {
+        &quot;title&quot;: &quot;Alarms&quot;,
+        &quot;intro&quot;: &quot;Plays a channel at set times.&quot;,
+        &quot;actions&quot;: [{&quot;action&quot;: &quot;add&quot;, &quot;label&quot;: &quot;Add alarm&quot;, &quot;style&quot;: &quot;primary&quot;}],
+        &quot;refresh&quot;: 30,
+        &quot;sections&quot;: [{
+            &quot;id&quot;: &quot;add&quot;, &quot;title&quot;: &quot;New alarm&quot;,
+            &quot;items&quot;: [
+                {&quot;type&quot;: &quot;field&quot;, &quot;name&quot;: &quot;time&quot;, &quot;field&quot;: {&quot;type&quot;: &quot;time&quot;, &quot;label&quot;: &quot;Time&quot;}, &quot;value&quot;: &quot;07:00&quot;},
+                {&quot;type&quot;: &quot;field&quot;, &quot;name&quot;: &quot;days&quot;, &quot;field&quot;: {&quot;type&quot;: &quot;multiselect&quot;, &quot;label&quot;: &quot;Days&quot;,
+                                                            &quot;options&quot;: [&quot;mon&quot;, &quot;tue&quot;, &quot;wed&quot;, &quot;thu&quot;, &quot;fri&quot;]}},
+                {&quot;type&quot;: &quot;button&quot;, &quot;action&quot;: &quot;add&quot;, &quot;label&quot;: &quot;Add&quot;, &quot;style&quot;: &quot;primary&quot;},
+            ]}, {
+            &quot;id&quot;: &quot;list&quot;, &quot;title&quot;: &quot;Alarms&quot;,
+            &quot;items&quot;: [
+                {&quot;type&quot;: &quot;table&quot;, &quot;id&quot;: &quot;alarms&quot;, &quot;empty&quot;: &quot;No alarms yet&quot;,
+                 &quot;columns&quot;: [{&quot;key&quot;: &quot;time&quot;, &quot;label&quot;: &quot;Time&quot;}, {&quot;key&quot;: &quot;days&quot;, &quot;label&quot;: &quot;Days&quot;},
+                             {&quot;key&quot;: &quot;state&quot;, &quot;label&quot;: &quot;State&quot;, &quot;format&quot;: &quot;status&quot;}],
+                 &quot;rows&quot;: [{&quot;id&quot;: &quot;a1&quot;, &quot;time&quot;: &quot;07:00&quot;, &quot;days&quot;: &quot;Mon-Fri&quot;, &quot;state&quot;: {&quot;state&quot;: &quot;ok&quot;, &quot;text&quot;: &quot;On&quot;}}],
+                 &quot;row_actions&quot;: [{&quot;id&quot;: &quot;delete&quot;, &quot;label&quot;: &quot;Delete&quot;, &quot;style&quot;: &quot;danger&quot;,
+                                  &quot;confirm&quot;: &quot;Delete this alarm?&quot;}]},
+            ]}],
+    }
+
+async def page_action(self, page_id, action, data):
+    # data: {&quot;values&quot;: {field name: value}, &quot;row&quot;: the row's id for a row action, else None}
+    if action == &quot;add&quot;:
+        ...
+        return {&quot;success&quot;: True, &quot;message&quot;: &quot;Alarm added&quot;}
+    if action == &quot;delete&quot;:
+        ...
+        return {&quot;success&quot;: True, &quot;message&quot;: &quot;Deleted&quot;}
+    return await super().page_action(page_id, action, data)
+</code></pre>
+<p>The menu entry (<code>get_pages()</code>): <code>id</code> (letters, digits, <code>_</code>, <code>-</code>; up to 64), <code>title</code>, <code>icon</code>. It appears in the <strong>Plugins</strong> section of the left menu while the plugin is on.</p>
+<p>The page (<code>get_page()</code>), built fresh each time it is opened:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Key"><code>title</code></td>
+<td data-label="Meaning">The page's title (default: the menu entry's)</td>
+</tr>
+<tr>
+<td data-label="Key"><code>intro</code></td>
+<td data-label="Meaning">One line under the title</td>
+</tr>
+<tr>
+<td data-label="Key"><code>actions</code></td>
+<td data-label="Meaning">Buttons in the page's header: <code>{&quot;action&quot;, &quot;label&quot;, &quot;style&quot;, &quot;confirm&quot;?}</code></td>
+</tr>
+<tr>
+<td data-label="Key"><code>refresh</code></td>
+<td data-label="Meaning">Reload the page every N seconds</td>
+</tr>
+<tr>
+<td data-label="Key"><code>sections</code></td>
+<td data-label="Meaning"><code>[{&quot;id&quot;, &quot;title&quot;, &quot;description&quot;, &quot;items&quot;: [item]}]</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Items:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th><code>type</code></th>
+<th>Keys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="type"><code>text</code></td>
+<td data-label="Keys"><code>text</code> (plain text), <code>style</code>: <code>normal</code>, <code>muted</code>, <code>success</code>, <code>warning</code>, <code>error</code></td>
+</tr>
+<tr>
+<td data-label="type"><code>field</code></td>
+<td data-label="Keys"><code>name</code>, <code>field</code> (a field, below), <code>value</code> (the current value)</td>
+</tr>
+<tr>
+<td data-label="type"><code>table</code></td>
+<td data-label="Keys"><code>id</code>, <code>columns</code> (<code>key</code>, <code>label</code>, <code>format</code>: <code>text</code>, <code>number</code>, <code>boolean</code>, <code>datetime</code>, <code>status</code>), <code>rows</code> (each may have an <code>id</code>), <code>empty</code>, <code>row_actions</code> (<code>id</code>, <code>label</code>, <code>style</code>, <code>confirm</code>)</td>
+</tr>
+<tr>
+<td data-label="type"><code>button</code></td>
+<td data-label="Keys"><code>action</code>, <code>label</code>, <code>style</code>: <code>primary</code>, <code>secondary</code>, <code>danger</code>; <code>confirm</code>: a question asked first</td>
+</tr>
+<tr>
+<td data-label="type"><code>status</code></td>
+<td data-label="Keys"><code>state</code>: <code>ok</code>, <code>warning</code>, <code>error</code>, <code>off</code>, <code>unknown</code>; <code>text</code></td>
+</tr>
+<tr>
+<td data-label="type"><code>command_map</code></td>
+<td data-label="Keys"><code>map</code>: one of the plugin's <a href="#command-maps">command maps</a>, drawn as a list the user fills</td>
+</tr>
+</tbody>
+</table></div>
+<p>Field types: the <a href="#settings">settings</a> types plus <code>textarea</code>, <code>time</code> (<code>HH:MM</code>), <code>date</code> (<code>YYYY-MM-DD</code>), <code>datetime</code> (ISO 8601) and <code>multiselect</code> (a list of option values).</p>
+<p>A <code>status</code> column takes a state, or <code>{&quot;state&quot;: &quot;ok&quot;, &quot;text&quot;: &quot;On&quot;}</code> for a chip with words. On a phone, the columns other than the first, status and ⋯ fold into a line under the first.</p>
+<p><strong>Icons</strong> are a name (<code>alarm</code>, <code>mdi:alarm-clock</code>) or a small inline SVG (at most 8 KB; no scripts, event attributes, links or <code>foreignObject</code>).</p>
+<p><strong>Buttons.</strong> A button or row action sends the values of every field on the page. Sonorium checks them against the fields (400 for a wrong value), and refuses an action the page doesn't show (404), before calling <code>page_action()</code>. The result <code>{&quot;success&quot;, &quot;message&quot;, &quot;refresh&quot;, &quot;data&quot;?}</code> shows <code>message</code> as a notice; the page reloads unless <code>&quot;refresh&quot;: false</code>.</p>
+<p>Limits: 50 sections, 200 items per section, 20 columns, 1000 rows, 4000 characters of text. An item Sonorium doesn't know is left out.</p>
+<p>Over HTTP (<code>pg.use</code>): <code>GET /api/extensions</code> lists every page; <code>GET /api/plugins/{id}/pages/{page}</code> returns one; <code>POST /api/plugins/{id}/pages/{page}/actions/{action}</code> with <code>{&quot;values&quot;, &quot;row&quot;}</code> clicks a button. The Doorbell's page:</p>
+<pre><code class="language-json">{&quot;id&quot;: &quot;rings&quot;, &quot;title&quot;: &quot;Doorbell&quot;, &quot;icon&quot;: {&quot;type&quot;: &quot;name&quot;, &quot;value&quot;: &quot;mdi:doorbell&quot;}, &quot;plugin_id&quot;: &quot;doorbell&quot;,
+ &quot;path&quot;: &quot;/api/plugins/doorbell/pages/rings&quot;, &quot;intro&quot;: &quot;The latest rings since Sonorium started.&quot;, &quot;refresh&quot;: 10,
+ &quot;actions&quot;: [{&quot;type&quot;: &quot;button&quot;, &quot;action&quot;: &quot;test&quot;, &quot;label&quot;: &quot;Ring now&quot;, &quot;style&quot;: &quot;primary&quot;, &quot;confirm&quot;: null}],
+ &quot;sections&quot;: [{&quot;id&quot;: &quot;rings&quot;, &quot;title&quot;: &quot;Latest rings&quot;, &quot;description&quot;: &quot;&quot;, &quot;items&quot;: [
+   {&quot;type&quot;: &quot;table&quot;, &quot;id&quot;: &quot;rings&quot;, &quot;columns&quot;: [{&quot;key&quot;: &quot;at&quot;, &quot;label&quot;: &quot;When&quot;, &quot;format&quot;: &quot;datetime&quot;}, &quot;...&quot;],
+    &quot;rows&quot;: [{&quot;id&quot;: &quot;s_27ad7fdc1282&quot;, &quot;door&quot;: &quot;Back door&quot;, &quot;at&quot;: &quot;2026-10-12T16:18:46.621436+00:00&quot;,
+              &quot;channels&quot;: 1, &quot;result&quot;: &quot;finished&quot;}], &quot;empty&quot;: &quot;No rings yet&quot;, &quot;row_actions&quot;: []},
+   {&quot;type&quot;: &quot;button&quot;, &quot;action&quot;: &quot;clear&quot;, &quot;label&quot;: &quot;Clear the list&quot;, &quot;style&quot;: &quot;secondary&quot;,
+    &quot;confirm&quot;: &quot;Clear the list of rings?&quot;}]}]}
+</code></pre>
+<hr />
+<h2 id="connections">Connections</h2>
+<p>A plugin that talks to another system (a hub, a chat bot, a cloud service) adds a row to <strong>Settings › Connection</strong>, next to Home Assistant and MQTT: its icon, name (marked Plugin), status, what it points at, <strong>Test</strong>, <strong>Edit</strong> (a dialog with the fields) and <strong>Remove</strong>. Saving needs no restart.</p>
+<pre><code class="language-python">def get_connections(self):
+    return [{&quot;id&quot;: &quot;hub&quot;, &quot;title&quot;: &quot;Hubitat&quot;, &quot;icon&quot;: &quot;hub&quot;, &quot;test&quot;: True,
+             &quot;description&quot;: &quot;The Maker API of your Hubitat hub.&quot;,
+             &quot;fields&quot;: {
+                 &quot;host&quot;: {&quot;type&quot;: &quot;string&quot;, &quot;label&quot;: &quot;Hub address&quot;, &quot;required&quot;: True},
+                 &quot;app_id&quot;: {&quot;type&quot;: &quot;number&quot;, &quot;label&quot;: &quot;Maker API app id&quot;, &quot;min&quot;: 1},
+                 &quot;token&quot;: {&quot;type&quot;: &quot;secret&quot;, &quot;label&quot;: &quot;Access token&quot;},
+             }}]
+
+async def test_connection(self, connection_id, values):
+    ok = await self.try_hub(values[&quot;host&quot;], values.get(&quot;token&quot;))
+    return {&quot;success&quot;: ok, &quot;message&quot;: &quot;Connected&quot; if ok else &quot;No answer from the hub&quot;}
+
+def connection_status(self, connection_id):
+    return {&quot;state&quot;: &quot;connected&quot;, &quot;message&quot;: &quot;12 devices&quot;}
+
+async def on_connection_changed(self, connection_id, values):
+    await self.reconnect(values)
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Declaration key</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Declaration key"><code>id</code></td>
+<td data-label="Meaning">Letters, digits, <code>_</code>, <code>-</code>; up to 64</td>
+</tr>
+<tr>
+<td data-label="Declaration key"><code>title</code></td>
+<td data-label="Meaning">Up to 60 characters</td>
+</tr>
+<tr>
+<td data-label="Declaration key"><code>description</code></td>
+<td data-label="Meaning">One line</td>
+</tr>
+<tr>
+<td data-label="Declaration key"><code>icon</code></td>
+<td data-label="Meaning">As for pages</td>
+</tr>
+<tr>
+<td data-label="Declaration key"><code>fields</code></td>
+<td data-label="Meaning">Page field types plus <code>secret</code></td>
+</tr>
+<tr>
+<td data-label="Declaration key"><code>test</code></td>
+<td data-label="Meaning">true shows <strong>Test</strong> and calls <code>test_connection()</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>connection_status()</code> states: <code>connected</code>, <code>disconnected</code>, <code>error</code>, <code>not_configured</code>, <code>unknown</code>. The plugin reads the saved values, secrets included, with <code>self.connection_values(&quot;hub&quot;)</code>.</p>
+<p><strong>Secret fields</strong> are write-only: the API never returns them; <code>GET</code> shows <code>token_set: true</code> instead. Saving with an empty secret keeps the saved one; <code>&quot;clear&quot;: [&quot;token&quot;]</code> removes it. Secrets are kept apart from other values in a file only Sonorium's user can read.</p>
+<p>Over HTTP (Admin): <code>GET /api/plugins/{id}/connections/{conn}</code> (fields, values without secrets, status), <code>PUT …</code> with <code>{&quot;values&quot;: {…}, &quot;clear&quot;: [names]}</code> (checked against the fields first), <code>POST …/test</code> with <code>{&quot;values&quot;: {…}}</code> (the saved values with the form's unsaved ones on top).</p>
+<hr />
+<h2 id="sounds-and-announcements">Sounds and announcements</h2>
+<p><code>self.audio</code> (capability <code>audio.sounds</code>) plays sounds over channels. A sound is mixed into each channel's stream, so every speaker, browser and cast device of the channel hears it. While it plays, the channel ducks (gets quieter) and comes back afterwards, the way a radio presenter talks over the music.</p>
+<pre><code class="language-python">result = await self.audio.play([&quot;kitchen-id&quot;, &quot;office-id&quot;], &quot;https://example.com/ghost.mp3&quot;,
+                               volume=90, duck={&quot;db&quot;: 18, &quot;attack&quot;: 0.3, &quot;release&quot;: 2.0},
+                               policy=&quot;now&quot;, label=&quot;Ghost&quot;)
+</code></pre>
+<p><code>await self.audio.play(channels, source=None, *, samples=None, sample_rate=None, volume=100, duck=True, policy=&quot;queue&quot;, priority=0, max_seconds=None, start_stopped=False, override=False, label=&quot;&quot;, announcement=False)</code></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Argument"><code>channels</code></td>
+<td data-label="Meaning">Channel ids, 1-50</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>source</code></td>
+<td data-label="Meaning">A file path, an http(s) URL, or the bytes of an audio file (anything FFmpeg reads)</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>samples</code>, <code>sample_rate</code></td>
+<td data-label="Meaning">Instead of <code>source</code>: a numpy array (mono <code>(n,)</code> or <code>(channels, n)</code>; float -1..1 or int16)</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>volume</code></td>
+<td data-label="Meaning">0-200; 100 is the file's level</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>duck</code></td>
+<td data-label="Meaning"><code>True</code> (Settings › Advanced's Duck amount, attack and release), <code>False</code>, or <code>{&quot;db&quot;, &quot;attack&quot;, &quot;release&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Argument"><code>policy</code></td>
+<td data-label="Meaning"><code>now</code>: at once, over anything playing. <code>queue</code>: after the sounds playing now, higher <code>priority</code> first. <code>replace</code>: cuts what plays or waits with the same or a lower priority; a higher one keeps playing and this one waits</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>priority</code></td>
+<td data-label="Meaning">A whole number; announcements use 10</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>max_seconds</code></td>
+<td data-label="Meaning">Cut it sooner than Settings › Advanced › Longest sound (60 s; 0 there is no limit)</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>start_stopped</code></td>
+<td data-label="Meaning">Start a stopped channel's speakers for the sound (at most Advanced › Wait for speakers, then Lead), play it, and stop them again (after Tail). The channel never shows as playing. Default false: a stopped channel is skipped</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>override</code></td>
+<td data-label="Meaning">Skip gates (zones, quiet hours). For announcements and alarms</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>label</code></td>
+<td data-label="Meaning">A name for it in events and lists</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>announcement</code></td>
+<td data-label="Meaning">Channels with Announcements off skip it</td>
+</tr>
+</tbody>
+</table></div>
+<p>It returns <code>{&quot;sound_id&quot;, &quot;length&quot;, &quot;capped&quot;, &quot;channels&quot;: {id: {&quot;state&quot;, &quot;message&quot;}}}</code>; a channel's <code>state</code> is <code>playing</code>, <code>queued</code>, <code>starting</code> or <code>skipped</code> (with the reason in <code>message</code>). A channel whose speakers are muted plays the sound to browsers only.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method"><code>await self.audio.cancel(sound_id, channel=None)</code></td>
+<td data-label="Does">Stop it (on one channel, or all); True if it was playing or waiting</td>
+</tr>
+<tr>
+<td data-label="Method"><code>await self.audio.sounds()</code></td>
+<td data-label="Does">What plays and waits, on every channel</td>
+</tr>
+<tr>
+<td data-label="Method"><code>await self.audio.announce(channels, text=None, *, sound=None, provider=None, language=None, volume=100, duck=True, start_stopped=True)</code></td>
+<td data-label="Does">An announcement (below)</td>
+</tr>
+<tr>
+<td data-label="Method"><code>self.audio.add_gate(gate)</code> / <code>remove_gate()</code></td>
+<td data-label="Does">Refuse sounds (below)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Announcements</strong> take one path, whoever sends them (Home Assistant, MQTT, <code>POST /api/announce</code>, a plugin): a chime and/or text spoken, ducking, admin-level, starting stopped channels.</p>
+<pre><code class="language-python">result = await self.audio.announce(&quot;Kids Room&quot;, &quot;Dinner is ready&quot;, sound=&quot;https://example.com/chime.mp3&quot;)
+</code></pre>
+<p><code>channels</code>: ids, names (not case-sensitive), a list, or <code>&quot;all&quot;</code>. <code>sound</code>: a URL, a path or bytes, played first. <code>duck</code>: <code>True</code>, <code>False</code>, a number of dB, or <code>{&quot;db&quot;, &quot;attack&quot;, &quot;release&quot;}</code>. It returns <code>{&quot;played&quot;, &quot;skipped&quot;, &quot;channels&quot;, &quot;chime&quot;, &quot;speech&quot;, &quot;notice&quot;}</code>: <code>played</code> the channel ids it plays on, <code>skipped</code> those with Announcements off, <code>chime</code> and <code>speech</code> the play results, <code>notice</code> why the text wasn't spoken when only the chime played. Text with no text to speech and no <code>sound</code> raises <code>ActionError</code> (<code>unavailable</code>); an unknown channel name <code>not_found</code>.</p>
+<p>Each channel has an <strong>Announcements</strong> switch (on by default; <code>PUT /api/sessions/{id}/announcements</code>, and <code>switch.sonorium_&lt;channel&gt;_announcements</code> in Home Assistant). With it off, no announcement plays there.</p>
+<p><strong>Gates.</strong> A plugin that owns channels (zones) can refuse sounds that aren't admin-level. One gate per plugin:</p>
+<pre><code class="language-python">def gate(channel, request):
+    # channel: the channel (channel.id, channel.name); request: sound_id, label, origin, priority
+    return &quot;Quiet hours&quot; if self.quiet(channel.id) else None     # None allows it
+
+self.audio.add_gate(gate)
+</code></pre>
+<p>A sound with <code>override=True</code> skips every gate.</p>
+<p><strong>Timing.</strong> The sound is exact to the stream. Network speakers (Cast, Sonos, AirPlay, DLNA) buffer a few seconds, so they play it that much later: fine for an announcement, noticeable for an effect that has to match a motion sensor. Audio outputs and browsers are close to instant.</p>
+<hr />
+<h2 id="text-to-speech">Text to speech</h2>
+<p>A provider turns text into audio for announcements (capability <code>audio.tts</code>). The built-in <strong>Announcements</strong> plugin provides Home Assistant's (<code>homeassistant</code>), ready while Home Assistant is linked. The first provider registered is the default; an announcement may name one.</p>
+<pre><code class="language-python">async def on_enable(self):
+    self.audio.register_tts(&quot;piper&quot;, &quot;Piper (local)&quot;, self.speak, ready=lambda: True)
+
+async def speak(self, message, language=None, **options) -&gt; bytes:
+    return wav_or_mp3_bytes
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method"><code>self.audio.register_tts(provider_id, title, speak, ready=None)</code></td>
+<td data-label="Does"><code>provider_id</code>: letters, digits, <code>_</code>, <code>-</code>, <code>.</code>, up to 64. <code>speak</code>: <code>async (message, language=None, **options) -&gt; bytes</code> of an audio file, at most 60 s to answer. <code>ready()</code>: whether it can speak now; when it can't, announcements play only their chime</td>
+</tr>
+<tr>
+<td data-label="Method"><code>self.audio.tts_providers()</code></td>
+<td data-label="Does"><code>[{&quot;id&quot;, &quot;title&quot;, &quot;plugin_id&quot;}]</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>await self.audio.tts(message, provider=None, **options)</code></td>
+<td data-label="Does">The audio bytes</td>
+</tr>
+</tbody>
+</table></div>
+<p>Providers are removed when the plugin is switched off. <code>GET /api/plugin-framework</code> lists them as <code>tts_providers</code>.</p>
+<hr />
+<h2 id="volume-ramps">Volume ramps</h2>
+<p>A ramp makes a channel louder or quieter gradually (capability <code>audio.ramps</code>): an alarm that rises over 20 minutes, a sleep timer that fades out over an hour. The gain is worked out for each sample, so it is smooth. It applies to the channel's mix: announcements play at their own level, and the speakers' volume stays as it is (set it with <code>set_volume()</code>, then ramp within it).</p>
+<pre><code class="language-python">await self.ramps.start(&quot;2c62267b&quot;, to=1.0, seconds=1200, from_level=0.0, curve=&quot;db&quot;, start=True)  # wake-up
+await self.ramps.start(&quot;2c62267b&quot;, to=0.0, seconds=3600, then=&quot;stop&quot;)                             # sleep timer
+await self.ramps.cancel(&quot;2c62267b&quot;, reset=False)                                                  # hold where it is
+await self.ramps.status(&quot;2c62267b&quot;)      # {&quot;channel_id&quot;, &quot;level&quot;, &quot;ramp&quot;: {...} or None}
+</code></pre>
+<p><code>await self.ramps.start(channel, to, seconds, *, from_level=None, curve=&quot;db&quot;, then=None, start=False)</code></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Argument"><code>to</code>, <code>from_level</code></td>
+<td data-label="Meaning">0 (silent) to 1 (the mix as it is), up to 4 (+12 dB). No <code>from_level</code>: from where it is</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>seconds</code></td>
+<td data-label="Meaning">How long; 0 is at once</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>curve</code></td>
+<td data-label="Meaning"><code>db</code> (default): even to the ear. <code>linear</code>, <code>ease</code> (slow, faster, slow), <code>exp</code> (slow at first, fast at the end)</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>then</code></td>
+<td data-label="Meaning"><code>stop</code> or <code>pause</code> the channel when it ends; None keeps it playing</td>
+</tr>
+<tr>
+<td data-label="Argument"><code>start</code></td>
+<td data-label="Meaning">Play the channel first if it is stopped</td>
+</tr>
+</tbody>
+</table></div>
+<p>It returns <code>{&quot;ramp_id&quot;, &quot;channel_id&quot;, &quot;from&quot;, &quot;to&quot;, &quot;seconds&quot;, &quot;curve&quot;, &quot;then&quot;}</code>. <code>cancel(channel, reset=False)</code> holds the level reached (<code>reset=True</code>: back to 1) and returns <code>{&quot;ramp_id&quot;, &quot;level&quot;, &quot;reset&quot;}</code> or None. A finished ramp holds its level until the channel stops or another ramp starts. Events: <code>ramp.started</code>, <code>ramp.finished</code>, <code>ramp.cancelled</code>.</p>
+<hr />
+<h2 id="audio-outputs">Audio outputs</h2>
+<p>A channel normally goes to speakers that pull its stream over the network. An output type sends it somewhere else (capability <code>audio.outputs</code>): the sound card of the machine Sonorium runs on, a Bluetooth speaker, a file. The plugin registers the type; Sonorium asks it for its devices, and for a sink when a channel is sent to one.</p>
+<pre><code class="language-python">from sonorium.core.audio_outputs import OutputType, Sink
+from sonorium.plugins.base import BasePlugin
+
+
+class HostAudio(OutputType):
+    id = &quot;host_audio&quot;
+    title = &quot;This computer&quot;
+
+    def available(self):
+        try:
+            import sounddevice
+            sounddevice.query_devices()
+            return True, &quot;&quot;
+        except Exception as e:
+            return False, f&quot;No sound card here ({e})&quot;
+
+    async def discover(self):
+        import sounddevice
+        return [{&quot;id&quot;: str(i), &quot;name&quot;: d[&quot;name&quot;]} for i, d in enumerate(sounddevice.query_devices())
+                if d[&quot;max_output_channels&quot;] &gt; 0]
+
+    def open(self, device_id, sample_rate, options):
+        return HostSink(int(device_id), sample_rate)
+
+
+class HostSink(Sink):
+    latency = 0.1
+
+    def __init__(self, device, rate):
+        import sounddevice
+        self.stream = sounddevice.OutputStream(device=device, samplerate=rate, channels=1, dtype=&quot;int16&quot;)
+        self.stream.start()
+
+    def write(self, block):            # int16, shape (1, n), mono, at sample_rate
+        self.stream.write(block.reshape(-1, 1))     # may block: it runs in a separate thread
+
+    def close(self):
+        self.stream.stop()
+        self.stream.close()
+
+
+class HostAudioPlugin(BasePlugin):
+    id = &quot;host_audio&quot;
+    name = &quot;Host audio&quot;
+    version = &quot;1.0.0&quot;
+
+    async def on_enable(self):
+        self.audio_outputs.register_type(HostAudio())
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th><code>OutputType</code> member</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="OutputType member"><code>id</code>, <code>title</code></td>
+<td data-label="Meaning">The type's id and name</td>
+</tr>
+<tr>
+<td data-label="OutputType member"><code>available()</code></td>
+<td data-label="Meaning"><code>(usable here, why not)</code></td>
+</tr>
+<tr>
+<td data-label="OutputType member"><code>async discover()</code></td>
+<td data-label="Meaning"><code>[{&quot;id&quot;, &quot;name&quot;, …}]</code>; extra keys reach the UI</td>
+</tr>
+<tr>
+<td data-label="OutputType member"><code>open(device_id, sample_rate, options)</code></td>
+<td data-label="Meaning">A <code>Sink</code> for a channel</td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th><code>Sink</code> member</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Sink member"><code>latency</code></td>
+<td data-label="Meaning">Seconds the device adds</td>
+</tr>
+<tr>
+<td data-label="Sink member"><code>write(block)</code></td>
+<td data-label="Meaning">A numpy int16 block, shape <code>(1, n)</code>, mono, at <code>sample_rate</code>. It runs in a separate thread and may block; a slow sink falls behind alone</td>
+</tr>
+<tr>
+<td data-label="Sink member"><code>close()</code></td>
+<td data-label="Meaning">The channel stopped or was taken off the output</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>self.audio_outputs</code> also has <code>unregister_types()</code>, <code>await types()</code>, <code>await devices(type_id)</code>, <code>await attach(channel, type_id, device_id, options=None)</code>, <code>await detach(channel, attachment_id)</code> and <code>await attachments(channel=None)</code>. Types are removed when the plugin is switched off.</p>
+<p><code>sounddevice</code> isn't part of every install: the plugin brings it with <code>&quot;requirements&quot;: [&quot;sounddevice&quot;]</code>. Where host audio can work: Windows, Linux and macOS installs; Docker on Linux with the sound device (<code>/dev/snd</code>) or the host's sound server socket passed in; not the Home Assistant app.</p>
+<p>A user sends a channel to a device with <code>POST /api/sessions/{id}/audio-outputs {&quot;type&quot;, &quot;device&quot;, &quot;options&quot;}</code>. A channel's outputs are remembered and start again when it plays. Each reads the channel's stream like a speaker: it keeps the channel from going idle and follows the speakers-muted switch.</p>
+<hr />
+<h2 id="command-maps">Command maps</h2>
+<p>An input plugin turns what it receives (an IR code, a button on an RF remote, an MQTT message) into a <strong>code</strong> and hands it over (capability <code>commands</code>). The user decides what each code does in a command map: a list of codes, each with an action, a channel and its arguments.</p>
+<pre><code class="language-python">def get_command_maps(self):
+    return [{&quot;id&quot;: &quot;remote&quot;, &quot;title&quot;: &quot;TV remote&quot;,
+             &quot;codes&quot;: [{&quot;code&quot;: &quot;KEY_VOLUMEUP&quot;, &quot;label&quot;: &quot;Volume +&quot;}]}]     # known codes, optional
+
+async def on_ir(self, code):
+    await self.commands.received(&quot;remote&quot;, code)
+</code></pre>
+<p>The plugin shows the map on its page with <code>{&quot;type&quot;: &quot;command_map&quot;, &quot;map&quot;: &quot;remote&quot;}</code>. There, <strong>Learn</strong> waits for the next code the plugin receives (press the button, up to 60 s), and <strong>Add</strong> adds one by hand. An entry:</p>
+<pre><code class="language-json">{&quot;code&quot;: &quot;KEY_VOLUMEUP&quot;, &quot;label&quot;: &quot;Volume +&quot;, &quot;action&quot;: &quot;channel.volume_up&quot;,
+ &quot;channel&quot;: &quot;2c62267b&quot;, &quot;args&quot;: {&quot;step&quot;: 5}, &quot;enabled&quot;: true}
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Arguments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Action"><code>channel.play</code>, <code>channel.stop</code>, <code>channel.toggle</code> (play or stop), <code>channel.next</code>, <code>channel.mute</code> (mute or unmute speakers)</td>
+<td data-label="Arguments"></td>
+</tr>
+<tr>
+<td data-label="Action"><code>channel.volume</code></td>
+<td data-label="Arguments"><code>volume</code> 0-100, or the number sent with the code: <code>received(map, code, value=42)</code></td>
+</tr>
+<tr>
+<td data-label="Action"><code>channel.volume_up</code>, <code>channel.volume_down</code></td>
+<td data-label="Arguments"><code>step</code> 1-50 (default 5)</td>
+</tr>
+<tr>
+<td data-label="Action"><code>channel.theme</code>, <code>channel.preset</code>, <code>channel.sequence</code>, <code>channel.playlist</code></td>
+<td data-label="Arguments"><code>theme_id</code>, <code>preset_id</code>, <code>sequence_id</code>, <code>playlist_id</code></td>
+</tr>
+<tr>
+<td data-label="Action"><code>channel.sound</code></td>
+<td data-label="Arguments"><code>url</code>, <code>volume</code> 0-200 (default 100)</td>
+</tr>
+<tr>
+<td data-label="Action"><code>stop_all</code>, <code>nothing</code></td>
+<td data-label="Arguments"></td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Method"><code>await self.commands.received(map_id, code, value=None)</code></td>
+<td data-label="Does">Runs the user's entries for the code (or learns it) → <code>{&quot;learned&quot;, &quot;ran&quot;, &quot;errors&quot;}</code></td>
+</tr>
+<tr>
+<td data-label="Method"><code>await self.commands.entries(map_id)</code></td>
+<td data-label="Does">The map's entries</td>
+</tr>
+<tr>
+<td data-label="Method"><code>await self.commands.set_entries(map_id, entries)</code></td>
+<td data-label="Does">Replace them (up to 300; codes up to 200 characters)</td>
+</tr>
+</tbody>
+</table></div>
+<p>The actions run through the plugin's actions, so they behave like the same change in the UI. Every code received publishes <code>command.received</code>. Over HTTP (Admin): <code>GET /api/command-actions</code>, <code>GET /api/plugins/{id}/command-maps</code>, <code>PUT …/command-maps/{map} {&quot;entries&quot;: [...]}</code>, <code>POST …/learn</code>, <code>POST …/test {&quot;code&quot;}</code>.</p>
+<hr />
+<h2 id="mqtt">MQTT</h2>
+<p>The broker Sonorium is connected to (capability <code>mqtt</code>): the Mosquitto app on Home Assistant, or the one set in <strong>Settings › Connection</strong>.</p>
+<pre><code class="language-python">async def on_enable(self):
+    self.mqtt.subscribe(&quot;zigbee2mqtt/front_door&quot;, self.on_door)     # &quot;+&quot; and &quot;#&quot; wildcards
+
+async def on_door(self, topic, payload):
+    if payload.get(&quot;contact&quot;) is False:
+        await self.ring(&quot;Front door&quot;, &quot;MQTT&quot;)
+
+await self.mqtt.publish(&quot;doorbell/state&quot;, {&quot;last_ring&quot;: &quot;Front door&quot;}, retain=True)   # a dict is sent as JSON
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Member"><code>self.mqtt.available</code></td>
+<td data-label="Meaning">A broker is connected. Without one, publishing does nothing and subscriptions start when one is linked</td>
+</tr>
+<tr>
+<td data-label="Member"><code>await publish(topic, payload, retain=False)</code></td>
+<td data-label="Meaning">Publish; a dict or list is sent as JSON</td>
+</tr>
+<tr>
+<td data-label="Member"><code>subscribe(topic_filter, handler)</code></td>
+<td data-label="Meaning"><code>handler(topic, payload)</code>, async or not, at most 30 s; up to 100 subscriptions per plugin</td>
+</tr>
+<tr>
+<td data-label="Member"><code>unsubscribe(topic_filter=None)</code></td>
+<td data-label="Meaning">One filter, or all; how many were removed</td>
+</tr>
+<tr>
+<td data-label="Member"><code>prefix</code></td>
+<td data-label="Meaning">Sonorium's topic prefix (<code>sonorium</code>)</td>
+</tr>
+<tr>
+<td data-label="Member"><code>device_info</code></td>
+<td data-label="Meaning">The &quot;Sonorium&quot; device, to put a plugin's Home Assistant entities next to Sonorium's</td>
+</tr>
+</tbody>
+</table></div>
+<p>Messages reach Sonorium's own entities first, then plugins. Subscriptions are removed when the plugin is switched off.</p>
+<hr />
+<h2 id="home-assistant">Home Assistant</h2>
+<p>Calls to Home Assistant's REST API through the connection Sonorium already has (capability <code>homeassistant</code>): the Supervisor on the Home Assistant app, the saved URL and token on Docker and Windows. The token never reaches the plugin, and only Home Assistant's <code>/api/...</code> paths are allowed.</p>
+<pre><code class="language-python">if self.homeassistant.available:
+    status, states = await self.homeassistant.request(&quot;GET&quot;, &quot;/api/states&quot;)
+    audio = await self.homeassistant.tts(&quot;Dinner is ready&quot;, engine=&quot;tts.piper&quot;)
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Member"><code>available</code></td>
+<td data-label="Meaning">Home Assistant is linked</td>
+</tr>
+<tr>
+<td data-label="Member"><code>await request(method, path, json=None)</code></td>
+<td data-label="Meaning"><code>(status, answer)</code>; 20 s timeout</td>
+</tr>
+<tr>
+<td data-label="Member"><code>await fetch(path)</code></td>
+<td data-label="Meaning">The bytes at a Home Assistant path (e.g. a TTS proxy URL)</td>
+</tr>
+<tr>
+<td data-label="Member"><code>await tts(message, engine=None, language=None, options=None)</code></td>
+<td data-label="Meaning">Speech as audio bytes (up to 32 MB), through Home Assistant's <code>tts_get_url</code> and its TTS proxy</td>
+</tr>
+<tr>
+<td data-label="Member"><code>await tts_engines()</code></td>
+<td data-label="Meaning">The <code>tts.*</code> entities</td>
+</tr>
+</tbody>
+</table></div>
+<p>Failures raise <code>ActionError</code> (<code>unavailable</code>).</p>
+<hr />
+<h2 id="themes-from-a-plugin">Themes from a plugin</h2>
+<p>A plugin that creates a theme or adds to one (an importer, a generator) goes through <code>ThemeEdit</code>, so it never writes <code>metadata.json</code> or <code>presets.json</code> itself. Nothing is written before <code>commit()</code>; a failure leaves the themes as they were.</p>
+<pre><code class="language-python">from pathlib import Path
+
+edit = self.new_theme(&quot;Rainy Tavern&quot;, description=&quot;Rain on the windows of a busy inn&quot;, icon=&quot;🌧️&quot;)
+fire = edit.add_file(downloaded_bytes, &quot;Fireplace.mp3&quot;, settings={&quot;playback_mode&quot;: &quot;continuous&quot;})
+edit.add_file(Path(&quot;/tmp/door.wav&quot;), group=&quot;Doors&quot;, settings={&quot;playback_mode&quot;: &quot;sparse&quot;, &quot;presence&quot;: 0.4})
+edit.set_group(&quot;Doors&quot;, {&quot;volume&quot;: 0.8})
+edit.add_preset(&quot;Quiet night&quot;, {fire: {&quot;volume&quot;: 0.5}})
+edit.add_extra_file(&quot;ATTRIBUTION.md&quot;, &quot;Sounds by ...&quot;)
+result = edit.commit()     # {&quot;theme_id&quot;, &quot;folder&quot;, &quot;name&quot;, &quot;is_new&quot;, &quot;added&quot;}
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Call</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Call"><code>self.list_themes()</code></td>
+<td data-label="Does"><code>[{&quot;id&quot;, &quot;name&quot;, &quot;folder&quot;, &quot;track_count&quot;, &quot;preset_count&quot;}]</code></td>
+</tr>
+<tr>
+<td data-label="Call"><code>self.new_theme(name, description=&quot;&quot;, icon=&quot;&quot;, attribution=None, categories=None)</code></td>
+<td data-label="Does">A <code>ThemeEdit</code> for a new theme</td>
+</tr>
+<tr>
+<td data-label="Call"><code>self.open_theme(theme_id)</code></td>
+<td data-label="Does">A <code>ThemeEdit</code> for a theme, by id or folder; <code>ThemeEditError</code> when missing or broken</td>
+</tr>
+<tr>
+<td data-label="Call"><code>edit.add_file(source, filename=None, group=None, settings=None)</code></td>
+<td data-label="Does">A track from a <code>Path</code> or bytes (bytes need <code>filename</code>); a taken name gets <code> (2)</code>; default Background. Returns the track key</td>
+</tr>
+<tr>
+<td data-label="Call"><code>edit.add_link(theme_id, track, group=None, settings=None)</code></td>
+<td data-label="Does">Link another theme's track</td>
+</tr>
+<tr>
+<td data-label="Call"><code>edit.set_track(key, **fields)</code></td>
+<td data-label="Does">Change a track's settings</td>
+</tr>
+<tr>
+<td data-label="Call"><code>edit.set_group(name, settings)</code></td>
+<td data-label="Does">Merge a group's settings</td>
+</tr>
+<tr>
+<td data-label="Call"><code>edit.add_preset(name, tracks, groups=None, is_default=None, mute_others=True)</code></td>
+<td data-label="Does">A preset: track key → settings; tracks it doesn't name are muted in it. Returns the preset id</td>
+</tr>
+<tr>
+<td data-label="Call"><code>edit.add_extra_file(filename, content)</code></td>
+<td data-label="Does">A file that isn't a track, at the top of the folder; never replaces one</td>
+</tr>
+<tr>
+<td data-label="Call"><code>edit.commit()</code></td>
+<td data-label="Does">Write everything</td>
+</tr>
+</tbody>
+</table></div>
+<p>Track settings: <code>playback_mode</code> (<code>continuous</code> Background, <code>sparse</code> Intermittent, <code>presence</code> Ebb &amp; Flow, <code>unassigned</code>), <code>volume</code>, <code>presence</code>, <code>volume_low</code>, <code>rise</code> (0-1), <code>muted</code>, <code>seamless_loop</code>, <code>exclusive</code>, <code>pause_between</code> (booleans), <code>fade_in</code>, <code>fade_out</code>, <code>pause_min</code>, <code>pause_max</code> (seconds). The theme format is in <a href="https://github.com/synssins/sonorium/blob/main/docs/THEME_FORMAT.md" target="_blank" rel="noopener">docs/THEME_FORMAT.md</a>. A plugin action that changed themes returns <code>&quot;refresh_themes&quot;: true</code> so Sonorium rescans them.</p>
+<hr />
+<h2 id="python-packages-and-programs">Python packages and programs</h2>
+<p><strong>Python packages</strong> (capability <code>packages.pip</code>): <code>&quot;requirements&quot;: [&quot;pyserial==3.5&quot;]</code> in the manifest, up to 30, each a package name with optional extras and version conditions (no URLs, paths or pip options).</p>
+<ul>
+<li>Off until an Admin switches on <strong>Settings › Advanced › Plugin packages</strong> (then restarts). A package comes from the internet and runs with Sonorium's rights, like the plugin. A plugin that needs packages while the switch is off is refused with that sentence.</li>
+<li>Installed with pip, wheels only (nothing is built and no setup script runs), into <code>plugin_packages/&lt;plugin id&gt;/</code> in the config folder, once, and again when the requirements or Python change. Removed with the plugin. <code>GET /api/plugins/{id}/packages</code> shows their state.</li>
+<li>That folder is added to the end of Python's search path: Sonorium's packages always win.</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Install</th>
+<th>Wheels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Install">Home Assistant app</td>
+<td data-label="Wheels">Alpine Linux: musllinux</td>
+</tr>
+<tr>
+<td data-label="Install">Docker</td>
+<td data-label="Wheels">Debian: manylinux</td>
+</tr>
+<tr>
+<td data-label="Install">Windows, Linux, macOS</td>
+<td data-label="Wheels">The platform's</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Programs</strong> (capability <code>packages.binaries</code>), such as ffmpeg:</p>
+<pre><code class="language-json">&quot;binaries&quot;: {&quot;ffmpeg&quot;: {
+    &quot;linux-x86_64&quot;:  {&quot;path&quot;: &quot;bin/linux-x86_64/ffmpeg&quot;,  &quot;sha256&quot;: &quot;…&quot;},
+    &quot;linux-aarch64&quot;: {&quot;path&quot;: &quot;bin/linux-aarch64/ffmpeg&quot;, &quot;sha256&quot;: &quot;…&quot;},
+    &quot;windows-amd64&quot;: {&quot;path&quot;: &quot;bin/windows-amd64/ffmpeg.exe&quot;, &quot;sha256&quot;: &quot;…&quot;}}}
+</code></pre>
+<p>Each file is checked when the plugin loads: it must be inside the plugin's folder (no links) and match its SHA-256; a mismatch refuses the plugin. <code>self.binary(&quot;ffmpeg&quot;)</code> is the path for this platform, or None. Platforms: <code>linux-x86_64</code>, <code>linux-aarch64</code>, <code>windows-amd64</code>, <code>darwin-arm64</code>, … On the Home Assistant app, build for musl (or statically).</p>
+<hr />
+<h2 id="api-version-and-capabilities">API version and capabilities</h2>
+<p>The plugin API has a version, <code>MAJOR.MINOR</code>; Sonorium 1.7.1 has <strong>1.1</strong>. Adding a service or a field raises the minor version: a plugin written for 1.0 runs on 1.1 and every later 1.x, because nothing it uses is renamed or removed. The major version goes up only for a change old plugins would notice.</p>
+<p>Sonorium reads <code>api_version</code> and <code>requires</code> before it loads any of the plugin's code. A plugin that needs a newer API, another major version, or a capability this install doesn't offer is refused with a sentence that says why, for example:</p>
+<blockquote>
+<p>Remote needs plugin API 1.3; this Sonorium has 1.1. Update Sonorium to use it.</p>
+</blockquote>
+<p>A refused plugin is listed in <strong>Settings › Plugins</strong> with that sentence (<code>compatible: false</code> and <code>problem</code> in <code>GET /api/plugins</code>), the web UI shows an alert, and none of its code runs.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Since</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Capability"><code>events</code></td>
+<td data-label="Since">1.0</td>
+<td data-label="What it is">Follow and publish events</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>actions</code></td>
+<td data-label="Since">1.0</td>
+<td data-label="What it is">Control channels, themes and speakers</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>scheduler</code></td>
+<td data-label="Since">1.0</td>
+<td data-label="What it is">Persistent scheduled jobs</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>triggers</code></td>
+<td data-label="Since">1.0</td>
+<td data-label="What it is">Webhook triggers with tokens</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>pages</code></td>
+<td data-label="Since">1.0</td>
+<td data-label="What it is">Left-menu pages drawn from a schema</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>connections</code></td>
+<td data-label="Since">1.0</td>
+<td data-label="What it is">Rows in Settings › Connection</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>audio.sounds</code></td>
+<td data-label="Since">1.1</td>
+<td data-label="What it is">Sounds over channels, with ducking; announcements</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>audio.ramps</code></td>
+<td data-label="Since">1.1</td>
+<td data-label="What it is">Volume ramps</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>audio.outputs</code></td>
+<td data-label="Since">1.1</td>
+<td data-label="What it is">Audio output types</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>audio.tts</code></td>
+<td data-label="Since">1.1</td>
+<td data-label="What it is">Text to speech providers</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>commands</code></td>
+<td data-label="Since">1.1</td>
+<td data-label="What it is">Command maps</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>mqtt</code></td>
+<td data-label="Since">1.1</td>
+<td data-label="What it is">Sonorium's MQTT broker</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>homeassistant</code></td>
+<td data-label="Since">1.1</td>
+<td data-label="What it is">Home Assistant's API</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>packages.pip</code></td>
+<td data-label="Since">1.1</td>
+<td data-label="What it is">Python packages</td>
+</tr>
+<tr>
+<td data-label="Capability"><code>packages.binaries</code></td>
+<td data-label="Since">1.1</td>
+<td data-label="What it is">Programs per platform</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>GET /api/plugin-framework</code> gives the version, every capability and those this install offers now (<code>offered</code>). Each 1.1 service is a facade on the plugin (<code>self.audio</code>, <code>self.ramps</code>, <code>self.audio_outputs</code>, <code>self.commands</code>, <code>self.mqtt</code>, <code>self.homeassistant</code>); every method that can fail raises <code>ActionError</code>, as <code>self.actions</code> does.</p>
+<hr />
+<h2 id="packaging-installing-and-updating">Packaging, installing and updating</h2>
+<p><strong>A zip.</strong> Zip the plugin folder so the zip holds <code>my_plugin/plugin.py</code> and <code>my_plugin/manifest.json</code> (a zip with the files at its top works too; the id then comes from the manifest, or the zip's name). Sonorium uses the first <code>plugin.py</code> it finds.</p>
+<p><strong>Upload</strong> (an Admin):</p>
+<ol>
+<li>Open <strong>Settings</strong> in the left menu.</li>
+<li>Click <strong>Plugins</strong>.</li>
+<li>Click <strong>Upload plugin</strong>.</li>
+<li>Pick the zip.</li>
+<li>Switch the plugin on with its <strong>On</strong> switch.</li>
+</ol>
+<p><strong>⋯ › Plugin requirements</strong> on that page lists what a zip has to contain. Or <code>POST /api/plugins/upload</code> (multipart, field <code>file</code>). The upload is refused (400) without a <code>version</code> in the manifest or class, with a version that isn't <code>MAJOR.MINOR.PATCH</code>, with a path outside the folder, or without <code>plugin.py</code>. A plugin with the same id is replaced; its settings, jobs, tokens and connection values are kept. The answer has the plugin as <code>GET /api/plugins/{id}</code> shows it, or <code>&quot;status&quot;: &quot;warning&quot;</code> when the files were installed but the plugin didn't load (the log says why).</p>
+<p><strong>Uninstall:</strong> <strong>⋯ › Uninstall…</strong> on its row, or <code>DELETE /api/plugins/{id}</code>.</p>
+<p><strong>The Catalog.</strong> <strong>Settings › Plugins › Catalog</strong> lists the plugins in <a href="https://github.com/synssins/sonorium/blob/main/plugins/catalog.json" target="_blank" rel="noopener"><code>plugins/catalog.json</code></a> of the Sonorium repository, each with its zip next to it:</p>
+<pre><code class="language-json">{&quot;version&quot;: 1, &quot;updated&quot;: &quot;2026-10-11&quot;,
+ &quot;plugins&quot;: [{&quot;id&quot;: &quot;theme_merge&quot;, &quot;name&quot;: &quot;Theme Merge&quot;,
+              &quot;description&quot;: &quot;Merge two themes together - combines tracks, groups and presets&quot;,
+              &quot;version&quot;: &quot;2.0.0&quot;, &quot;author&quot;: &quot;Sonorium&quot;, &quot;category&quot;: &quot;utilities&quot;, &quot;zip_file&quot;: &quot;theme_merge_v2.0.0.zip&quot;}]}
+</code></pre>
+<p><strong>Install</strong> downloads and installs the zip; <strong>Update</strong> appears when the Catalog's <code>version</code> is newer than the installed one, so raise <code>version</code> for every release. The zip is fetched from the <code>plugins</code> folder next to <code>catalog.json</code>. Built-in plugins that were uninstalled are listed there too, to install again.</p>
+<hr />
+<h2 id="storage-and-security">Storage and security</h2>
+<ul>
+<li><strong>Plugins run inside Sonorium</strong> with its rights: they can read its files and the network. Install plugins you trust, as you would an add-on.</li>
+<li><strong>Settings</strong> are in <code>state.json</code>; jobs, plain connection values, the scheduler's time zone, command maps and audio output choices in <code>plugin_framework.json</code>; token hashes and secret connection values in <code>plugin_secrets.json</code> (readable only by the user Sonorium runs as). All in Sonorium's config folder, kept across updates. Keep anything else the plugin needs to remember in a file in the config folder, or in memory as the Doorbell does.</li>
+<li><strong>Tokens</strong> (triggers, the event stream) are 32 random bytes. Sonorium keeps only their SHA-256 hash and compares in constant time; a wrong token and a missing plugin get the same answer. <code>token=</code> is masked in the log.</li>
+<li><strong>The management routes</strong> (installing, settings, tokens, jobs, connections) need an Admin. The trigger and event stream routes are the ones meant for other devices, and they need a token or a key.</li>
+<li>A plugin never logs secrets or tokens; <code>connection_values()</code> is for the plugin's use only.</li>
+</ul>
+<hr />
+<h2 id="testing">Testing</h2>
+<p>The quickest test is the Doorbell's: install the zip on a test Sonorium, switch it on, call its trigger and page with curl, and follow <code>GET /api/events/stream?types=*</code> while you do. Errors in a handler appear as <code>error</code> events and in <strong>Settings › Logs</strong>.</p>
+<p>The repository's tests load plugins without Home Assistant or speakers; copy the pattern of <code>tests/test_plugin_framework_api.py</code>:</p>
+<ol>
+<li>Build a session manager with fake speakers (<code>build()</code> in <code>tests/test_sequences_playlists.py</code>).</li>
+<li>Make a <code>PluginHost</code> (with a fresh <code>EventBus</code>) and a <code>PluginManager(state_store, plugins_dir=..., host=host)</code>, with the plugin folder copied into <code>plugins_dir</code>.</li>
+<li>Mount <code>create_plugin_framework_router(manager, host)</code> in a FastAPI app and use <code>TestClient</code> as a context manager; run async calls with <code>client.portal.call(...)</code> (<code>manager.initialize</code>, <code>host.start</code>, <code>manager.enable_plugin</code>).</li>
+<li>Call the triggers, pages and actions over HTTP and check the events in <code>bus.history()</code> and the channels' state.</li>
+</ol>
+<p>Run the suite with <code>python -m pytest -q tests</code>.</p>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo"><img src="images/icon.png" alt="Sonorium"><span>Sonorium</span></div>
+            <div class="footer-links">
+                <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
+                <a href="docs.html">Docs</a>
+                <a href="faq.html">FAQ</a>
+                <a href="privacy/">Privacy</a>
+            </div>
+            <div class="footer-credit">Fork of <a href="https://github.com/fmtr/amniotic" target="_blank">Amniotic</a> by fmtr</div>
+        </div>
+    </footer>
+</body>
+</html>
