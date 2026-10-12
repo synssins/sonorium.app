@@ -77,7 +77,7 @@
 <li>Speakers on the same network as the PC: Google Cast, Sonos, DLNA, AirPlay, LinkPlay or HEOS. Sonorium finds them on the network.</li>
 <li>Home Assistant and an MQTT broker are optional. With Home Assistant connected, Sonorium can also play to Home Assistant's speakers and use its floors and areas.</li>
 </ul>
-<p>Nothing else needs installing: the installer brings everything Sonorium needs, including its copy of Python, and doesn't change any Python already on the PC.</p>
+<p>The installer is self-contained: nothing else needs installing.</p>
 <hr />
 <h2 id="for-me-only-or-for-all-users">For me only, or for all users?</h2>
 <p>The installer asks this first. The choice decides where Sonorium is installed and how it can run.</p>
@@ -221,10 +221,10 @@
 <p>A field is saved when you click away from it or press Tab; Sonorium then restarts to use it.</p>
 <p><strong>A. Use Home Assistant:</strong> on, Sonorium plays to Home Assistant's speakers and uses its floors and areas. Off removes the saved address and token.</p>
 <p><strong>B. Address:</strong> Home Assistant's address, for example <code>http://homeassistant.local:8123</code>.</p>
-<p><strong>C. Access token:</strong> a long-lived access token from your Home Assistant profile (in Home Assistant: your profile, <strong>Security</strong>, <strong>Long-lived access tokens</strong>, <strong>Create token</strong>). Windows encrypts it for the account Sonorium runs as. After saving, the box shows dots instead of the token; leaving it empty keeps the saved token. <strong>Test</strong> tries the address and token as typed, without saving them.</p>
+<p><strong>C. Access token:</strong> a long-lived access token from your Home Assistant profile (in Home Assistant: your profile, <strong>Security</strong>, <strong>Long-lived access tokens</strong>, <strong>Create token</strong>). After saving, the box shows dots instead of the token; leaving it empty keeps the saved token. <strong>Test</strong> tries the address and token as typed, without saving them.</p>
 <p><strong>D. Use MQTT:</strong> on, Sonorium's channels appear in Home Assistant, for dashboards and automations.</p>
 <p><strong>E. Broker:</strong> the MQTT broker's address and port (<code>1883</code> by default).</p>
-<p><strong>F. Username and password:</strong> the broker login. The password is encrypted like the access token. <strong>Test</strong> tries the values as typed.</p>
+<p><strong>F. Username and password:</strong> the broker login. <strong>Test</strong> tries the values as typed.</p>
 <p><strong>G. Find speakers on this network:</strong> on by default. Sonorium looks for Google Cast, Sonos, DLNA, AirPlay, LinkPlay and HEOS speakers on the network. Changing it restarts Sonorium.</p>
 <h3 id="updates">Updates</h3>
 <p><img loading="lazy" alt="The Updates page" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-console-updates.png" /></p>
@@ -261,7 +261,7 @@
 <p>Windows' <strong>Services</strong> app (press the Windows key, type <code>services</code>, press Enter) lists the service as <strong>Sonorium</strong>, with <strong>Start</strong>, <strong>Stop</strong> and <strong>Restart</strong>. It does the same as the tray menu.</p>
 <hr />
 <h2 id="switching-between-a-service-and-when-i-sign-in">Switching between a service and "When I sign in"</h2>
-<p>Sonorium must be installed for all users. Your channels, themes and settings come across; the Home Assistant access token and the MQTT password don't, because Windows encrypts them for one account. Type them again on the <strong>Connections</strong> page after switching.</p>
+<p>Sonorium must be installed for all users. Your channels, themes and settings come across. The Home Assistant access token and the MQTT password don't: type them again on the <strong>Connections</strong> page after switching.</p>
 <p><img loading="lazy" alt="The Sonorium icon" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-tray-icon.png" /></p>
 <p><strong>1:</strong> Click the Sonorium icon. The settings window opens.</p>
 <p><img loading="lazy" alt="General, then the run mode" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-general-switch.png" /></p>
@@ -299,7 +299,7 @@
 <p>What happens next:</p>
 <ul>
 <li>The tray icon and the settings window close, and Sonorium stops.</li>
-<li>The update downloads and installs in the background, without asking for administrator permission. The download is checked against the checksum GitHub publishes for it before anything runs.</li>
+<li>The update downloads and installs in the background, without asking for administrator permission.</li>
 <li>Sonorium and the tray icon start again on the new version. <strong>About</strong> shows it.</li>
 </ul>
 <p>A Windows notification, <strong>Sonorium &lt;version&gt; is available</strong>, also offers <strong>Update now</strong> when the automatic check finds one.</p>
@@ -315,7 +315,7 @@
 <p><strong>2:</strong> Click <strong>Logs…</strong>.</p>
 <p><img loading="lazy" alt="Click Errors" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-logs-errors.png" /></p>
 <p><strong>3:</strong> Click <strong>Errors</strong> to see only errors, or type in <strong>Search</strong>.</p>
-<p>Each line starts with the time. Lines from SonoriumHost, the program that runs Sonorium in the background, start with <strong>Host:</strong>, for example <code>Host: Running as the Windows service (version …, server …)</code> at each start. When reporting a problem, <strong>Save…</strong> the log and attach it.</p>
+<p>Each line starts with the time. When reporting a problem, <strong>Save…</strong> the log and attach it to the report.</p>
 <hr />
 <h2 id="linking-the-sonorium-app-on-your-phone">Linking the Sonorium app on your phone</h2>
 <p>The Sonorium app links to Sonorium with the <strong>Link App</strong> button on Sonorium's <strong>Channels</strong> page; the steps are in <a href="docs.html?page=Link-App">Link App</a>.</p>
@@ -331,7 +331,7 @@ Kept: the themes, settings and data folders and the logs (see <a href="#folders"
 <hr />
 <h2 id="troubleshooting">Troubleshooting</h2>
 <p><strong>"Windows protected your PC" when running the installer.</strong> The installer isn't signed yet. Click <strong>More info</strong>, then <strong>Run anyway</strong>.</p>
-<p><strong>Windows Firewall asks to allow Python.</strong> With <strong>Install for me only</strong>, the installer can't add firewall rules, so Windows Firewall may ask the first time Sonorium starts. Allow it on <strong>Private networks</strong>; without it, speakers and phones can't reach Sonorium.</p>
+<p><strong>Windows Firewall asks to allow Python.</strong> With <strong>Install for me only</strong>, Windows Firewall may ask the first time Sonorium starts; the prompt names Python. Allow it on <strong>Private networks</strong> so speakers and phones can reach Sonorium.</p>
 <p><strong>The menu stays on "Sonorium is starting".</strong> Another program may use the port. The <strong>Logs</strong> page then shows <code>[Errno 10048] error while attempting to bind on address ('0.0.0.0', 8008): [winerror 10048] only one usage of each socket address (protocol/network address/port) is normally permitted</code>. Change the port: <a href="#changing-the-port">Changing the port</a>.</p>
 <p><strong>Speakers aren't found.</strong> Check that <strong>Find speakers on this network</strong> is on (<strong>Connections</strong>), that the PC and speakers are on the same network, and that the network is set to <strong>Private</strong> in Windows (Settings, <strong>Network &amp; internet</strong>).</p>
 <hr />
