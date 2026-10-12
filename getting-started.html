@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Getting Started - Sonorium</title>
-    <meta name="description" content="Get started with Sonorium - installation guide for Home Assistant and Windows.">
+    <meta name="description" content="Sonorium plays ambient sound, such as rain, a forest or a busy tavern, on the speakers in your home. It mixes several recordings and keeps changing how each one">
     <link rel="icon" type="image/png" href="images/icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,248 +21,122 @@
                 <a href="index.html#features">Features</a>
                 <a href="faq.html">FAQ</a>
                 <a href="docs.html">Docs</a>
+                <a href="api.html">API</a>
+                <a href="plugin-development.html">Plugin Development</a>
+                <a href="theme-format.html">Theme Format</a>
                 <a href="https://github.com/synssins/sonorium" target="_blank" class="btn btn-primary">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                     GitHub
                 </a>
             </div>
-            <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('show')">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <button class="mobile-menu-btn" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </button>
         </div>
     </nav>
 
     <header class="page-header">
         <h1>Getting Started</h1>
-        <p>Up and running in minutes with your choice of installation.</p>
+        <p>Pick how to install Sonorium. Every path ends at the same documentation.</p>
     </header>
 
-    <div class="content-container">
-        <div class="tabs">
-            <button class="tab active" id="ha-tab" onclick="showTab('ha')">Home Assistant</button>
-            <button class="tab" id="docker-tab" onclick="showTab('docker')">Docker</button>
-            <button class="tab" id="windows-tab" onclick="showTab('windows')">Windows App</button>
-        </div>
-
-        <!-- Home Assistant -->
-        <div id="ha-content" class="tab-content active">
-            <div class="step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h3>Add the Repository</h3>
-                    <p>Click the button below to add Sonorium to your Home Assistant Add-on Store with one click.</p>
-                    <a href="https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fsynssins%2Fsonorium" target="_blank" style="display: inline-block; margin: 1rem 0;">
-                        <img src="https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg" alt="Add Repository">
-                    </a>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Or manually: <strong>Settings → Add-ons → ⋮ → Repositories</strong> and add <code>https://github.com/synssins/sonorium</code></p>
-                </div>
-            </div>
-
-            <div class="step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h3>Install & Start</h3>
-                    <p>Find <strong>"Sonorium"</strong> in the Add-on Store, click <strong>Install</strong>, then <strong>Start</strong>. The addon will appear in your Home Assistant sidebar.</p>
-                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Sonorium needs the <strong>Mosquitto broker</strong> add-on (Settings → Add-ons → Add-on Store), started with <strong>Start on boot</strong> on.</p>
-                </div>
-            </div>
-
-            <div class="step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h3>Set It Up</h3>
-                    <p>Open Sonorium and follow <a href="#first-steps" style="color: var(--accent-primary);">First steps</a> below: turn on a speaker, make a channel and play a theme.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Docker -->
-        <div id="docker-content" class="tab-content">
-            <div class="step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h3>Create a Compose File</h3>
-                    <p>Sonorium runs on any Docker host, with or without Home Assistant. The image is <code>ghcr.io/synssins/sonorium:latest</code>.</p>
-                    <div class="card" style="padding: 0; margin-top: 1rem; border: none; background: none;">
-<pre>services:
-  sonorium:
-    image: ghcr.io/synssins/sonorium:latest
-    container_name: sonorium
-    network_mode: host        # needed to find speakers on your network
-    environment:
-      - PUID=1000             # optional: owner of the files Sonorium writes
-      - PGID=1000
-      - TZ=Etc/UTC            # your time zone, for log times
-    volumes:
-      - ./sonorium/config:/config          # settings and channels
-      - ./sonorium/media:/media/sonorium   # themes and audio
-    restart: unless-stopped</pre>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h3>Start It</h3>
-                    <p>Run <code>docker compose up -d</code>, then open <code>http://&lt;docker-host&gt;:8008</code> in your browser.</p>
-                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Sonorium finds Google Cast, Sonos, DLNA, AirPlay, LinkPlay and HEOS speakers on your network. Add one the scan didn't find by its address, under <strong>Settings → Speakers</strong>.</p>
-                </div>
-            </div>
-
-            <div class="step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h3>Optional: Home Assistant and MQTT</h3>
-                    <p>Connect Home Assistant and MQTT under <strong>Settings → Connection</strong> to use Home Assistant's speakers and control Sonorium from your dashboard.</p>
-                </div>
-            </div>
-
-            <div class="step">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <h3>Set It Up</h3>
-                    <p>Open Sonorium and follow <a href="#first-steps" style="color: var(--accent-primary);">First steps</a> below: turn on a speaker, make a channel and play a theme.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Windows -->
-        <div id="windows-content" class="tab-content">
-            <div class="card" style="background: var(--bg-secondary); border-color: var(--accent-warning); margin-bottom: 2rem;">
-                <p style="margin: 0;"><strong>🚧 Alpha Release:</strong> The Windows app currently plays through your PC's audio output. Network streaming to Chromecast, DLNA, and AirPlay speakers is coming soon.</p>
-            </div>
-
-            <div class="step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h3>Download the App</h3>
-                    <p>Download <strong>Sonorium.exe</strong> from the <a href="index.html#downloads" style="color: var(--accent-primary);">Downloads page</a> or <a href="https://github.com/synssins/sonorium/releases" target="_blank" style="color: var(--accent-primary);">GitHub Releases</a>.</p>
-                    <p style="color: var(--text-muted); margin-top: 0.5rem;">It's a single executable—no installation required. Just download and run.</p>
-                </div>
-            </div>
-
-            <div class="step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h3>Run Sonorium</h3>
-                    <p>Double-click <strong>Sonorium.exe</strong> to launch the app. Windows may show a SmartScreen warning since the app isn't signed—click <strong>More info → Run anyway</strong>.</p>
-                </div>
-            </div>
-
-            <div class="step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h3>Create Your First Theme</h3>
-                    <p>Go to <strong>Themes</strong> in the app. Click <strong>Create Theme</strong>, give it a name, then drag and drop your audio files to upload them.</p>
-                    <p style="color: var(--text-muted); margin-top: 0.5rem;">You can also import theme zip files shared by the community.</p>
-                </div>
-            </div>
-
-            <div class="step">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <h3>Start Mixing</h3>
-                    <p>Select a theme, adjust the track mixer to fine-tune volumes and interval, then enjoy ambient soundscapes through your speakers.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- First steps (mirrors the wiki's Getting Started) -->
-        <h2 class="guide-title" id="first-steps">First steps</h2>
-        <div class="card guide">
-            <h2 id="before-you-start">Before you start</h2>
-            <p>This guide takes you from a fresh install to sound playing on a speaker. It has four parts:</p>
-            <ol><li><a href="#enabling-speakers">Enabling speakers</a>: tell Sonorium which speakers it may use.</li><li><a href="#creating-a-channel">Creating a channel</a>: a channel is one stream of sound, played on one or more speakers.</li><li><a href="#assigning-speakers-to-the-channel">Assigning speakers to the channel</a>: choose where the channel plays.</li><li><a href="#loading-a-theme">Loading a theme</a>: choose what the channel plays, and start it.</li></ol>
-            <p>Sonorium opens on the <strong>Channels</strong> page, so every part starts there. The theme used in this guide, <strong>A Rainy Day... Or is it?</strong>, comes with Sonorium.</p>
-        </div>
-        <div class="card guide">
-            <h2 id="enabling-speakers">Enabling speakers</h2>
-            <p>Sonorium finds the speakers in your home (from Home Assistant, and on your network in the Docker version), but it only uses the ones you turn on. A speaker that is turned off never shows up when you build a channel, so this is the first thing to set up.</p>
-            <img class="guide-shot" src="screenshots/getting-started-speakers-1.png" alt="Open Settings, then Speakers" loading="lazy">
-            <p><strong>1:</strong> On the <strong>Channels</strong> page, click <strong>Settings</strong> in the menu on the left. The menu opens to show the settings pages.</p>
-            <p><strong>2:</strong> Click <strong>Speakers</strong>.</p>
-            <img class="guide-shot" src="screenshots/getting-started-speakers-2.png" alt="Find the speaker and turn it on" loading="lazy">
-            <p>The <strong>Speakers</strong> page lists every speaker Sonorium knows about, grouped by floor and area (for example "Ground Level · Office"). Each row shows:</p>
-            <ul><li><strong>The dot</strong> on the left: filled in when the speaker is online and can be reached.</li><li><strong>Name:</strong> the speaker's name. Click it to rename the speaker in Sonorium.</li><li><strong>Source:</strong> How the speaker is connected to Sonorium. <strong>HA</strong> means Home Assistant, <strong>Discovered</strong> means Sonorium found it on your network, <strong>Manual</strong> means it was added by hand. There may be more than one entry for this. Finally, a badge shows how Sonorium talks to it, such as <strong>Cast</strong> (Google Cast), <strong>Sonos</strong>, <strong>Linkplay</strong>, or <strong>Airplay</strong>.</li><li><strong>Address:</strong> the speaker's network address or Home Assistant name.</li><li><strong>Area:</strong> This is generally populated when the speaker is discovered in HA. It can be changed in Sonorium; changing it here does not change the area inside of HA. Channels can pick speakers by area.</li><li><strong>Offset:</strong> makes this speaker louder or quieter than the channel's volume, for a speaker that plays louder or softer than the rest.</li><li><strong>Test:</strong> plays a short, quiet chime on the speaker, so you can check you have the right one.</li><li><strong>Use:</strong> the switch that turns the speaker on for Sonorium.</li></ul>
-            <p><strong>3:</strong> Click the <strong>Search speakers</strong> box and type part of the speaker's name. This guide uses a speaker called <strong>Office_C97A</strong>, so "Office" finds it. You can also narrow the list with <strong>All</strong>, <strong>Home Assistant</strong>, <strong>Discovered</strong> and <strong>Manual</strong>, or hide speakers that are offline.</p>
-            <p><strong>4:</strong> Click the <strong>Use</strong> switch on the speaker's row to turn it on.</p>
-            <img class="guide-shot" src="screenshots/getting-started-speakers-3.png" alt="The speaker is turned on" loading="lazy">
-            <p>The switch is now on, and the count at the top of the area (here "3 of 4 on") goes up by one. The speaker is saved straight away; there is no Save button on this page.</p>
-            <p>If a speaker you expect isn't listed, click <strong>Rescan network</strong> to search again, or <strong>Add speaker</strong> to add it by its address.</p>
-        </div>
-        <div class="card guide">
-            <h2 id="creating-a-channel">Creating a channel</h2>
-            <p>A channel is one stream of sound. It plays one theme (or one playlist) on the speakers you give it. You can have several channels at once, for example one for the office and one for the living room, each playing something different.</p>
-            <img class="guide-shot" src="screenshots/getting-started-channel-1.png" alt="Click New Channel" loading="lazy">
-            <p><strong>1:</strong> On the <strong>Channels</strong> page, click <strong>New Channel</strong> in the top right. The <strong>New Channel</strong> window opens.</p>
-            <img class="guide-shot" src="screenshots/getting-started-channel-2.png" alt="Name the channel" loading="lazy">
-            <p>The window has two halves. On the left: the channel's name, what it plays, and its volume. On the right: the speakers it plays on.</p>
-            <p><strong>2:</strong> Click the <strong>Channel name</strong> box and type a name, for example "Office". If you leave it empty, Sonorium names it "Channel" followed by a number, for example "Channel 1".</p>
-            <p>Under <strong>Plays</strong>, <strong>Theme</strong> is already selected. Leave it there for this guide. (<strong>Playlist</strong> plays several themes one after another; see <a href="https://github.com/synssins/sonorium/wiki/Sequences-and-Playlists" target="_blank">Sequences and Playlists</a>.)</p>
-            <p>Keep the window open for the next part.</p>
-        </div>
-        <div class="card guide">
-            <h2 id="assigning-speakers-to-the-channel">Assigning speakers to the channel</h2>
-            <p>The right half of the <strong>New Channel</strong> window lists the speakers you turned on in <a href="#enabling-speakers">Enabling speakers</a>, grouped by floor and area.</p>
-            <img class="guide-shot" src="screenshots/getting-started-assign-1.png" alt="Find and tick the speaker" loading="lazy">
-            <p><strong>3:</strong> Click the <strong>Search speakers</strong> box and type part of the speaker's name, for example "Office".</p>
-            <p><strong>4:</strong> Tick the box next to the speaker.</p>
-            <p>The speaker now shows as a tag under the search box, and the bottom of the list reads "1 speaker selected". To play on more than one speaker, tick more boxes. Ticking a floor or an area selects every speaker in it. To remove a speaker, untick it, or click the <strong>×</strong> on its tag.</p>
-            <p>Keep the window open for the next part.</p>
-        </div>
-        <div class="card guide">
-            <h2 id="loading-a-theme">Loading a theme</h2>
-            <p>A theme is the sound itself: a set of recordings Sonorium mixes together, such as rain, wind and thunder.</p>
-            <img class="guide-shot" src="screenshots/getting-started-theme-1.png" alt="Pick the theme" loading="lazy">
-            <p><strong>5:</strong> In the list of themes on the left, click <strong>A Rainy Day... Or is it?</strong>. The theme's name appears above the list, and a <strong>Theme preset</strong> box appears below it.</p>
-            <img class="guide-shot" src="screenshots/getting-started-theme-2.png" alt="Choose no preset, or the default preset" loading="lazy">
-            <p>A preset is a saved version of the theme's mix: for example, the same storm with the thunder turned off, or with the rain louder. A theme can have several presets.</p>
-            <p><strong>6:</strong> Click the <strong>Theme preset</strong> box. A list of the theme's presets opens.</p>
-            <p><strong>7:</strong> Choose how the theme plays:</p>
-            <ul><li><strong>7a: Default settings</strong> plays the theme as it is, with no preset.</li><li><strong>7b:</strong> the preset marked with a <strong>★</strong> is the theme's default preset. Sonorium picks it for you when you choose the theme, so you only need to change this if you want something else.</li></ul>
-            <p>Presets marked with the sequence icon (a square, a triangle and a circle), such as <strong>Storm builds</strong>, are sequences: they play several presets one after another. See <a href="https://github.com/synssins/sonorium/wiki/Sequences-and-Playlists" target="_blank">Sequences and Playlists</a>.</p>
-            <img class="guide-shot" src="screenshots/getting-started-theme-3.png" alt="Create the channel" loading="lazy">
-            <p><strong>8:</strong> Click <strong>Create Channel</strong>. The window closes and the new channel appears on the <strong>Channels</strong> page.</p>
-            <img class="guide-shot" src="screenshots/getting-started-theme-4.png" alt="Play the channel" loading="lazy">
-            <p><strong>9:</strong> Click <strong>Play</strong>. Sonorium starts the theme on the channel's speakers. It fades in over a few seconds rather than starting at full volume.</p>
-            <p>To stop, click the same button again; it now reads <strong>Stop</strong>.</p>
-            <p>You can change the theme or preset at any time from the boxes on the channel, while it plays. The slider under them is the speakers' volume.</p>
-        </div>
-
-        <div class="card" style="margin-top: 3rem;">
-            <h2>What's Next?</h2>
-            <ul>
-                <li><a href="docs.html" style="color: var(--accent-primary);">Documentation</a> — Learn about all features</li>
-                <li><a href="faq.html" style="color: var(--accent-primary);">FAQ</a> — Common questions and troubleshooting</li>
-                <li><a href="https://github.com/synssins/sonorium/issues" target="_blank" style="color: var(--accent-primary);">Report Issues</a> — Found a bug? Let us know</li>
-            </ul>
-        </div>
-    </div>
+    <main class="content-container docs-content doc-page">
+<p>Sonorium plays ambient sound, such as rain, a forest or a busy tavern, on the speakers in your home. It mixes several recordings and keeps changing how each one plays, so the sound doesn't loop noticeably.</p>
+<p>Sonorium runs on a computer that stays on, and you use it from a web page on any phone, tablet or computer in your home. There are three ways to install it. Pick the one that fits the machine you have; each has a complete guide, and all three end at the same place: <a href="docs.html">Sonorium's documentation</a>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th><a href="getting-started-home-assistant.html">Home Assistant app</a></th>
+<th><a href="getting-started-docker.html">Docker</a></th>
+<th><a href="getting-started-windows.html">Windows</a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pick it when</strong></td>
+<td>You run Home Assistant OS or Supervised</td>
+<td>You have a Linux server or NAS with Docker, with or without Home Assistant</td>
+<td>You want Sonorium on a Windows PC</td>
+</tr>
+<tr>
+<td><strong>Runs on</strong></td>
+<td>The Home Assistant machine (amd64 or aarch64)</td>
+<td>Any amd64 Docker host</td>
+<td>Windows</td>
+</tr>
+<tr>
+<td><strong>Speakers</strong></td>
+<td>Home Assistant's <code>media_player</code> entities</td>
+<td>Found on your network (Google Cast, Sonos, DLNA/UPnP, AirPlay, LinkPlay, HEOS), plus Home Assistant's if linked</td>
+<td>See the Windows guide</td>
+</tr>
+<tr>
+<td><strong>Home Assistant controls</strong></td>
+<td>Built in</td>
+<td>Optional: link Home Assistant and MQTT in the web UI</td>
+<td>See the Windows guide</td>
+</tr>
+<tr>
+<td><strong>Sign-in</strong></td>
+<td>Home Assistant's users</td>
+<td>Accounts made in Sonorium</td>
+<td>See the Windows guide</td>
+</tr>
+<tr>
+<td><strong>Updates</strong></td>
+<td>Home Assistant's update button</td>
+<td><code>docker compose pull</code></td>
+<td>See the Windows guide</td>
+</tr>
+</tbody>
+</table></div>
+<p>Not sure? If you already have Home Assistant OS, use the Home Assistant app. If you have Home Assistant in Docker (Container), use Docker and link it to Home Assistant.</p>
+<hr />
+<h2 id="every-path-step-by-step">Every path, step by step</h2>
+<ol>
+<li><strong><a href="getting-started-home-assistant.html">Home Assistant app</a>:</strong> the Mosquitto broker, the repository, installing, the options, starting, the sidebar, Home Assistant's users, updating and uninstalling.</li>
+<li><strong><a href="getting-started-docker.html">Docker</a>:</strong> the folders and compose file, starting, the first admin account, linking Home Assistant and MQTT, running without host networking, updating and uninstalling.</li>
+<li><strong><a href="getting-started-windows.html">Windows</a>:</strong> installing and starting Sonorium on a Windows PC.</li>
+</ol>
+<p>What each path needs in detail: <a href="docs.html?page=Requirements">Requirements</a>.</p>
+<hr />
+<h2 id="after-installing">After installing</h2>
+<p>Once Sonorium is open in your browser, everything works the same on every install:</p>
+<ol>
+<li><a href="docs.html?page=Speakers#how-to-turn-a-speaker-on">Turn on your speakers</a>.</li>
+<li><a href="docs.html?page=Channels#how-to-make-a-channel">Make a channel</a> and <a href="docs.html?page=Channels#how-to-play-and-stop-a-channel">play it</a>.</li>
+<li>Explore <a href="docs.html?page=Themes">Themes</a>, <a href="docs.html?page=Presets">Presets</a> and <a href="docs.html?page=Sequences-and-Playlists">Sequences and Playlists</a>.</li>
+</ol>
+<p>The full documentation starts at <a href="docs.html">Home</a>.</p>
+        <p class="doc-source">This page is also in the <a href="https://github.com/synssins/sonorium/wiki/Getting-Started" target="_blank">GitHub wiki</a>.</p>
+    </main>
 
     <footer>
         <div class="footer-content">
             <div class="footer-logo"><img src="images/icon.png" alt="Sonorium"><span>Sonorium</span></div>
             <div class="footer-links">
-                <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
+                <a href="getting-started.html">Get Started</a>
+                <a href="getting-started-home-assistant.html">Home Assistant</a>
+                <a href="getting-started-docker.html">Docker</a>
+                <a href="getting-started-windows.html">Windows</a>
                 <a href="docs.html">Docs</a>
+                <a href="api.html">API</a>
+                <a href="plugin-development.html">Plugin Development</a>
+                <a href="theme-format.html">Theme Format</a>
                 <a href="faq.html">FAQ</a>
                 <a href="privacy/">Privacy</a>
+                <a href="https://github.com/synssins/sonorium/issues" target="_blank">Issues</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
             </div>
-            <div class="footer-credit">Fork of <a href="https://github.com/fmtr/amniotic" target="_blank">Amniotic</a> by fmtr</div>
+            <div class="footer-credit">Originally based on <a href="https://github.com/fmtr/amniotic" target="_blank">Amniotic</a> by fmtr · <a href="https://github.com/synssins/sonorium/blob/main/LICENSE.md" target="_blank">PolyForm Noncommercial 1.0.0</a></div>
         </div>
     </footer>
-
     <script>
-        function showTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(tab + '-tab').classList.add('active');
-            document.getElementById(tab + '-content').classList.add('active');
-        }
-        // getting-started.html#docker (or #windows) opens that tab
-        const startTab = window.location.hash.slice(1);
-        if (['ha', 'docker', 'windows'].includes(startTab)) showTab(startTab);
+        (function () {
+            var to = {'#ha': 'getting-started-home-assistant.html', '#docker': 'getting-started-docker.html', '#windows': 'getting-started-windows.html'}[location.hash];
+            if (to) location.replace(to);
+        })();
     </script>
 </body>
 </html>

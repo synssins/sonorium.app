@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started with Docker - Sonorium</title>
+    <meta name="description" content="This page installs Sonorium as a Docker container, from an empty folder to the Sonorium web UI open in your browser. When you&#x27;re done, What&#x27;s next sends you to">
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Sonorium"></a>
+            <div class="nav-links">
+                <a href="index.html#downloads">Downloads</a>
+                <a href="getting-started.html">Get Started</a>
+                <a href="index.html#features">Features</a>
+                <a href="faq.html">FAQ</a>
+                <a href="docs.html">Docs</a>
+                <a href="api.html">API</a>
+                <a href="plugin-development.html">Plugin Development</a>
+                <a href="theme-format.html">Theme Format</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Getting Started with Docker</h1>
+        <p>Sonorium in a Docker container, with or without Home Assistant.</p>
+    </header>
+
+    <main class="content-container docs-content doc-page">
+<p>This page installs Sonorium as a Docker container, from an empty folder to the Sonorium web UI open in your browser. When you're done, <a href="#whats-next">What's next</a> sends you to Sonorium's documentation to turn on speakers and play your first channel.</p>
+<p>The Docker version runs on any machine that runs Docker, with or without Home Assistant. It finds the speakers on your network (Google Cast, Sonos, DLNA/UPnP, AirPlay, LinkPlay/Arylic and HEOS), and can also use Home Assistant's speakers and publish its controls to Home Assistant over MQTT if you link them.</p>
+<p>Other ways to run Sonorium: <a href="getting-started-home-assistant.html">Home Assistant app</a> · <a href="getting-started-windows.html">Windows</a> · <a href="getting-started.html">Compare them</a></p>
+<hr />
+<h2 id="what-you-need">What you need</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A Docker host</strong></td>
+<td>A Linux machine with Docker and Docker Compose on an <strong>x86-64 (amd64)</strong> processor: a NAS (TrueNAS, Unraid, Synology with Container Manager), a mini PC or a server. The image is built for amd64 only, so ARM machines such as a Raspberry Pi can't run it.</td>
+</tr>
+<tr>
+<td><strong>The same network as your speakers</strong></td>
+<td>Sonorium finds speakers with network broadcasts (mDNS and SSDP), which only reach devices on the same network. Speakers then fetch the sound from Sonorium on port 8008.</td>
+</tr>
+<tr>
+<td><strong>Host networking</strong></td>
+<td>The container shares the host's network (<code>network_mode: host</code>). Without it the broadcasts never leave the container, and you have to add every speaker by its address. See <a href="#running-without-host-networking">Running without host networking</a>.</td>
+</tr>
+<tr>
+<td><strong>Two free ports</strong></td>
+<td><strong>8008</strong> and <strong>8808</strong> on the host (see <a href="#ports">Ports</a>).</td>
+</tr>
+<tr>
+<td><strong>Disk space</strong></td>
+<td>Room for the image (downloaded on the first start) and your sound files.</td>
+</tr>
+<tr>
+<td><strong>Optional</strong></td>
+<td>Home Assistant (for its speakers, floors and areas, and text to speech for announcements) and an MQTT broker (for Sonorium's controls in Home Assistant). Both are linked from the web UI after the first start.</td>
+</tr>
+</tbody>
+</table></div>
+<p>If the Docker host is a virtual machine, its CPU type must pass the host's processor features through (in Proxmox: <strong>Hardware › Processors › Type: host</strong>). See <a href="docs.html?page=Requirements#virtual-machines">Requirements</a>.</p>
+<hr />
+<h2 id="install">Install</h2>
+<p>Think of the container as a sealed appliance and the two folders as its memory card and its record collection: you can replace the appliance at any time, and everything you made stays in the folders.</p>
+<h3 id="1-make-the-folders">1. Make the folders</h3>
+<p>On the Docker host, make a folder for Sonorium, for example in your home folder or on your NAS's apps pool, and two folders inside it:</p>
+<pre><code class="language-bash">mkdir -p sonorium/config sonorium/media
+cd sonorium
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Folder</th>
+<th>Mounted at</th>
+<th>What Sonorium keeps there</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>./sonorium/config</code> (here <code>./config</code>)</td>
+<td><code>/config</code></td>
+<td>Settings, channels, playlists, accounts, keys, plugins, the HTTPS certificate. Sonorium writes into a <code>sonorium</code> folder inside it.</td>
+</tr>
+<tr>
+<td><code>./sonorium/media</code> (here <code>./media</code>)</td>
+<td><code>/media/sonorium</code></td>
+<td>Themes: one folder per theme, with its sound files and settings. The three bundled themes are copied here on the first start.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="2-write-the-compose-file">2. Write the compose file</h3>
+<p>In the <code>sonorium</code> folder, make a file called <code>compose.yaml</code> (or <code>docker-compose.yml</code>) with this content:</p>
+<pre><code class="language-yaml">services:
+  sonorium:
+    image: ghcr.io/synssins/sonorium:latest
+    container_name: sonorium
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - BYPASS_LOGIN=false
+      - SONORIUM_HTTPS_PORT=8808
+    volumes:
+      - ./config:/config
+      - ./media:/media/sonorium
+    restart: unless-stopped
+</code></pre>
+<p>What each line does:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Line</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>image</code></td>
+<td>Where Docker downloads Sonorium from. <code>latest</code> is the newest release. A version number (for example <code>ghcr.io/synssins/sonorium:1.7.1</code>) stays on that version until you change it.</td>
+</tr>
+<tr>
+<td><code>container_name</code></td>
+<td>The name used in Docker commands below (<code>docker logs sonorium</code>).</td>
+</tr>
+<tr>
+<td><code>network_mode: host</code></td>
+<td>Shares the host's network so Sonorium can find speakers. Ports 8008 and 8808 open on the host directly; no <code>ports:</code> section is needed.</td>
+</tr>
+<tr>
+<td><code>restart: unless-stopped</code></td>
+<td>Starts Sonorium again after a reboot or a crash, unless you stopped it yourself.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The environment variables:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PUID</code>, <code>PGID</code></td>
+<td>Not set (runs as root)</td>
+<td>The user and group id that owns the files Sonorium writes. Set them to your user's ids (<code>id -u</code> and <code>id -g</code> on the host print them) so you can edit the theme folders without <code>sudo</code>. Sonorium takes ownership of the config folder and of the top media folder at start.</td>
+</tr>
+<tr>
+<td><code>TZ</code></td>
+<td><code>Etc/UTC</code></td>
+<td>Your time zone, for the times in the log and in <strong>Recent changes</strong>, for example <code>Europe/Berlin</code> or <code>America/Chicago</code>.</td>
+</tr>
+<tr>
+<td><code>BYPASS_LOGIN</code></td>
+<td><code>false</code></td>
+<td>Recovery only. <code>true</code> opens the web UI without a sign-in, to reset a forgotten password. See <a href="docs.html?page=Sign-in-and-Users#forgotten-password">Forgotten password</a>.</td>
+</tr>
+<tr>
+<td><code>SONORIUM_HTTPS_PORT</code></td>
+<td><code>8808</code></td>
+<td>The HTTPS port. Change it only if 8808 is taken on the host.</td>
+</tr>
+<tr>
+<td><code>SONORIUM__MAX_CHANNELS</code></td>
+<td><code>6</code></td>
+<td>How many channels can play (or be listened to in a browser) at the same time, from 1 to 10. Each playing channel uses some processor time. See <a href="docs.html?page=Channels">Channels</a>.</td>
+</tr>
+<tr>
+<td><code>SONORIUM_LOG_LEVEL</code></td>
+<td><code>info</code></td>
+<td>How much the log says: <code>debug</code>, <code>info</code>, <code>warning</code> or <code>error</code>. <code>debug</code> adds detail per theme and per speaker.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="3-start-it">3. Start it</h3>
+<pre><code class="language-bash">docker compose up -d
+</code></pre>
+<p>Docker downloads the image and starts the container. The download takes a few minutes the first time. Watch the log:</p>
+<pre><code class="language-bash">docker logs -f sonorium
+</code></pre>
+<p>A first start ends with lines like these (press <strong>Ctrl+C</strong> to stop watching; Sonorium keeps running):</p>
+<pre><code>Copied built-in plugin: users -&gt; /config/sonorium/plugins/users
+Users: new install, an admin account is made on the first visit
+Sonorium 1.7.1 (Docker) ready: 3 themes, 4 speakers detected, 0 channels, MQTT not available
+mDNS: Sonorium announced as sonorium.local (192.0.2.10), http://sonorium.local:8008 and https://sonorium.local:8808
+</code></pre>
+<ul>
+<li><strong>3 themes</strong> are the bundled ones: Sleigh Ride, Tavern and A Rainy Day... Or is it?</li>
+<li><strong>speakers detected</strong> counts the speakers found so far. The network scan keeps running in the background; more can show up in the next minute.</li>
+<li><strong>MQTT not available</strong> is normal until you <a href="#link-mqtt">link MQTT</a>.</li>
+<li><strong>sonorium.local</strong> is the name Sonorium announced on your network. If another device already uses it, Sonorium takes <code>sonorium-2.local</code> (then <code>-3</code>, up to <code>-9</code>), and this line says which.</li>
+</ul>
+<hr />
+<h2 id="open-the-web-ui">Open the web UI</h2>
+<p>In a browser on any device on the same network, open one of:</p>
+<ul>
+<li><code>http://sonorium.local:8008</code> (use the name from the log line above)</li>
+<li><code>http://&lt;the Docker host's address&gt;:8008</code>, for example <code>http://192.0.2.10:8008</code></li>
+</ul>
+<p>The name <code>sonorium.local</code> works on most computers and phones. If it doesn't on yours (some Android versions and some routers don't pass these names along), use the address.</p>
+<h3 id="ports">Ports</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Serves</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>8008</strong></td>
+<td>The web UI, the API and the audio streams, over HTTP. Speakers fetch the sound here.</td>
+</tr>
+<tr>
+<td><strong>8808</strong></td>
+<td>The web UI and the API over HTTPS, for the Sonorium app for Android. The certificate is made by Sonorium, so a browser opening <code>https://sonorium.local:8808</code> warns that the connection isn't private. The connection is still encrypted; the warning means no public authority vouched for the certificate. The app checks the certificate's fingerprint instead (see <a href="docs.html?page=Link-App">Link App</a>).</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="create-the-admin-account">Create the admin account</h3>
+<p>The first visit asks for an admin account. Until it exists, nothing else opens.</p>
+<p><img loading="lazy" alt="Create the admin account" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/dk-first-1.png" ></p>
+<p><strong>1:</strong> Type a username: 1 to 32 letters, numbers, dots, dashes or underscores.</p>
+<p><strong>2:</strong> Type a password of at least 8 characters.</p>
+<p><strong>3:</strong> Type the password again.</p>
+<p><strong>4:</strong> Click <strong>Create account</strong>.</p>
+<p>Sonorium signs you in and opens the <strong>Channels</strong> page, which is empty: "No channels yet". This account is an <strong>Admin</strong>, so it can change every setting and add more people. From now on every browser asks for a sign-in; it stays signed in for 30 days, or until it hasn't been used for 14 days. Speakers, Home Assistant and MQTT don't need to sign in.</p>
+<p>Everything about accounts, roles, adding people, keys for scripts and linking phones is on <a href="docs.html?page=Sign-in-and-Users">Sign-in and Users</a>.</p>
+<p><strong>Updating from a version before 1.7.0?</strong> Your existing install stays open without a sign-in until you choose otherwise. A banner at the top offers to create the admin account and then turn on <strong>Require login</strong>. See <a href="docs.html?page=Sign-in-and-Users#signing-in-for-the-first-time">Signing in for the first time</a>.</p>
+<hr />
+<h2 id="link-home-assistant">Link Home Assistant</h2>
+<p>Optional. Linked, Sonorium adds Home Assistant's speakers, floors and areas to its lists, and can speak announcements with Home Assistant's text to speech. Home Assistant only gets Sonorium's controls (the channel switches, selects and cards) through <a href="#link-mqtt">MQTT</a>.</p>
+<p>Sonorium needs two things from Home Assistant: its address, and a <strong>long-lived access token</strong>, a password made for programs.</p>
+<p><strong>Make the token in Home Assistant:</strong></p>
+<ol>
+<li>In Home Assistant, click your user name at the bottom left of the sidebar to open your profile.</li>
+<li>Open the <strong>Security</strong> tab.</li>
+<li>Under <strong>Long-lived access tokens</strong>, click <strong>Create token</strong>.</li>
+<li>Name it "Sonorium" and click <strong>OK</strong>.</li>
+<li>Copy the token. Home Assistant shows it once.</li>
+</ol>
+<p><strong>Give it to Sonorium:</strong></p>
+<p><img loading="lazy" alt="Open Settings, then Connection" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/dk-conn-1.png" ></p>
+<p><strong>1:</strong> On the <strong>Channels</strong> page, click <strong>Settings</strong> in the menu on the left. The menu opens to show the settings pages.</p>
+<p><strong>2:</strong> Click <strong>Connection</strong>.</p>
+<p><img loading="lazy" alt="Click Edit on the Home Assistant row" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/dk-conn-2.png" ></p>
+<p>The <strong>Connection</strong> page lists Home Assistant and MQTT, each with its <strong>Status</strong> (<strong>Connected</strong>, <strong>Not connected</strong>, <strong>Not answering</strong> or <strong>Not configured</strong>) and the address it <strong>Points at</strong>.</p>
+<p><strong>3:</strong> Click <strong>Edit</strong> on the <strong>Home Assistant</strong> row. The <strong>Home Assistant</strong> window opens.</p>
+<p><img loading="lazy" alt="Type the address and the token" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/dk-conn-3.png" ></p>
+<p><strong>4:</strong> In <strong>URL</strong>, type Home Assistant's address with its port, starting with <code>http://</code> or <code>https://</code>, for example <code>http://192.0.2.5:8123</code> or <code>http://homeassistant.local:8123</code>.</p>
+<p><strong>5:</strong> Click <strong>Access token</strong> and paste the token.</p>
+<p><strong>6:</strong> Click <strong>Test</strong>. Sonorium tries the address and token you typed, before saving them. The answer shows next to the button: "Connected", or the reason it failed (wrong address, Home Assistant not answering, token refused).</p>
+<p><strong>7:</strong> Click <strong>Save</strong>. A box asks to restart Sonorium.</p>
+<p><img loading="lazy" alt="Confirm the restart" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/dk-conn-4.png" ></p>
+<p><strong>8:</strong> Click <strong>Restart</strong>. Sonorium restarts with the new connection, and the page reloads when it's back, after a few seconds. Channels that were playing are stopped by the restart; press <strong>Play</strong> to start them again.</p>
+<p>The <strong>Home Assistant</strong> row now reads <strong>Connected</strong>. Home Assistant's speakers appear on <strong>Settings › Speakers</strong> marked <strong>HA</strong>, switched off until you turn them on. A speaker found both on the network and in Home Assistant is listed once; its <strong>⋯ › Play via</strong> picks which way it plays. See <a href="docs.html?page=Speakers">Speakers</a>.</p>
+<p>To close the window without saving, click <strong>Cancel</strong> or the <strong>×</strong>, or press the <strong>Esc</strong> key.</p>
+<p><strong>Change or remove it later:</strong> <strong>Edit</strong> opens the same window; a saved token is not shown, and leaving the field empty keeps it. <strong>⋯ › Remove…</strong> deletes the address and token after you confirm; Home Assistant's floors, areas and speakers leave every list at once, without a restart.</p>
+<hr />
+<h2 id="link-mqtt">Link MQTT</h2>
+<p>Optional. MQTT is the messaging system Home Assistant uses to receive Sonorium's controls: a switch, theme and preset selects, a volume slider and more for every channel, plus Sonorium's dashboard cards. See <a href="docs.html?page=Home-Assistant-Integration">Home Assistant Integration</a>.</p>
+<p>You need an MQTT broker that Home Assistant also uses, usually the <strong>Mosquitto broker</strong> add-on in Home Assistant, or Mosquitto in a container. Home Assistant's <strong>MQTT</strong> integration must point at the same broker.</p>
+<p><img loading="lazy" alt="Click Edit on the MQTT row" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/dk-mqtt-1.png" ></p>
+<p><strong>1:</strong> On the <strong>Channels</strong> page, click <strong>Settings</strong> in the menu on the left.</p>
+<p><strong>2:</strong> Click <strong>Connection</strong> (see the screenshots in <a href="#link-home-assistant">Link Home Assistant</a>).</p>
+<p><strong>3:</strong> Click <strong>Edit</strong> on the <strong>MQTT</strong> row. The <strong>MQTT</strong> window opens.</p>
+<p><img loading="lazy" alt="Fill in the broker" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/dk-mqtt-2.png" ></p>
+<p><strong>4:</strong> In <strong>Broker</strong>, type the broker's host name or IP address, for example <code>192.0.2.5</code>. For the Mosquitto add-on, that is the Home Assistant machine's address.</p>
+<p><strong>5:</strong> In <strong>Port</strong>, type the broker's port: <code>1883</code> unless you changed it (1 to 65535). Left empty, Sonorium uses 1883.</p>
+<p><strong>6:</strong> In <strong>Username</strong>, type the MQTT user. Leave it empty for a broker that allows anonymous connections. For the Mosquitto add-on, use a Home Assistant user made for MQTT, or a login from the add-on's configuration.</p>
+<p><strong>7:</strong> In <strong>Password</strong>, type that user's password. When you edit a saved connection, leaving it empty keeps the saved password.</p>
+<p><strong>8:</strong> Click <strong>Test</strong> to try the values before saving.</p>
+<p><strong>9:</strong> Click <strong>Save</strong>, then <strong>Restart</strong> in the box that opens. As with Home Assistant, the restart stops playing channels.</p>
+<p>After the restart the <strong>MQTT</strong> row reads <strong>Connected</strong>, the log says <code>MQTT connected successfully</code>, and the startup line ends with <code>MQTT connected</code>. In Home Assistant, a <strong>Sonorium</strong> device appears under <strong>Settings › Devices &amp; services › MQTT</strong>, with entities for every channel.</p>
+<p><strong>Dashboard cards</strong> are added to Home Assistant automatically when both Home Assistant and MQTT are linked. When they can't be added, <strong>Settings › Connection</strong> says why and offers the card file to download. See <a href="docs.html?page=Dashboard-Cards">Dashboard Cards</a>.</p>
+<hr />
+<h2 id="running-without-host-networking">Running without host networking</h2>
+<p>Some hosts can't use <code>network_mode: host</code> (for example Docker Desktop on Windows or macOS). Sonorium then works with these limits:</p>
+<ul>
+<li>Publish both ports with a <code>ports:</code> section instead of <code>network_mode: host</code>:
+  <code>yaml
+      ports:
+        - "8008:8008"
+        - "8808:8808"</code></li>
+<li>The network scan finds nothing. Add each speaker by its address with <strong>Add speaker</strong> on <strong>Settings › Speakers</strong> (see <a href="docs.html?page=Speakers#how-to-add-a-speaker-by-its-address">How to add a speaker by its address</a>), or link Home Assistant and use its speakers.</li>
+<li>Speakers must be given the host's address, not the container's. Set it on <strong>Settings › Advanced › Stream URL</strong>, for example <code>http://192.0.2.10:8008</code>. See <a href="docs.html?page=Advanced-Settings#stream-url">Stream URL</a>.</li>
+<li><code>sonorium.local</code> isn't announced; use the host's address.</li>
+</ul>
+<p>On Windows, the <a href="getting-started-windows.html">Windows</a> version avoids these limits.</p>
+<hr />
+<h2 id="updating">Updating</h2>
+<pre><code class="language-bash">cd sonorium
+docker compose pull
+docker compose up -d
+</code></pre>
+<p><code>pull</code> downloads the newest image for the tag in your compose file; <code>up -d</code> replaces the container. Your folders are untouched: settings, channels, themes and accounts carry over. Channels that were playing are stopped by the swap and need <strong>Play</strong> again.</p>
+<p>The version you run is shown at the bottom left of Sonorium's menu, next to the install type (<strong>Docker</strong>). Release notes: <a href="https://github.com/synssins/sonorium#whats-new">What's new</a>.</p>
+<p>To stay on one version, use its number as the tag (<code>ghcr.io/synssins/sonorium:1.7.1</code>). To go back to an earlier version, change the tag and run the two commands again.</p>
+<hr />
+<h2 id="uninstalling">Uninstalling</h2>
+<pre><code class="language-bash">cd sonorium
+docker compose down
+</code></pre>
+<p>This stops and removes the container. Your <code>config</code> and <code>media</code> folders stay; starting again with <code>docker compose up -d</code> brings everything back. To remove Sonorium completely, also delete the <code>sonorium</code> folder and the image:</p>
+<pre><code class="language-bash">docker image rm ghcr.io/synssins/sonorium:latest
+</code></pre>
+<p>If you linked MQTT, Sonorium's device stays in Home Assistant as unavailable; delete it under <strong>Settings › Devices &amp; services › MQTT</strong>.</p>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>What to check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The page doesn't open</td>
+<td>The container is running (<code>docker ps</code> lists <code>sonorium</code>); you used port <strong>8008</strong> with <code>http://</code> (not https); no firewall on the host blocks 8008. <code>docker logs sonorium</code> shows why a start failed.</td>
+</tr>
+<tr>
+<td><code>sonorium.local</code> doesn't open</td>
+<td>Use the host's address instead. The log line starting with <code>mDNS:</code> gives the name Sonorium got and its address.</td>
+</tr>
+<tr>
+<td>No speakers are found</td>
+<td><code>network_mode: host</code> is in the compose file; the speakers are on the same network (not a guest or IoT network the host can't see). Click <strong>Rescan network</strong> on <strong>Settings › Speakers</strong>, or add the speaker by its address.</td>
+</tr>
+<tr>
+<td>A speaker is listed but stays silent</td>
+<td>The speaker can reach <code>http://&lt;host address&gt;:8008</code>. With several network cards on the host, set the address on <strong>Settings › Advanced › Stream URL</strong>.</td>
+</tr>
+<tr>
+<td>Permission errors in the log</td>
+<td><code>PUID</code>/<code>PGID</code> match the owner of the two folders, or the folders are writable by that user.</td>
+</tr>
+<tr>
+<td><code>Segmentation fault</code> or <code>Illegal instruction</code> at start</td>
+<td>The host's CPU type in a virtual machine; see <a href="docs.html?page=Requirements#virtual-machines">Requirements</a>.</td>
+</tr>
+<tr>
+<td>Forgotten password</td>
+<td><a href="docs.html?page=Sign-in-and-Users#forgotten-password">Forgotten password</a>.</td>
+</tr>
+<tr>
+<td>Anything else</td>
+<td><strong>Settings › Logs</strong> in the web UI, or <code>docker logs sonorium</code>. See <a href="docs.html?page=Troubleshooting">Troubleshooting</a>.</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="whats-next">What's next</h2>
+<p>Sonorium is running. The rest happens in the web UI and is the same on every install:</p>
+<ol>
+<li><a href="docs.html?page=Speakers#how-to-turn-a-speaker-on">Turn on your speakers</a>: Sonorium lists every speaker it finds, but uses only the ones you turn on.</li>
+<li><a href="docs.html?page=Channels#how-to-make-a-channel">Make your first channel</a> and <a href="docs.html?page=Channels#how-to-play-and-stop-a-channel">play it</a>.</li>
+<li><a href="docs.html?page=Themes">Themes</a>: the bundled themes, making your own and <a href="docs.html?page=Theme-Editor#how-to-add-sound-files">adding sound files</a>.</li>
+<li><a href="docs.html?page=Presets">Presets</a>, <a href="docs.html?page=Sequences-and-Playlists">Sequences and Playlists</a>: different versions of a theme, and channels that change over time.</li>
+<li><a href="docs.html?page=Sign-in-and-Users">Sign-in and Users</a>: add the people in your home.</li>
+</ol>
+<p>All of Sonorium's documentation starts at <a href="docs.html">Home</a>.</p>
+        <p class="doc-source">This page is also in the <a href="https://github.com/synssins/sonorium/wiki/Getting-Started-Docker" target="_blank">GitHub wiki</a>.</p>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo"><img src="images/icon.png" alt="Sonorium"><span>Sonorium</span></div>
+            <div class="footer-links">
+                <a href="getting-started.html">Get Started</a>
+                <a href="getting-started-home-assistant.html">Home Assistant</a>
+                <a href="getting-started-docker.html">Docker</a>
+                <a href="getting-started-windows.html">Windows</a>
+                <a href="docs.html">Docs</a>
+                <a href="api.html">API</a>
+                <a href="plugin-development.html">Plugin Development</a>
+                <a href="theme-format.html">Theme Format</a>
+                <a href="faq.html">FAQ</a>
+                <a href="privacy/">Privacy</a>
+                <a href="https://github.com/synssins/sonorium/issues" target="_blank">Issues</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
+            </div>
+            <div class="footer-credit">Originally based on <a href="https://github.com/fmtr/amniotic" target="_blank">Amniotic</a> by fmtr · <a href="https://github.com/synssins/sonorium/blob/main/LICENSE.md" target="_blank">PolyForm Noncommercial 1.0.0</a></div>
+        </div>
+    </footer>
+</body>
+</html>

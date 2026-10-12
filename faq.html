@@ -21,13 +21,16 @@
                 <a href="index.html#features">Features</a>
                 <a href="faq.html">FAQ</a>
                 <a href="docs.html">Docs</a>
+                <a href="api.html">API</a>
+                <a href="plugin-development.html">Plugin Development</a>
+                <a href="theme-format.html">Theme Format</a>
                 <a href="https://github.com/synssins/sonorium" target="_blank" class="btn btn-primary">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                     GitHub
                 </a>
             </div>
-            <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('show')">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <button class="mobile-menu-btn" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </button>
         </div>
     </nav>
@@ -53,7 +56,7 @@
                     <li><strong>Unassigned tracks:</strong> Tracks in the Theme Editor's Unassigned section don't play. Pick a Mode or drag them into a section</li>
                     <li><strong>Device muted:</strong> Physical speaker is muted</li>
                 </ul>
-                <p>Try playing to a different speaker to isolate the issue. Check the Sonorium logs for errors.</p>
+                <p>Try playing to a different speaker to narrow it down, and check <strong>Settings › Logs</strong>. More in <a href="docs.html?page=Troubleshooting" style="color: var(--accent-primary);">Troubleshooting</a>.</p>
             </div></div>
         </div>
 
@@ -69,7 +72,7 @@
                     <li>Check they aren't disabled in Sonorium Settings</li>
                     <li>In Docker, click <strong>Rescan network</strong> on Settings → Speakers</li>
                 </ul>
-                <p>Speakers must support HTTP audio streaming (Chromecast, Sonos, DLNA work great).</p>
+                <p>Speakers Sonorium finds are switched off until you turn them on on <strong>Settings › Speakers</strong>. See <a href="docs.html?page=Speakers" style="color: var(--accent-primary);">Speakers</a>.</p>
             </div></div>
         </div>
 
@@ -98,7 +101,7 @@
                 <ul>
                     <li><strong>Intermittent:</strong> <em>Interval</em> sets the wait between plays. For occasional sounds like thunder or bird calls, try 20-40%.</li>
                     <li><strong>In an Intermittent group:</strong> how fast a track's weight wears off. Higher comes back sooner; lower plays less often.</li>
-                    <li><strong>Ebb &amp; Flow:</strong> Duration increases or decreases the amount of time the track is at a value, while the Rise increases or decreases the speed at which the track reaches that value. Before 1.6.1 the Duration slider was called Interval.</li>
+                    <li><strong>Ebb &amp; Flow:</strong> Duration increases or decreases the amount of time the track is at a value, while the Rise increases or decreases the speed at which the track reaches that value.</li>
                 </ul>
             </div></div>
         </div>
@@ -156,7 +159,7 @@
                     <li><strong>Presets:</strong> turn linked files on and other tracks off, like rain that mutes the crickets. A preset that turns a linked file on shows ⚭.</li>
                 </ul>
                 <p>Example: a Campsite theme links rain from a Rainy Day theme. Its "Rain" preset turns the rain on and mutes the crickets. Pick it on a channel and the rain fades in while the crickets fade out.</p>
-                <p>Intrusion groups are retired in 1.6.1: a linked file is an ordinary file that can sit in any section or group. Exports copy linked files in, so a shared theme is complete.</p>
+                <p>A linked file can sit in any section or group. Exports copy linked files in, so a shared theme is complete.</p>
             </div></div>
         </div>
 
@@ -187,7 +190,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>New in 1.6.1, they let a channel change over time.</p>
+                <p>They let a channel change over time.</p>
                 <ul>
                     <li><strong>Sequence:</strong> plays presets of this theme in the order you choose, gliding from one to the next. Marked with the sequence icon (square, triangle, circle). For example, a mild summer storm that becomes a heavy one.</li>
                     <li><strong>Playlist:</strong> themes that play one after another on a channel: each entry is a theme, with a preset or sequence if you want one, played in order or shuffled, for a random time in the playlist's range, once or on repeat.</li>
@@ -214,11 +217,10 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>Yes! Any speaker that's a <code>media_player</code> in Home Assistant and supports HTTP streaming:</p>
+                <p>In the Home Assistant app, any <code>media_player</code> in Home Assistant that plays an internet audio stream. The Docker version also finds these on your network:</p>
                 <ul>
                     <li><strong>Sonos:</strong> Full support</li>
                     <li><strong>Google/Chromecast:</strong> Works great</li>
-                    <li><strong>Amazon Echo:</strong> Requires extra setup</li>
                     <li><strong>DLNA/UPnP:</strong> Most network speakers work</li>
                     <li><strong>AirPlay:</strong> Works with AirPlay devices</li>
                 </ul>
@@ -243,26 +245,57 @@
 
         <div class="faq-item">
             <div class="faq-question" onclick="toggleFaq(this)">
-                <span>Will standalone apps support network speakers?</span>
+                <span>Which install should I use?</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p><strong>Docker does already.</strong> The Docker image (<code>ghcr.io/synssins/sonorium:latest</code>) finds Google Cast, Sonos, DLNA, AirPlay, LinkPlay and HEOS speakers on your network, with or without Home Assistant. See <a href="getting-started.html#docker" style="color: var(--accent-primary);">Getting Started</a>.</p>
-                <p>Network streaming is on the roadmap for the standalone apps. Currently the Windows app plays through local PC audio. macOS and Linux apps are in development.</p>
+                <p>There are three, each with a step-by-step guide:</p>
+                <ul>
+                    <li><a href="getting-started-home-assistant.html" style="color: var(--accent-primary);">Home Assistant app</a>: you run Home Assistant OS or Supervised. Plays on Home Assistant's speakers, and every Home Assistant user can open it from the sidebar.</li>
+                    <li><a href="getting-started-docker.html" style="color: var(--accent-primary);">Docker</a>: you have a Linux server or NAS with Docker, with or without Home Assistant. Finds Google Cast, Sonos, DLNA, AirPlay, LinkPlay and HEOS speakers on your network.</li>
+                    <li><a href="getting-started-windows.html" style="color: var(--accent-primary);">Windows</a>: Sonorium on a Windows PC.</li>
+                </ul>
+                <p>A comparison is on <a href="getting-started.html" style="color: var(--accent-primary);">Getting Started</a>.</p>
             </div></div>
         </div>
-
         <div class="faq-item">
             <div class="faq-question" onclick="toggleFaq(this)">
-                <span>Is Sonorium really free?</span>
+                <span>Is Sonorium free?</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-answer"><div class="faq-answer-content">
-                <p>Yes. Sonorium is free, and its source code is public. Its licence is being updated; the current terms are in the <a href="https://github.com/synssins/sonorium" target="_blank" style="color: var(--accent-primary);">repository on GitHub</a>. It's a fork of <a href="https://github.com/fmtr/amniotic" target="_blank" style="color: var(--accent-primary);">Amniotic</a> by fmtr.</p>
-                <p>Source code is on <a href="https://github.com/synssins/sonorium" target="_blank" style="color: var(--accent-primary);">GitHub</a>. Contributions welcome!</p>
+                <p>Yes, for noncommercial use. Sonorium is licensed under the <a href="https://github.com/synssins/sonorium/blob/main/LICENSE.md" target="_blank" style="color: var(--accent-primary);">PolyForm Noncommercial License 1.0.0</a>: you can use, change and share it for any noncommercial purpose, at home or in a charity, school or public institution. Commercial use needs a separate licence.</p>
+                <p>The source code is on <a href="https://github.com/synssins/sonorium" target="_blank" style="color: var(--accent-primary);">GitHub</a>. Sonorium was originally based on <a href="https://github.com/fmtr/amniotic" target="_blank" style="color: var(--accent-primary);">Amniotic</a> by fmtr, and has since been rewritten.</p>
             </div></div>
         </div>
-
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Do I have to sign in?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-content">
+                <p>On a new Docker install, yes: the first visit creates the admin account, and every browser signs in after that. In the Home Assistant app, Home Assistant's sidebar opens Sonorium without a second sign-in, and Home Assistant's users are Sonorium's users. Speakers never sign in.</p>
+                <p>An install updated from a version before 1.7.0 stays open until an admin turns on <strong>Require login</strong>. See <a href="docs.html?page=Sign-in-and-Users" style="color: var(--accent-primary);">Sign-in and Users</a>.</p>
+            </div></div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Can Home Assistant or a script make announcements?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-content">
+                <p>Yes. Home Assistant (each channel's notify entity), MQTT, Node-RED or any program that can send a web request with a key can send a chime, words to speak, or both. Sonorium plays them on the channels named, and a playing channel gets quieter while they play. The other system decides when to announce; each channel has an <strong>Announcements</strong> switch to turn them off. See <a href="docs.html?page=Announcements" style="color: var(--accent-primary);">Announcements</a>.</p>
+            </div></div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Is there a phone app?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-content">
+                <p>The Sonorium app for Android links to your Sonorium with a QR code: <strong>Link App</strong> on the Channels page. On any phone, the web UI also works in the browser. See <a href="docs.html?page=Link-App" style="color: var(--accent-primary);">Link App</a>.</p>
+            </div></div>
+        </div>
         <div class="faq-item">
             <div class="faq-question" onclick="toggleFaq(this)">
                 <span>How do I report a bug?</span>
@@ -284,12 +317,20 @@
         <div class="footer-content">
             <div class="footer-logo"><img src="images/icon.png" alt="Sonorium"><span>Sonorium</span></div>
             <div class="footer-links">
-                <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
-                <a href="docs.html">Docs</a>
                 <a href="getting-started.html">Get Started</a>
+                <a href="getting-started-home-assistant.html">Home Assistant</a>
+                <a href="getting-started-docker.html">Docker</a>
+                <a href="getting-started-windows.html">Windows</a>
+                <a href="docs.html">Docs</a>
+                <a href="api.html">API</a>
+                <a href="plugin-development.html">Plugin Development</a>
+                <a href="theme-format.html">Theme Format</a>
+                <a href="faq.html">FAQ</a>
                 <a href="privacy/">Privacy</a>
+                <a href="https://github.com/synssins/sonorium/issues" target="_blank">Issues</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
             </div>
-            <div class="footer-credit">Fork of <a href="https://github.com/fmtr/amniotic" target="_blank">Amniotic</a> by fmtr</div>
+            <div class="footer-credit">Originally based on <a href="https://github.com/fmtr/amniotic" target="_blank">Amniotic</a> by fmtr · <a href="https://github.com/synssins/sonorium/blob/main/LICENSE.md" target="_blank">PolyForm Noncommercial 1.0.0</a></div>
         </div>
     </footer>
 

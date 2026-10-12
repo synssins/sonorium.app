@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started with the Home Assistant app - Sonorium</title>
+    <meta name="description" content="This page installs Sonorium as a Home Assistant app (an add-on), from the add-on store to the Sonorium web UI open in Home Assistant&#x27;s sidebar. When you&#x27;re done">
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Sonorium"></a>
+            <div class="nav-links">
+                <a href="index.html#downloads">Downloads</a>
+                <a href="getting-started.html">Get Started</a>
+                <a href="index.html#features">Features</a>
+                <a href="faq.html">FAQ</a>
+                <a href="docs.html">Docs</a>
+                <a href="api.html">API</a>
+                <a href="plugin-development.html">Plugin Development</a>
+                <a href="theme-format.html">Theme Format</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Getting Started with the Home Assistant app</h1>
+        <p>Sonorium as a Home Assistant app: install, set up, update and remove.</p>
+    </header>
+
+    <main class="content-container docs-content doc-page">
+<p>This page installs Sonorium as a Home Assistant app (an add-on), from the add-on store to the Sonorium web UI open in Home Assistant's sidebar. When you're done, <a href="#whats-next">What's next</a> sends you to Sonorium's documentation to turn on speakers and play your first channel.</p>
+<p>The Home Assistant app runs inside Home Assistant, the way an app runs on a phone. It plays on the speakers Home Assistant already knows (its <code>media_player</code> entities), uses Home Assistant's floors and areas, lets every Home Assistant user in with the role they have there, and gives Home Assistant switches, selects and dashboard cards for every channel.</p>
+<p>Other ways to run Sonorium: <a href="getting-started-docker.html">Docker</a> · <a href="getting-started-windows.html">Windows</a> · <a href="getting-started.html">Compare them</a></p>
+<hr />
+<h2 id="what-you-need">What you need</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Home Assistant OS or Supervised</strong></td>
+<td>Apps (add-ons) need Home Assistant's Supervisor. Home Assistant Container and Core installs don't have it: use <a href="getting-started-docker.html">Docker</a> there and link it to Home Assistant.</td>
+</tr>
+<tr>
+<td><strong>A 64-bit machine</strong></td>
+<td><strong>amd64</strong> (x86-64) or <strong>aarch64</strong> (64-bit ARM, such as a Raspberry Pi 4 or 5, or Home Assistant Green and Yellow).</td>
+</tr>
+<tr>
+<td><strong>The Mosquitto broker app</strong></td>
+<td>Sonorium sends its controls to Home Assistant over MQTT and does not start without a broker. The next section installs it.</td>
+</tr>
+<tr>
+<td><strong>Speakers in Home Assistant</strong></td>
+<td>Any <code>media_player</code> entity: Google Cast (Chromecast, Nest, Google Home), Sonos, Music Assistant players and most smart speakers with a Home Assistant integration.</td>
+</tr>
+<tr>
+<td><strong>Virtual machines</strong></td>
+<td>If Home Assistant runs in a virtual machine (Proxmox and others), set the VM's CPU type to <strong>host</strong>. See <a href="docs.html?page=Requirements#virtual-machines">Requirements</a>.</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="1-install-the-mosquitto-broker">1. Install the Mosquitto broker</h2>
+<p>Skip this if <strong>Mosquitto broker</strong> is already installed and running.</p>
+<ol>
+<li>In Home Assistant, open <strong>Settings › Add-ons</strong> and click <strong>Add-on Store</strong> at the bottom right.</li>
+<li>Search for "Mosquitto" and click <strong>Mosquitto broker</strong>.</li>
+<li>Click <strong>Install</strong> and wait for it to finish.</li>
+<li>Turn on <strong>Start on boot</strong>.</li>
+<li>Click <strong>Start</strong>.</li>
+<li>Open <strong>Settings › Devices &amp; services</strong>. Home Assistant shows the <strong>MQTT</strong> integration as discovered. Click <strong>Configure</strong>, then <strong>Submit</strong>.</li>
+</ol>
+<p>Sonorium finds this broker automatically.</p>
+<p><strong>Using another MQTT broker?</strong> Leave Mosquitto out and fill in the <code>sonorium__mqtt_host</code> options in <a href="#configuration">Configuration</a> instead.</p>
+<hr />
+<h2 id="2-add-the-sonorium-repository">2. Add the Sonorium repository</h2>
+<p>Home Assistant's store lists apps from repositories. Sonorium's repository has to be added once.</p>
+<p><strong>With the button:</strong> click this button, which opens your Home Assistant with the repository filled in, then click <strong>Add</strong>:</p>
+<p><a href="https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fsynssins%2Fsonorium"><img loading="lazy" alt="Add the Sonorium repository to Home Assistant" src="https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg" ></a></p>
+<p><strong>By hand:</strong></p>
+<ol>
+<li>Open <strong>Settings › Add-ons › Add-on Store</strong>.</li>
+<li>Click the <strong>⋮</strong> menu at the top right and pick <strong>Repositories</strong>.</li>
+<li>Paste <code>https://github.com/synssins/sonorium</code> and click <strong>Add</strong>.</li>
+<li>Click <strong>Close</strong>.</li>
+</ol>
+<p>The store now has a <strong>Sonorium</strong> section. If it doesn't show, reload the page.</p>
+<hr />
+<h2 id="3-install-sonorium">3. Install Sonorium</h2>
+<ol>
+<li>In <strong>Settings › Add-ons › Add-on Store</strong>, find the <strong>Sonorium</strong> section and click <strong>Sonorium</strong>.</li>
+<li>Click <strong>Install</strong>. Home Assistant downloads a ready-made image for your machine; this takes a few minutes.</li>
+<li>Turn on <strong>Start on boot</strong>, so Sonorium starts with Home Assistant.</li>
+<li>Leave <strong>Show in sidebar</strong> on: the sidebar entry signs Home Assistant users in to Sonorium (see <a href="#5-open-the-web-ui">Open the web UI</a>).</li>
+</ol>
+<p>Don't start it yet if you want to change an option first; the defaults work for most homes.</p>
+<hr />
+<h2 id="configuration">Configuration</h2>
+<p>The add-on's <strong>Configuration</strong> tab holds Sonorium's start-up options. After changing one, click <strong>Save</strong> and restart the add-on (<strong>Info</strong> tab › <strong>Restart</strong>).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>log_level</code></td>
+<td><code>info</code></td>
+<td>How much the log says. <code>info</code> shows a start-up summary, warnings and errors. <code>debug</code> adds detail per theme and per speaker, and library versions. The other choices are <code>trace</code>, <code>notice</code>, <code>warning</code>, <code>error</code> and <code>fatal</code>.</td>
+</tr>
+<tr>
+<td><code>sonorium__stream_url</code></td>
+<td><code>auto</code></td>
+<td>The address speakers fetch the sound from. <code>auto</code> uses Home Assistant's address on your network with port 8008. Set it only when speakers can't reach that address, for example <code>http://192.0.2.5:8008</code>.</td>
+</tr>
+<tr>
+<td><code>sonorium__path_audio</code></td>
+<td><code>/media/sonorium</code></td>
+<td>The folder that holds the themes, one folder per theme. It is inside Home Assistant's media folder.</td>
+</tr>
+<tr>
+<td><code>sonorium__max_channels</code></td>
+<td><code>6</code></td>
+<td>How many channels can play (or be listened to in a browser) at the same time, from 1 to 10. Each playing channel uses some processor time, which matters on a Raspberry Pi. See <a href="docs.html?page=Channels">Channels</a>.</td>
+</tr>
+<tr>
+<td><code>sonorium__mqtt_host</code></td>
+<td><code>auto</code></td>
+<td><code>auto</code> uses the Mosquitto broker app. Type a host name or address only for another broker.</td>
+</tr>
+<tr>
+<td><code>sonorium__mqtt_port</code></td>
+<td><code>0</code></td>
+<td>That broker's port. <code>0</code> means 1883.</td>
+</tr>
+<tr>
+<td><code>sonorium__mqtt_username</code>, <code>sonorium__mqtt_password</code></td>
+<td>empty</td>
+<td>That broker's login.</td>
+</tr>
+<tr>
+<td><code>web_ui_only_through_ha</code></td>
+<td><code>false</code></td>
+<td><code>true</code> keeps the web UI in Home Assistant's sidebar only. Ports 8008 and 8808 then serve the audio streams, linked phones and keys, but not the web UI.</td>
+</tr>
+<tr>
+<td><code>bypass_login</code></td>
+<td><code>false</code></td>
+<td>Recovery only. <code>true</code> opens the web UI on the direct ports without a sign-in. See <a href="docs.html?page=Sign-in-and-Users#forgotten-password">Forgotten password</a>.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="network">Network</h3>
+<p>The <strong>Network</strong> section of the <strong>Configuration</strong> tab maps Sonorium's ports to the Home Assistant machine:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Container port</th>
+<th>Host port</th>
+<th>Serves</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>8080/tcp</code></td>
+<td><strong>8008</strong></td>
+<td>The web UI, the API and the audio streams, over HTTP. Speakers fetch the sound here, so this port must stay mapped.</td>
+</tr>
+<tr>
+<td><code>8808/tcp</code></td>
+<td><strong>8808</strong></td>
+<td>The web UI and the API over HTTPS, for the Sonorium app for Android. The certificate is made by Sonorium, so a browser warns about it; the app checks its fingerprint instead.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Change a host port only if another app already uses it. Home Assistant's sidebar reaches Sonorium on a separate internal port that is never mapped.</p>
+<hr />
+<h2 id="4-start-sonorium">4. Start Sonorium</h2>
+<ol>
+<li>On the add-on's <strong>Info</strong> tab, click <strong>Start</strong>.</li>
+<li>Open the <strong>Log</strong> tab and click <strong>Refresh</strong> after a few seconds.</li>
+</ol>
+<p>A good start includes lines like these:</p>
+<pre><code>Starting Sonorium addon...
+Auto-detecting MQTT from Supervisor services...
+MQTT auto-detected: core-mosquitto:1883
+Configuration:
+  Stream URL: auto
+  Audio Path: /media/sonorium
+  Max Channels: 6
+Python imports OK
+Launching Sonorium...
+Users: new install, an admin account is made on the first visit
+  MQTT connected successfully
+Sonorium 1.7.1 (HA App) ready: 3 themes, 12 speakers detected, 0 channels, MQTT connected
+</code></pre>
+<ul>
+<li><strong>3 themes</strong> are the bundled ones: Sleigh Ride, Tavern and A Rainy Day... Or is it?</li>
+<li><strong>speakers detected</strong> is the number of <code>media_player</code> entities Sonorium found in Home Assistant.</li>
+<li><strong>MQTT connected</strong> means the broker was found. Within a few seconds a <strong>Sonorium</strong> device appears in Home Assistant under <strong>Settings › Devices &amp; services › MQTT</strong>.</li>
+</ul>
+<p>If the log says <code>No MQTT broker is registered with the Supervisor yet. Waiting up to 2 minutes for the Mosquitto broker add-on to start...</code>, Sonorium is waiting for Mosquitto, which is normal while Home Assistant boots. If Mosquitto never comes, the log says what to check, Sonorium doesn't start, and its sidebar page shows <strong>502: Bad Gateway</strong>.</p>
+<hr />
+<h2 id="5-open-the-web-ui">5. Open the web UI</h2>
+<p>Click <strong>Sonorium</strong> in Home Assistant's sidebar. Every Home Assistant user sees it there and is signed in already: Home Assistant told Sonorium who they are. The <strong>Open Web UI</strong> button on the add-on's <strong>Info</strong> tab opens the same web UI on port 8008 in a new tab.</p>
+<p>Sonorium opens on the <strong>Channels</strong> page. The bottom left of its menu shows the version and <strong>HA App</strong>.</p>
+<h3 id="who-can-do-what">Who can do what</h3>
+<p>Home Assistant's users are Sonorium's users, with the role they have in Home Assistant:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>In Home Assistant</th>
+<th>In Sonorium</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Owner, or in the Administrators group</td>
+<td><strong>Admin</strong>: everything, including settings, users and keys</td>
+</tr>
+<tr>
+<td>User, Read-only</td>
+<td><strong>User</strong>: plays and changes channels, playlists and sequences; sees themes and speakers</td>
+</tr>
+<tr>
+<td>Switched off ("Can log in" off) or removed</td>
+<td>Signed out; their phones and keys stop working</td>
+</tr>
+</tbody>
+</table></div>
+<p>A role change in Home Assistant applies within a minute. Passwords stay in Home Assistant: Sonorium keeps no password for these users. See <a href="docs.html?page=Sign-in-and-Users">Sign-in and Users</a>.</p>
+<h3 id="opening-sonorium-outside-home-assistant">Opening Sonorium outside Home Assistant</h3>
+<p>On any device on your network, <code>http://&lt;Home Assistant's address&gt;:8008</code> opens Sonorium directly, for example <code>http://192.0.2.5:8008</code>. On a new install this asks for a sign-in: use your <strong>Home Assistant</strong> username and password. Sonorium passes them to Home Assistant to check and never keeps them.</p>
+<p>After an update from a version before 1.7.0, the direct port stays open without a sign-in until an admin turns on <strong>Require login</strong> with the banner at the top of the page. See <a href="docs.html?page=Sign-in-and-Users#require-login">Require login</a>.</p>
+<p>To keep the web UI in the sidebar only, set <code>web_ui_only_through_ha</code> to <code>true</code>.</p>
+<hr />
+<h2 id="speakers-home-assistant-and-mqtt">Speakers, Home Assistant and MQTT</h2>
+<ul>
+<li><strong>Speakers:</strong> every <code>media_player</code> in Home Assistant is listed on <strong>Settings › Speakers</strong>, by Home Assistant's floors and areas, and switched off. Sonorium uses only the ones you turn on: <a href="docs.html?page=Speakers#how-to-turn-a-speaker-on">How to turn a speaker on</a>.</li>
+<li><strong>Floors and areas</strong> come from Home Assistant and are read-only in Sonorium; change them in Home Assistant. See <a href="docs.html?page=Speakers#floors-and-areas">Floors and areas</a>.</li>
+<li><strong>Home Assistant's controls:</strong> each channel gets entities over MQTT (play switch, theme, preset and playlist selects, volume, announcements), and Sonorium's dashboard cards are added to Home Assistant automatically. See <a href="docs.html?page=Home-Assistant-Integration">Home Assistant Integration</a>, <a href="docs.html?page=MQTT-Entities">MQTT Entities</a> and <a href="docs.html?page=Dashboard-Cards">Dashboard Cards</a>.</li>
+<li><strong>Announcements:</strong> each channel also gets a notify entity that speaks a message with Home Assistant's text to speech. See <a href="docs.html?page=Announcements">Announcements</a>.</li>
+</ul>
+<p>The <strong>Connection</strong> settings page is not in the Home Assistant app: Home Assistant and the broker are found automatically.</p>
+<hr />
+<h2 id="where-your-files-are">Where your files are</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>What</th>
+<th>Where</th>
+<th>Reach it from</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Themes and sound files</td>
+<td><code>/media/sonorium</code></td>
+<td>The <strong>media</strong> share of the Samba share app, or the upload in Sonorium's Theme Editor.</td>
+</tr>
+<tr>
+<td>Settings, channels, playlists, plugins, keys</td>
+<td><code>addon_configs/&lt;id&gt;_sonorium/sonorium</code></td>
+<td>The <strong>addon_configs</strong> share of the Samba share app.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Home Assistant backups include the add-on's settings when the add-on is in the backup, and the themes when the <strong>Media</strong> folder is.</p>
+<hr />
+<h2 id="updating">Updating</h2>
+<p>When a new version is out, Home Assistant shows an update for Sonorium under <strong>Settings</strong> (and on the add-on's <strong>Info</strong> tab). Click <strong>Update</strong>. Its release notes are on the add-on's <strong>Changelog</strong> tab.</p>
+<p>The update replaces the program only: themes, channels, settings and accounts stay. Playing channels stop during the update; press <strong>Play</strong> to start them again.</p>
+<hr />
+<h2 id="uninstalling">Uninstalling</h2>
+<ol>
+<li>Open <strong>Settings › Add-ons › Sonorium</strong>.</li>
+<li>Click <strong>Uninstall</strong>.</li>
+</ol>
+<p>When Home Assistant offers to delete the add-on's data as well, choosing it removes Sonorium's settings folder (channels, playlists, accounts, keys). The themes in <code>/media/sonorium</code> are your files and stay; delete that folder yourself if you no longer want them. The <strong>Sonorium</strong> device stays in Home Assistant as unavailable; delete it under <strong>Settings › Devices &amp; services › MQTT</strong>.</p>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>What to check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The sidebar shows <strong>502: Bad Gateway</strong></td>
+<td>Sonorium isn't running. Read the add-on's <strong>Log</strong> tab: most often the Mosquitto broker app isn't started, or <strong>Start on boot</strong> is off for it.</td>
+</tr>
+<tr>
+<td><code>Segmentation fault</code>, or <code>FAILED: numpy import</code> and a line about SSE4.2</td>
+<td>Home Assistant runs in a VM with a basic CPU type. Set it to <strong>host</strong>: <a href="docs.html?page=Requirements#virtual-machines">Requirements</a>.</td>
+</tr>
+<tr>
+<td>No speakers in the channel editor</td>
+<td>Speakers are listed on <strong>Settings › Speakers</strong> but switched off: <a href="docs.html?page=Speakers#how-to-turn-a-speaker-on">turn them on</a>.</td>
+</tr>
+<tr>
+<td>A speaker is picked but stays silent</td>
+<td>The speaker must reach Home Assistant's address on port 8008. On a network with several subnets or VLANs, set <code>sonorium__stream_url</code>. See <a href="docs.html?page=Troubleshooting">Troubleshooting</a>.</td>
+</tr>
+<tr>
+<td>No Sonorium entities in Home Assistant</td>
+<td>The <strong>MQTT</strong> integration is set up (step 6 of <a href="#1-install-the-mosquitto-broker">Install the Mosquitto broker</a>), and the log's start-up line ends with <code>MQTT connected</code>.</td>
+</tr>
+<tr>
+<td>Port 8008 doesn't open</td>
+<td>The <strong>Network</strong> section still maps <code>8080/tcp</code> to a host port.</td>
+</tr>
+<tr>
+<td>Anything else</td>
+<td><strong>Settings › Logs</strong> in Sonorium, or the add-on's <strong>Log</strong> tab. See <a href="docs.html?page=Troubleshooting">Troubleshooting</a>.</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="whats-next">What's next</h2>
+<p>Sonorium is running. The rest happens in the web UI and is the same on every install:</p>
+<ol>
+<li><a href="docs.html?page=Speakers#how-to-turn-a-speaker-on">Turn on your speakers</a>: Sonorium lists every speaker Home Assistant has, but uses only the ones you turn on.</li>
+<li><a href="docs.html?page=Channels#how-to-make-a-channel">Make your first channel</a> and <a href="docs.html?page=Channels#how-to-play-and-stop-a-channel">play it</a>.</li>
+<li><a href="docs.html?page=Themes">Themes</a>: the bundled themes, making your own and <a href="docs.html?page=Theme-Editor#how-to-add-sound-files">adding sound files</a>.</li>
+<li><a href="docs.html?page=Presets">Presets</a>, <a href="docs.html?page=Sequences-and-Playlists">Sequences and Playlists</a>: different versions of a theme, and channels that change over time.</li>
+<li><a href="docs.html?page=Home-Assistant-Integration">Home Assistant Integration</a> and <a href="docs.html?page=Automation-Examples">Automation Examples</a>: control Sonorium from Home Assistant.</li>
+</ol>
+<p>All of Sonorium's documentation starts at <a href="docs.html">Home</a>.</p>
+        <p class="doc-source">This page is also in the <a href="https://github.com/synssins/sonorium/wiki/Getting-Started-Home-Assistant" target="_blank">GitHub wiki</a>.</p>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo"><img src="images/icon.png" alt="Sonorium"><span>Sonorium</span></div>
+            <div class="footer-links">
+                <a href="getting-started.html">Get Started</a>
+                <a href="getting-started-home-assistant.html">Home Assistant</a>
+                <a href="getting-started-docker.html">Docker</a>
+                <a href="getting-started-windows.html">Windows</a>
+                <a href="docs.html">Docs</a>
+                <a href="api.html">API</a>
+                <a href="plugin-development.html">Plugin Development</a>
+                <a href="theme-format.html">Theme Format</a>
+                <a href="faq.html">FAQ</a>
+                <a href="privacy/">Privacy</a>
+                <a href="https://github.com/synssins/sonorium/issues" target="_blank">Issues</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
+            </div>
+            <div class="footer-credit">Originally based on <a href="https://github.com/fmtr/amniotic" target="_blank">Amniotic</a> by fmtr · <a href="https://github.com/synssins/sonorium/blob/main/LICENSE.md" target="_blank">PolyForm Noncommercial 1.0.0</a></div>
+        </div>
+    </footer>
+</body>
+</html>

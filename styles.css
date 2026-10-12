@@ -398,3 +398,41 @@ footer {
 .guide ol { margin: 0.5rem 0 1rem 1.5rem; color: var(--text-secondary); }
 .guide a { color: var(--accent-primary); }
 .guide-shot { display: block; width: 100%; height: auto; margin: 1.25rem 0; border-radius: 8px; border: 1px solid var(--border-color); }
+
+/* Documentation pages (docs.html and the getting-started pages built from the wiki) */
+.docs-page { padding-top: 80px; }
+.docs-sidebar { max-height: calc(100vh - 120px); overflow-y: auto; }
+.docs-toc-btn { display: none; }
+.docs-note { font-size: 0.8rem; color: var(--text-muted); margin: 2rem 0 0; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; }
+.docs-note a { color: var(--accent-primary); }
+.docs-content img { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border-color); margin: 0.5rem 0 1rem; }
+.docs-content .table-wrap { overflow-x: auto; margin: 1rem 0; }
+.docs-content .table-wrap table { margin: 0; }
+.docs-content td code, .docs-content th code { white-space: nowrap; }
+.docs-content h1, .docs-content h2, .docs-content h3, .docs-content h4 { scroll-margin-top: 90px; }
+.docs-content h4 { font-size: 1rem; margin: 1.25rem 0 0.5rem; }
+.docs-content hr { border: none; border-top: 1px solid var(--border-color); margin: 2rem 0; }
+.docs-content blockquote { border-left: 3px solid var(--accent-primary); padding: 0.25rem 1rem; margin: 1rem 0; background: var(--bg-card); border-radius: 0 6px 6px 0; }
+.docs-content blockquote p { margin: 0.5rem 0; }
+.doc-page { max-width: 1000px; }
+.doc-page > h2:first-child { border-top: none; padding-top: 0; }
+.doc-source { margin-top: 3rem; font-size: 0.85rem; color: var(--text-muted); }
+.footer-links { flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+
+@media (max-width: 1150px) {
+    .nav-links { display: none; }
+    .mobile-menu-btn { display: block; }
+}
+
+@media (max-width: 968px) {
+    .docs-layout { padding: 1rem; gap: 1rem; }
+    .docs-sidebar { max-height: none; overflow: visible; }
+    .docs-toc-btn { display: block; width: 100%; padding: 0.75rem 1rem; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 8px; font: inherit; font-weight: 600; text-align: left; cursor: pointer; }
+    .docs-toc { display: none; margin-top: 0.75rem; }
+    .docs-sidebar.open .docs-toc { display: block; }
+    .docs-content h1 { font-size: 1.9rem; }
+    .content-container.doc-page { padding: 2rem 1rem; }
+}
+.docs-content hr + h2 { border-top: none; padding-top: 0; }
+.nav-links a.btn-primary, .nav-links a.btn-primary:hover { color: var(--bg-primary); }
+@media (max-width: 640px) { .docs-content .table-wrap table { min-width: 560px; } }

@@ -1,81 +1,18 @@
-// Fetch addon version from config.yaml
-async function fetchAddonVersion() {
+// The released version, from the add-on's config.yaml (the Home Assistant app and Docker share it)
+async function fetchVersion() {
     try {
         const response = await fetch('https://raw.githubusercontent.com/synssins/sonorium/main/sonorium_addon/config.yaml');
         const text = await response.text();
-        const versionMatch = text.match(/version:\s*"?([^"\n]+)"?/);
-        if (versionMatch) {
-            const version = 'v' + versionMatch[1];
-            const addonVersion = document.getElementById('addon-version');
-            const addonBadge = document.getElementById('addon-version-badge');
-            if (addonVersion) addonVersion.textContent = version;
-            if (addonBadge) addonBadge.textContent = version;
-            // The Docker image is built from the same release, with the same version
-            const dockerVersion = document.getElementById('docker-version');
-            const dockerBadge = document.getElementById('docker-version-badge');
-            if (dockerVersion) dockerVersion.textContent = version;
-            if (dockerBadge) dockerBadge.textContent = version;
-        }
+        const match = text.match(/^version:\s*"?([^"\n]+)"?/m);
+        if (!match) return;
+        const version = 'v' + match[1];
+        ['addon-version', 'addon-version-badge', 'docker-version', 'docker-version-badge'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = version;
+        });
     } catch (e) {
-        console.log('Could not fetch addon version');
+        console.log('Could not fetch the version');
     }
 }
 
-// Fetch Windows app release from GitHub API
-async function fetchAppRelease() {
-    try {
-        const response = await fetch('https://api.github.com/repos/synssins/sonorium/releases');
-        const releases = await response.json();
-        
-        // Find the latest STABLE release with a Windows exe (skip alpha/beta)
-        for (const release of releases) {
-            const version = (release.tag_name || release.name || '').toLowerCase();
-            
-            // Skip alpha and beta releases
-            if (version.includes('alpha') || version.includes('beta')) {
-                continue;
-            }
-            
-            const exeAsset = release.assets.find(a => a.name.endsWith('.exe'));
-            if (exeAsset) {
-                const displayVersion = release.tag_name || release.name;
-                const appVersion = document.getElementById('app-version');
-                const appBadge = document.getElementById('app-version-badge');
-                const windowsBtn = document.getElementById('windows-download-btn');
-                const ctaBtn = document.getElementById('cta-windows-btn');
-                const windowsNote = document.getElementById('windows-note');
-                
-                if (appVersion) appVersion.textContent = displayVersion;
-                if (appBadge) appBadge.textContent = displayVersion;
-                if (windowsBtn) windowsBtn.href = exeAsset.browser_download_url;
-                if (ctaBtn) ctaBtn.href = exeAsset.browser_download_url;
-                if (windowsNote) windowsNote.textContent = 'Stable release • No install required';
-                return;
-            }
-        }
-        
-        // No stable release found - fallback to releases page
-        setFallbackLinks();
-    } catch (e) {
-        console.log('Could not fetch app release');
-        setFallbackLinks();
-    }
-}
-
-function setFallbackLinks() {
-    const windowsBtn = document.getElementById('windows-download-btn');
-    const ctaBtn = document.getElementById('cta-windows-btn');
-    const appVersion = document.getElementById('app-version');
-    const windowsNote = document.getElementById('windows-note');
-    
-    if (windowsBtn) windowsBtn.href = 'https://github.com/synssins/sonorium/releases';
-    if (ctaBtn) ctaBtn.href = 'https://github.com/synssins/sonorium/releases';
-    if (appVersion) appVersion.textContent = 'See Releases';
-    if (windowsNote) windowsNote.textContent = 'View all releases on GitHub';
-}
-
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    fetchAddonVersion();
-    fetchAppRelease();
-});
+document.addEventListener('DOMContentLoaded', fetchVersion);
