@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started with Windows - Sonorium</title>
+    <meta name="description" content="This page installs Sonorium on a Windows PC, from the download to Sonorium&#x27;s web page open in your browser, and explains the tray icon and the settings window.">
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Sonorium"></a>
+            <div class="nav-links">
+                <a href="index.html#downloads">Downloads</a>
+                <a href="getting-started.html">Get Started</a>
+                <a href="index.html#features">Features</a>
+                <a href="faq.html">FAQ</a>
+                <a href="docs.html">Docs</a>
+                <a href="api.html">API</a>
+                <a href="plugin-development.html">Plugin Development</a>
+                <a href="theme-format.html">Theme Format</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Getting Started with Windows</h1>
+        <p>Sonorium on a Windows PC, for your account or as a service.</p>
+    </header>
+
+    <main class="content-container docs-content doc-page">
+<p>This page installs Sonorium on a Windows PC, from the download to Sonorium's web page open in your browser, and explains the tray icon and the settings window. When you're done, <a href="#whats-next">What's next</a> sends you to the Sonorium documentation to turn on speakers and play your first channel.</p>
+<p>Other ways to run Sonorium: <a href="getting-started-home-assistant.html">Home Assistant app</a> · <a href="getting-started-docker.html">Docker</a> · <a href="getting-started.html">Compare them</a></p>
+<p>The Windows app runs Sonorium on a Windows PC, with no Home Assistant needed. It has three parts:</p>
+<ul>
+<li><strong>Sonorium</strong>: the program that mixes the themes and streams them to your speakers. It runs in the background and has no window; you use it through its web page.</li>
+<li><strong>The tray icon</strong>: the Sonorium icon by the clock. Its menu starts, stops and opens Sonorium, and its settings window holds the settings that decide how Sonorium runs on this PC: the port, the folders, the connections and updates.</li>
+<li><strong>The updater</strong>: finds a new version on GitHub, installs it and starts everything again.</li>
+</ul>
+<p>Think of Sonorium as an engine and the tray icon as its dashboard: the dashboard starts and stops the engine and shows how it's running, but what plays is chosen in Sonorium's web page.</p>
+<h2 id="contents">Contents</h2>
+<ol>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#for-me-only-or-for-all-users">For me only, or for all users?</a></li>
+<li><a href="#installing">Installing</a></li>
+<li><a href="#the-first-start">The first start</a></li>
+<li><a href="#the-tray-icon-and-its-menu">The tray icon and its menu</a></li>
+<li><a href="#the-settings-window">The settings window</a></li>
+<li><a href="#starting-stopping-and-restarting">Starting, stopping and restarting</a></li>
+<li><a href="#switching-between-a-service-and-when-i-sign-in">Switching between a service and "When I sign in"</a></li>
+<li><a href="#changing-the-port">Changing the port</a></li>
+<li><a href="#moving-the-themes-or-data-folder">Moving the themes or data folder</a></li>
+<li><a href="#checking-for-and-installing-updates">Checking for and installing updates</a></li>
+<li><a href="#reading-the-logs">Reading the logs</a></li>
+<li><a href="#linking-the-sonorium-app-on-your-phone">Linking the Sonorium app on your phone</a></li>
+<li><a href="#uninstalling">Uninstalling</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#whats-next">What's next</a></li>
+</ol>
+<hr />
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>Windows 10 version 2004 or later, or Windows 11, 64-bit.</li>
+<li>About 335 MB of free disk space (the installer shows the exact amount).</li>
+<li>Speakers on the same network as the PC: Google Cast, Sonos, DLNA, AirPlay, LinkPlay or HEOS. Sonorium finds them on the network.</li>
+<li>Home Assistant and an MQTT broker are optional. With Home Assistant connected, Sonorium can also play to Home Assistant's speakers and use its floors and areas.</li>
+</ul>
+<p>Nothing else needs installing: the installer brings everything Sonorium needs, including its copy of Python, and doesn't change any Python already on the PC.</p>
+<hr />
+<h2 id="for-me-only-or-for-all-users">For me only, or for all users?</h2>
+<p>The installer asks this first. The choice decides where Sonorium is installed and how it can run.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Install for me only</th>
+<th>Install for all users</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Administrator permission</td>
+<td>Not needed</td>
+<td>Needed once, to install</td>
+</tr>
+<tr>
+<td>Installed in</td>
+<td><code>%LOCALAPPDATA%\Programs\Sonorium</code></td>
+<td><code>C:\Program Files\Sonorium</code></td>
+</tr>
+<tr>
+<td>Sonorium runs</td>
+<td>While you're signed in to Windows</td>
+<td>While you're signed in, or as a Windows service</td>
+</tr>
+<tr>
+<td>Updates</td>
+<td>Install without a prompt</td>
+<td>Install without a prompt</td>
+</tr>
+<tr>
+<td>Firewall</td>
+<td>Windows asks to allow it the first time</td>
+<td>Allowed by the installer</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>As a Windows service</strong>, Sonorium starts with Windows, before anyone signs in, and keeps playing when you sign out. Pick this for a PC that plays sound around the clock, such as a PC in a closet or a home server. A service is like the heating in a building: it runs whether or not anyone is in the room.</p>
+<p><strong>When I sign in</strong> starts Sonorium when you sign in to Windows and stops it when you sign out. Pick this for a PC you use every day, where Sonorium only needs to play while you're there.</p>
+<p>You can switch between the two later on the <strong>General</strong> page, as long as Sonorium is installed for all users.</p>
+<hr />
+<h2 id="installing">Installing</h2>
+<ol>
+<li>Open the <a href="https://github.com/synssins/sonorium/releases">Releases page</a> and download <code>Sonorium-Setup-&lt;version&gt;.exe</code> from the newest release.</li>
+<li>Run the downloaded file.</li>
+</ol>
+<p>The installer isn't signed yet. Windows SmartScreen may show <strong>Windows protected your PC</strong>: click <strong>More info</strong>, then <strong>Run anyway</strong>.</p>
+<h3 id="install-for-me-only">Install for me only</h3>
+<p><img loading="lazy" alt="Click Install for me only" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-install-me-1.png" /></p>
+<p><strong>1:</strong> Click <strong>Install for me only (recommended)</strong>.</p>
+<p><img loading="lazy" alt="Accept the agreement, then Next" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-install-me-2.png" /></p>
+<p><strong>2:</strong> Click <strong>I accept the agreement</strong>.</p>
+<p><strong>3:</strong> Click <strong>Next</strong>.</p>
+<p><img loading="lazy" alt="The install folder, then Next" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-install-me-3.png" /></p>
+<p>The installer shows where Sonorium will be installed: <code>%LOCALAPPDATA%\Programs\Sonorium</code>.</p>
+<p><strong>4:</strong> Click <strong>Next</strong>.</p>
+<p><img loading="lazy" alt="The tasks, then Next" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-install-me-4.png" /></p>
+<p><strong>Start Sonorium when I sign in to Windows</strong> is ticked: Sonorium and the tray icon start each time you sign in. Leave it ticked unless you prefer to start Sonorium from the Start menu.</p>
+<p><strong>5:</strong> Click <strong>Next</strong>.</p>
+<p><img loading="lazy" alt="Click Install" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-install-me-5.png" /></p>
+<p><strong>6:</strong> Click <strong>Install</strong>.</p>
+<p><img loading="lazy" alt="Click Finish" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-install-me-6.png" /></p>
+<p><strong>7:</strong> Leave <strong>Start Sonorium</strong> ticked and click <strong>Finish</strong>.</p>
+<h3 id="install-for-all-users-as-a-service">Install for all users, as a service</h3>
+<p><img loading="lazy" alt="Click Install for all users" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-install-all-1.png" /></p>
+<p><strong>1:</strong> Click <strong>Install for all users</strong>.</p>
+<p><strong>2:</strong> Windows asks for administrator permission: click <strong>Yes</strong>.</p>
+<p><img loading="lazy" alt="Accept the agreement, then Next" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-install-all-2.png" /></p>
+<p><strong>3:</strong> Click <strong>I accept the agreement</strong>.</p>
+<p><strong>4:</strong> Click <strong>Next</strong>.</p>
+<p><img loading="lazy" alt="The install folder, then Next" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-install-all-3.png" /></p>
+<p>Sonorium is installed in <code>C:\Program Files\Sonorium</code>.</p>
+<p><strong>5:</strong> Click <strong>Next</strong>.</p>
+<p><img loading="lazy" alt="Tick the service, then Next" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-install-all-4.png" /></p>
+<p><strong>6:</strong> Click <strong>Run Sonorium as a Windows service (starts with Windows, before anyone signs in)</strong>.</p>
+<p><strong>7:</strong> Click <strong>Next</strong>.</p>
+<p><img loading="lazy" alt="Click Install" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-install-all-5.png" /></p>
+<p><strong>8:</strong> Click <strong>Install</strong>.</p>
+<p><img loading="lazy" alt="Click Finish" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-install-all-6.png" /></p>
+<p><strong>9:</strong> Leave <strong>Start Sonorium</strong> ticked and click <strong>Finish</strong>.</p>
+<p>The installer also sets up:</p>
+<ul>
+<li>the <strong>Sonorium</strong> service, which you, the user who installed it, can start and stop without administrator permission;</li>
+<li>Windows Firewall rules that let speakers and phones on your network reach Sonorium;</li>
+<li>a scheduled task, <strong>Sonorium Update</strong>, that installs updates without asking for administrator permission each time.</li>
+</ul>
+<p>To install for all users without the service, leave step 6 out.</p>
+<hr />
+<h2 id="the-first-start">The first start</h2>
+<p>When the installer finishes, the Sonorium icon appears in the notification area by the clock. Windows puts a new icon with the hidden icons, behind the <strong>^</strong> arrow, until you drag it onto the taskbar.</p>
+<p>A new Sonorium needs its first account:</p>
+<p><img loading="lazy" alt="Show the hidden icons, then right-click the Sonorium icon" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-tray-1.png" /></p>
+<p><strong>1:</strong> Click the <strong>^</strong> arrow by the clock. The hidden icons open.</p>
+<p><strong>2:</strong> Right-click the Sonorium icon.</p>
+<p><img loading="lazy" alt="Click Open Sonorium" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-tray-open.png" /></p>
+<p><strong>3:</strong> Click <strong>Open Sonorium</strong>. Your browser opens Sonorium's web page.</p>
+<p><strong>4:</strong> Create the admin account Sonorium asks for. This account signs you in to Sonorium's web page from any device on your network.</p>
+<p>Sonorium copies its bundled themes into the themes folder on the first start, so there is something to play straight away. What to do next in the web page is in <a href="#whats-next">What's next</a>.</p>
+<hr />
+<h2 id="the-tray-icon-and-its-menu">The tray icon and its menu</h2>
+<p><strong>Click</strong> the Sonorium icon to open the settings window. <strong>Right-click</strong> it for the menu.</p>
+<p><img loading="lazy" alt="The tray menu" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-tray-menu.png" /></p>
+<p><strong>A. Status:</strong> the dot and the first line show whether Sonorium is running, starting or stopped. The second line shows how many channels are playing and the address of the web page on this PC.</p>
+<p><strong>B. Open Sonorium:</strong> opens Sonorium's web page in your browser.</p>
+<p><strong>C. Settings…:</strong> opens the settings window on the <strong>Status</strong> page.</p>
+<p><strong>D. Restart Sonorium:</strong> stops Sonorium and starts it again.</p>
+<p><strong>E. Stop Sonorium:</strong> stops Sonorium; speakers stop playing. While Sonorium is stopped, this item reads <strong>Start Sonorium</strong>.</p>
+<p><strong>F. Check for updates…:</strong> opens the <strong>Updates</strong> page and checks GitHub for a newer version. A dot next to it means an update is waiting.</p>
+<p><strong>G. Logs…:</strong> opens the <strong>Logs</strong> page.</p>
+<p><strong>H. Help:</strong> opens Sonorium's documentation.</p>
+<p><strong>I. Quit:</strong> stops Sonorium, the service too when it runs as one, and removes the tray icon. To start again, open <strong>Sonorium</strong> from the Start menu.</p>
+<hr />
+<h2 id="the-settings-window">The settings window</h2>
+<p>What Sonorium plays, and on which speakers, is set in Sonorium's web page; this window covers how Sonorium runs on this PC.</p>
+<h3 id="status">Status</h3>
+<p><img loading="lazy" alt="The Status page" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-console-status.png" /></p>
+<p><strong>A.</strong> Whether Sonorium is running, its version, the address of its web page on this PC, and how long it has been running.</p>
+<p><strong>B. Open Sonorium</strong>, <strong>Restart</strong> and <strong>Stop</strong>: as in the tray menu. While Sonorium is stopped, <strong>Stop</strong> reads <strong>Start</strong>.</p>
+<p><strong>C. Channels playing:</strong> each playing channel and its theme. <strong>Open Status page</strong> opens Sonorium's web page.</p>
+<p><strong>D. Home Assistant</strong> and <strong>MQTT:</strong> whether Sonorium is connected, and to which address. <strong>Not set up</strong> means no address is saved on the <strong>Connections</strong> page.</p>
+<p><strong>E. Updates:</strong> the result of the last check. <strong>Check now</strong> checks again.</p>
+<h3 id="general">General</h3>
+<p><img loading="lazy" alt="The General page" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-console-general.png" /></p>
+<p><strong>A. Run Sonorium as:</strong> <strong>A service</strong> or <strong>When I sign in</strong> (see <a href="#for-me-only-or-for-all-users">For me only, or for all users?</a>). The shield means Windows asks for administrator permission when you change it. How to switch: <a href="#switching-between-a-service-and-when-i-sign-in">Switching between a service and "When I sign in"</a>.</p>
+<p><strong>B. Start Sonorium when I sign in to Windows:</strong> on by default. When Sonorium runs as a service, this reads <strong>Show this tray icon when I sign in to Windows</strong>: the service starts with Windows, and this switch decides whether the tray icon appears.</p>
+<p><strong>C. Open Sonorium in my browser when it starts:</strong> off by default. When on, Sonorium's web page opens each time the tray icon starts and Sonorium is ready.</p>
+<p><strong>D. Port:</strong> the network port of Sonorium's web page and of the streams speakers play: <code>8008</code> by default. The line under it shows the address other devices use. Change it only when another program already uses 8008: <a href="#changing-the-port">Changing the port</a>.</p>
+<p><strong>E. Stream address for speakers:</strong> <strong>Automatic</strong> by default: Sonorium works out the address speakers use to fetch its streams. Type an address, such as <code>http://192.0.2.10:8008</code>, only when speakers can't reach the PC by the address Sonorium picks, for example on a PC with several network adapters. Sonorium restarts to use it.</p>
+<p><strong>F. Channels:</strong> how many channels can play at the same time, from 1 to 10: 6 by default. Each playing channel uses some of the PC's processor. Sonorium restarts to use it.</p>
+<h3 id="folders">Folders</h3>
+<p><img loading="lazy" alt="The Folders page" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-console-folders.png" /></p>
+<p><strong>A. Themes:</strong> the folder of theme folders, one folder per theme. Per user: <code>Music\Sonorium</code>. As a service: <code>C:\ProgramData\Sonorium\Themes</code>.</p>
+<p><strong>B. Settings and data:</strong> channels, playlists, speakers, plugins and accounts. Per user: <code>Documents\Sonorium</code>. As a service: <code>C:\ProgramData\Sonorium\Data</code>.</p>
+<p><strong>C. Logs:</strong> Sonorium's log files, one per day, kept for 7 days. Per user: <code>%LOCALAPPDATA%\Sonorium\Logs</code>. As a service: <code>C:\ProgramData\Sonorium\Logs</code>.</p>
+<p><strong>D. Program:</strong> where Sonorium is installed.</p>
+<p><strong>Browse…</strong> moves a folder (see <a href="#moving-the-themes-or-data-folder">Moving the themes or data folder</a>). <strong>Open</strong> shows the folder in File Explorer.</p>
+<h3 id="connections">Connections</h3>
+<p><img loading="lazy" alt="The Connections page" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-console-connections.png" /></p>
+<p>A field is saved when you click away from it or press Tab; Sonorium then restarts to use it.</p>
+<p><strong>A. Use Home Assistant:</strong> on, Sonorium plays to Home Assistant's speakers and uses its floors and areas. Off removes the saved address and token.</p>
+<p><strong>B. Address:</strong> Home Assistant's address, for example <code>http://homeassistant.local:8123</code>.</p>
+<p><strong>C. Access token:</strong> a long-lived access token from your Home Assistant profile (in Home Assistant: your profile, <strong>Security</strong>, <strong>Long-lived access tokens</strong>, <strong>Create token</strong>). Windows encrypts it for the account Sonorium runs as. After saving, the box shows dots instead of the token; leaving it empty keeps the saved token. <strong>Test</strong> tries the address and token as typed, without saving them.</p>
+<p><strong>D. Use MQTT:</strong> on, Sonorium's channels appear in Home Assistant, for dashboards and automations.</p>
+<p><strong>E. Broker:</strong> the MQTT broker's address and port (<code>1883</code> by default).</p>
+<p><strong>F. Username and password:</strong> the broker login. The password is encrypted like the access token. <strong>Test</strong> tries the values as typed.</p>
+<p><strong>G. Find speakers on this network:</strong> on by default. Sonorium looks for Google Cast, Sonos, DLNA, AirPlay, LinkPlay and HEOS speakers on the network. Changing it restarts Sonorium.</p>
+<h3 id="updates">Updates</h3>
+<p><img loading="lazy" alt="The Updates page" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-console-updates.png" /></p>
+<p><strong>A.</strong> Shown when a new version is waiting. <strong>Update now</strong> installs it; <strong>Later</strong> hides the notice until a newer version is out.</p>
+<p><strong>B. Last checked</strong> and <strong>Check now:</strong> when GitHub was last asked for a new version.</p>
+<p><strong>C.</strong> What the new version changes.</p>
+<p><strong>D. Check for updates automatically:</strong> on by default. Sonorium checks 30 seconds after the tray icon starts, then every 6 hours, and shows a Windows notification when a new version is out.</p>
+<p><strong>E. Install updates automatically:</strong> off by default. When on, a new version installs as soon as it's found.</p>
+<p><strong>F. Update channel:</strong> <strong>Stable</strong> gets the releases. <strong>Preview</strong> also gets test versions, which have new features first and may have problems.</p>
+<p>How an update installs: <a href="#checking-for-and-installing-updates">Checking for and installing updates</a>.</p>
+<h3 id="logs">Logs</h3>
+<p><img loading="lazy" alt="The Logs page" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-console-logs.png" /></p>
+<p><strong>A. Search:</strong> shows only the lines containing what you type.</p>
+<p><strong>B. All</strong>, <strong>Warnings</strong>, <strong>Errors:</strong> shows all lines, warnings and errors, or errors only.</p>
+<p><strong>C. Copy:</strong> copies the selected lines, or every line shown when none is selected. <strong>Save…</strong> saves the lines shown to a file. <strong>Open folder</strong> opens the logs folder.</p>
+<p><strong>D.</strong> Today's log, following new lines as Sonorium writes them.</p>
+<h3 id="about">About</h3>
+<p><img loading="lazy" alt="The About page" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-console-about.png" /></p>
+<p>The version, how Sonorium runs, <strong>Copy version</strong> (for a bug report), and links to the documentation, to GitHub issues, to the License and to the Third-party notices.</p>
+<hr />
+<h2 id="starting-stopping-and-restarting">Starting, stopping and restarting</h2>
+<h3 id="from-the-tray-icon">From the tray icon</h3>
+<p><img loading="lazy" alt="The Sonorium icon" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-tray-icon.png" /></p>
+<p><strong>1:</strong> Right-click the Sonorium icon.</p>
+<p><img loading="lazy" alt="Click Restart Sonorium" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-tray-restart.png" /></p>
+<p><strong>2:</strong> Click <strong>Restart Sonorium</strong>, <strong>Stop Sonorium</strong> or, when stopped, <strong>Start Sonorium</strong>.</p>
+<p>The first line of the menu shows the result: <strong>Sonorium is running</strong>, <strong>Sonorium is starting</strong> or <strong>Sonorium is stopped</strong>.</p>
+<h3 id="when-the-tray-icon-isnt-there">When the tray icon isn't there</h3>
+<p><strong>1:</strong> Open the <strong>Start</strong> menu.</p>
+<p><strong>2:</strong> Type <strong>Sonorium</strong>.</p>
+<p><strong>3:</strong> Click <strong>Sonorium</strong>. The tray icon appears and starts Sonorium if it isn't running.</p>
+<p>Keyboard: press the Windows key, type <code>Sonorium</code>, then press Enter.</p>
+<h3 id="as-a-service-from-windows">As a service, from Windows</h3>
+<p>Windows' <strong>Services</strong> app (press the Windows key, type <code>services</code>, press Enter) lists the service as <strong>Sonorium</strong>, with <strong>Start</strong>, <strong>Stop</strong> and <strong>Restart</strong>. It does the same as the tray menu.</p>
+<hr />
+<h2 id="switching-between-a-service-and-when-i-sign-in">Switching between a service and "When I sign in"</h2>
+<p>Sonorium must be installed for all users. Your channels, themes and settings come across; the Home Assistant access token and the MQTT password don't, because Windows encrypts them for one account. Type them again on the <strong>Connections</strong> page after switching.</p>
+<p><img loading="lazy" alt="The Sonorium icon" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-tray-icon.png" /></p>
+<p><strong>1:</strong> Click the Sonorium icon. The settings window opens.</p>
+<p><img loading="lazy" alt="General, then the run mode" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-general-switch.png" /></p>
+<p><strong>2:</strong> Click <strong>General</strong>.</p>
+<p><strong>3:</strong> Under <strong>Run Sonorium as</strong>, click <strong>A service</strong> or <strong>When I sign in</strong>.</p>
+<p><strong>4:</strong> Windows asks for administrator permission: click <strong>Yes</strong>.</p>
+<p>Sonorium stops, switches and starts again. <strong>About</strong> shows the new mode.</p>
+<hr />
+<h2 id="changing-the-port">Changing the port</h2>
+<p><img loading="lazy" alt="The Sonorium icon" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-tray-icon.png" /></p>
+<p><strong>1:</strong> Click the Sonorium icon. The settings window opens.</p>
+<p><img loading="lazy" alt="General, then the Port box" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-general-port.png" /></p>
+<p><strong>2:</strong> Click <strong>General</strong>.</p>
+<p><strong>3:</strong> Click the <strong>Port</strong> box and type the new port, from 1 to 65535.</p>
+<p><strong>4:</strong> Press Enter. Sonorium restarts on the new port.</p>
+<p>Sonorium's web page is then at <code>http://localhost:&lt;port&gt;</code> on this PC and at the address under <strong>Port</strong> from other devices. Firewall rules from an all-users install follow the change.</p>
+<hr />
+<h2 id="moving-the-themes-or-data-folder">Moving the themes or data folder</h2>
+<p><img loading="lazy" alt="The Sonorium icon" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-tray-icon.png" /></p>
+<p><strong>1:</strong> Click the Sonorium icon. The settings window opens.</p>
+<p><img loading="lazy" alt="Folders, then Browse" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-folders-browse.png" /></p>
+<p><strong>2:</strong> Click <strong>Folders</strong>.</p>
+<p><strong>3:</strong> Click <strong>Browse…</strong> next to <strong>Themes</strong> or <strong>Settings and data</strong>.</p>
+<p><strong>4:</strong> Choose the new folder and click <strong>Select Folder</strong>.</p>
+<p>Sonorium stops, moves the folder's contents to the new place, and starts again. As a service, the service is given access to the new folder. A network share needs its address (<code>\\server\share</code>), not a drive letter: a service can't see drive letters mapped by a user.</p>
+<hr />
+<h2 id="checking-for-and-installing-updates">Checking for and installing updates</h2>
+<h3 id="checking-and-installing">Checking and installing</h3>
+<p><img loading="lazy" alt="The Sonorium icon" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-tray-icon.png" /></p>
+<p><strong>1:</strong> Right-click the Sonorium icon.</p>
+<p><img loading="lazy" alt="Click Check for updates" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-tray-updates.png" /></p>
+<p><strong>2:</strong> Click <strong>Check for updates…</strong>. The <strong>Updates</strong> page opens and checks GitHub.</p>
+<p><img loading="lazy" alt="Click Update now" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-updates-now.png" /></p>
+<p><strong>3:</strong> When a new version is listed, click <strong>Update now</strong>.</p>
+<p>What happens next:</p>
+<ul>
+<li>The tray icon and the settings window close, and Sonorium stops.</li>
+<li>The update downloads and installs in the background, without asking for administrator permission. The download is checked against the checksum GitHub publishes for it before anything runs.</li>
+<li>Sonorium and the tray icon start again on the new version. <strong>About</strong> shows it.</li>
+</ul>
+<p>A Windows notification, <strong>Sonorium &lt;version&gt; is available</strong>, also offers <strong>Update now</strong> when the automatic check finds one.</p>
+<h3 id="stable-or-preview">Stable or Preview</h3>
+<p><strong>Stable</strong> gets releases. <strong>Preview</strong> also gets test versions: they have new features first and may have problems. A test version follows <strong>Preview</strong> until you choose <strong>Stable</strong> on the <strong>Updates</strong> page.</p>
+<h3 id="if-an-update-doesnt-install">If an update doesn't install</h3>
+<p>The updater writes what it did to <code>Updater-&lt;date&gt;.log</code> in the logs folder; for an all-users install, the update task writes to <code>C:\ProgramData\Sonorium\Updates\updater.log</code>.</p>
+<hr />
+<h2 id="reading-the-logs">Reading the logs</h2>
+<p><img loading="lazy" alt="The Sonorium icon" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-tray-icon.png" /></p>
+<p><strong>1:</strong> Right-click the Sonorium icon.</p>
+<p><img loading="lazy" alt="Click Logs" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-tray-logs.png" /></p>
+<p><strong>2:</strong> Click <strong>Logs…</strong>.</p>
+<p><img loading="lazy" alt="Click Errors" src="https://raw.githubusercontent.com/wiki/synssins/sonorium/images/windows-logs-errors.png" /></p>
+<p><strong>3:</strong> Click <strong>Errors</strong> to see only errors, or type in <strong>Search</strong>.</p>
+<p>Each line starts with the time. Lines from SonoriumHost, the program that runs Sonorium in the background, start with <strong>Host:</strong>, for example <code>Host: Running as the Windows service (version …, server …)</code> at each start. When reporting a problem, <strong>Save…</strong> the log and attach it.</p>
+<hr />
+<h2 id="linking-the-sonorium-app-on-your-phone">Linking the Sonorium app on your phone</h2>
+<p>The Sonorium app links to Sonorium with the <strong>Link App</strong> button on Sonorium's <strong>Channels</strong> page; the steps are in <a href="docs.html?page=Link-App">Link App</a>.</p>
+<p>On Windows, the phone and the PC must be on the same network, and the app connects over HTTPS on port <code>8808</code>. An all-users install allows it in Windows Firewall; with <strong>Install for me only</strong>, allow Sonorium when Windows Firewall asks (see <a href="#troubleshooting">Troubleshooting</a>).</p>
+<hr />
+<h2 id="uninstalling">Uninstalling</h2>
+<p><strong>1:</strong> Open <strong>Settings</strong> in Windows.</p>
+<p><strong>2:</strong> Click <strong>Apps</strong>, then <strong>Installed apps</strong> (on Windows 10: <strong>Apps &amp; features</strong>).</p>
+<p><strong>3:</strong> Find <strong>Sonorium</strong>, click <strong>⋯</strong> (on Windows 10: click <strong>Sonorium</strong>), then <strong>Uninstall</strong>.</p>
+<p><strong>4:</strong> Confirm with <strong>Uninstall</strong>. For an all-users install, Windows asks for administrator permission.</p>
+<p>Removed: the program, the service, the firewall rules, the update task and the start at sign-in.
+Kept: the themes, settings and data folders and the logs (see <a href="#folders">Folders</a>). Delete those folders by hand to remove everything.</p>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p><strong>"Windows protected your PC" when running the installer.</strong> The installer isn't signed yet. Click <strong>More info</strong>, then <strong>Run anyway</strong>.</p>
+<p><strong>Windows Firewall asks to allow Python.</strong> With <strong>Install for me only</strong>, the installer can't add firewall rules, so Windows Firewall may ask the first time Sonorium starts. Allow it on <strong>Private networks</strong>; without it, speakers and phones can't reach Sonorium.</p>
+<p><strong>The menu stays on "Sonorium is starting".</strong> Another program may use the port. The <strong>Logs</strong> page then shows <code>[Errno 10048] error while attempting to bind on address ('0.0.0.0', 8008): [winerror 10048] only one usage of each socket address (protocol/network address/port) is normally permitted</code>. Change the port: <a href="#changing-the-port">Changing the port</a>.</p>
+<p><strong>Speakers aren't found.</strong> Check that <strong>Find speakers on this network</strong> is on (<strong>Connections</strong>), that the PC and speakers are on the same network, and that the network is set to <strong>Private</strong> in Windows (Settings, <strong>Network &amp; internet</strong>).</p>
+<hr />
+<h2 id="whats-next">What's next</h2>
+<p>Sonorium is running. The rest happens in the web UI and is the same on every install:</p>
+<ol>
+<li><a href="docs.html?page=Speakers#how-to-turn-a-speaker-on">Turn on your speakers</a>: Sonorium lists every speaker it finds, but uses only the ones you turn on.</li>
+<li><a href="docs.html?page=Channels#how-to-make-a-channel">Make your first channel</a> and <a href="docs.html?page=Channels#how-to-play-and-stop-a-channel">play it</a>.</li>
+<li><a href="docs.html?page=Themes">Themes</a>: the bundled themes, making your own and adding sound files.</li>
+<li><a href="docs.html?page=Presets">Presets</a>, <a href="docs.html?page=Sequences-and-Playlists">Sequences and Playlists</a>: different versions of a theme, and channels that change over time.</li>
+<li><a href="docs.html?page=Sign-in-and-Users">Sign-in and Users</a>: add the people in your home.</li>
+</ol>
+<p>All of Sonorium's documentation starts at <a href="docs.html">Home</a>.</p>
+        <p class="doc-source">This page is also in the <a href="https://github.com/synssins/sonorium/wiki/Getting-Started-Windows" target="_blank">GitHub wiki</a>.</p>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo"><img src="images/icon.png" alt="Sonorium"><span>Sonorium</span></div>
+            <div class="footer-links">
+                <a href="getting-started.html">Get Started</a>
+                <a href="getting-started-home-assistant.html">Home Assistant</a>
+                <a href="getting-started-docker.html">Docker</a>
+                <a href="getting-started-windows.html">Windows</a>
+                <a href="docs.html">Docs</a>
+                <a href="api.html">API</a>
+                <a href="plugin-development.html">Plugin Development</a>
+                <a href="theme-format.html">Theme Format</a>
+                <a href="faq.html">FAQ</a>
+                <a href="privacy/">Privacy</a>
+                <a href="https://github.com/synssins/sonorium/issues" target="_blank">Issues</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
+            </div>
+            <div class="footer-credit">Originally based on <a href="https://github.com/fmtr/amniotic" target="_blank">Amniotic</a> by fmtr · <a href="https://github.com/synssins/sonorium/blob/main/LICENSE.md" target="_blank">PolyForm Noncommercial 1.0.0</a></div>
+        </div>
+    </footer>
+</body>
+</html>
