@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Format - Sonorium</title>
+    <meta name="description" content="Build a Sonorium theme by hand: the folder layout, metadata.json, presets.json, sequences, and how to import it.">
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .docs-content h2, .docs-content h3, .docs-content h4 { scroll-margin-top: 90px; }
+        .docs-content h4 { font-size: 1rem; margin: 1.25rem 0 0.5rem; }
+        .docs-content .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .docs-content .table-wrap table { margin: 0; }
+        .docs-content td code, .docs-content th code { white-space: nowrap; }
+        .docs-content hr { display: none; }
+        .docs-sidebar { max-height: calc(100vh - 120px); overflow-y: auto; }
+        @media (max-width: 968px) { .docs-sidebar { max-height: none; } }
+        @media (max-width: 600px) {
+            .docs-layout { padding: 1rem; gap: 1.5rem; }
+            .page-header { padding-left: 1rem; padding-right: 1rem; }
+            .docs-content .table-wrap table, .docs-content .table-wrap tbody, .docs-content .table-wrap tr, .docs-content .table-wrap td { display: block; width: 100%; }
+            .docs-content .table-wrap thead { display: none; }
+            .docs-content .table-wrap tr { border: 1px solid var(--border-color); border-radius: 8px; padding: 0.5rem 0.75rem; margin-bottom: 0.75rem; background: var(--bg-card); }
+            .docs-content .table-wrap td { border: none; padding: 0.25rem 0; }
+            .docs-content .table-wrap td::before { content: attr(data-label); display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+            .docs-content .table-wrap td:first-child { color: var(--text-primary); }
+            .docs-content td code { white-space: normal; overflow-wrap: anywhere; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Sonorium"></a>
+            <div class="nav-links">
+                <a href="index.html#downloads">Downloads</a>
+                <a href="getting-started.html">Get Started</a>
+                <a href="index.html#features">Features</a>
+                <a href="faq.html">FAQ</a>
+                <a href="docs.html">Docs</a>
+                <a href="api.html">API</a>
+                <a href="plugin-development.html">Plugin Development</a>
+                <a href="theme-format.html">Theme Format</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+            <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Theme Format</h1>
+        <p>Build a theme by hand, from an empty folder, and add it to Sonorium.</p>
+    </header>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar">
+            <h3>On this page</h3>
+            <ul>
+                    <li><a href="#what-a-theme-is">What a theme is</a></li>
+                    <li><a href="#metadatajson">metadata.json</a></li>
+                    <li><a href="#presetsjson">presets.json</a></li>
+                    <li><a href="#manifestjson-and-attributionmd">MANIFEST.json and ATTRIBUTION.md</a></li>
+                    <li><a href="#what-sonorium-does-when-it-loads-a-theme">What Sonorium does when it loads a theme</a></li>
+                    <li><a href="#example-1-a-minimal-theme">Example 1: a minimal theme</a></li>
+                    <li><a href="#example-2-a-fuller-theme">Example 2: a fuller theme</a></li>
+                    <li><a href="#adding-the-theme-to-sonorium">Adding the theme to Sonorium</a></li>
+                    <li><a href="#tips">Tips</a></li>
+            </ul>
+            <h3>More</h3>
+            <ul>
+                <li><a href="getting-started.html">Get Started</a></li>
+                <li><a href="docs.html">Docs</a></li>
+                <li><a href="api.html">API</a></li>
+                <li><a href="plugin-development.html">Plugin Development</a></li>
+            </ul>
+        </aside>
+        <main class="docs-content">
+<p>This page describes the files that make up a Sonorium theme, so you can build one by hand, from an empty folder, and add it to Sonorium. It matches Sonorium 1.7.1.</p>
+<p>The full technical specification, with the exact mixer maths, is <a href="https://github.com/synssins/sonorium/blob/main/docs/THEME_FORMAT.md" target="_blank" rel="noopener">docs/THEME_FORMAT.md</a> in the repository.</p>
+<hr>
+<h2 id="what-a-theme-is">What a theme is</h2>
+<p>A theme is a folder. The audio files in it are the sounds; two JSON files say how each sound plays. Think of it as a mixing desk packed in a box: the audio files are the instruments, <code>metadata.json</code> is the desk's settings, and <code>presets.json</code> holds saved settings you can switch between.</p>
+<pre><code>Thunderstorm/                  &lt;- the theme folder
+  metadata.json                &lt;- theme info, track settings, group settings
+  presets.json                 &lt;- presets and sequences
+  Rain.wav                     &lt;- a track
+  Gusts.wav                    &lt;- a track
+  Wind/                        &lt;- a group
+    Wind 1.wav                 &lt;- a track in the group
+    Wind 2.wav
+  ATTRIBUTION.md               &lt;- optional: credits, for people
+  MANIFEST.json                &lt;- optional: source and licence, for tools
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>File</th>
+<th>Required</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="File">Audio files</td>
+<td data-label="Required">Yes, at least one</td>
+<td data-label="What it is">The sounds. A folder with no audio file is not listed as a theme.</td>
+</tr>
+<tr>
+<td data-label="File"><code>metadata.json</code></td>
+<td data-label="Required">No, but write it</td>
+<td data-label="What it is">Name, description, icon and how every track and group plays. Without it Sonorium makes one with defaults.</td>
+</tr>
+<tr>
+<td data-label="File"><code>presets.json</code></td>
+<td data-label="Required">No</td>
+<td data-label="What it is">Presets and sequences.</td>
+</tr>
+<tr>
+<td data-label="File"><code>MANIFEST.json</code></td>
+<td data-label="Required">No</td>
+<td data-label="What it is">Source and licence details. Sonorium's mixer doesn't read it.</td>
+</tr>
+<tr>
+<td data-label="File"><code>ATTRIBUTION.md</code></td>
+<td data-label="Required">No</td>
+<td data-label="What it is">Credits for the sounds, in plain text. Sonorium's mixer doesn't read it.</td>
+</tr>
+</tbody>
+</table></div>
+<p>All JSON files are UTF-8 text. Write non-English characters, emoji included, as <code>\uXXXX</code> escapes (<code>"🔥"</code> for 🔥): every install reads those correctly.</p>
+<h3 id="where-themes-live">Where themes live</h3>
+<p>Every theme is one folder inside Sonorium's audio folder.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Install</th>
+<th>Audio folder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Install">Home Assistant app</td>
+<td data-label="Audio folder"><code>/media/sonorium</code> (the <code>media</code> share, folder <code>sonorium</code>)</td>
+</tr>
+<tr>
+<td data-label="Install">Docker</td>
+<td data-label="Audio folder"><code>/media/sonorium</code> inside the container: the host folder you mapped to it (<code>./sonorium/media</code> in the <a href="getting-started.html">Getting Started</a> compose file)</td>
+</tr>
+<tr>
+<td data-label="Install">Windows app</td>
+<td data-label="Audio folder">The <code>themes</code> folder next to <code>Sonorium.exe</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="audio-files">Audio files</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Rule">Formats</td>
+<td data-label="Detail"><code>.mp3</code>, <code>.wav</code>, <code>.flac</code>, <code>.ogg</code> (upper or lower case)</td>
+</tr>
+<tr>
+<td data-label="Rule">Best format</td>
+<td data-label="Detail">44.1 kHz mono. Sonorium mixes in 44.1 kHz mono: other rates are resampled and stereo is mixed down to mono as the file is read.</td>
+</tr>
+<tr>
+<td data-label="Rule">Where</td>
+<td data-label="Detail">At the top of the theme folder, or in a group folder one level down. Files deeper than that are not found.</td>
+</tr>
+<tr>
+<td data-label="Rule">Ignored</td>
+<td data-label="Detail">Files and folders whose name starts with <code>.</code> or <code>_</code> (useful for drafts: <code>_drafts/</code>).</td>
+</tr>
+<tr>
+<td data-label="Rule">Order</td>
+<td data-label="Detail">Top-level files sorted by name, then each group (sorted by name) with its files sorted by name.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="track-keys">Track keys</h3>
+<p>Each track is known by its <strong>key</strong>: its path inside the theme without the extension, with <code>/</code> between group and file.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>File</th>
+<th>Key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="File"><code>Rain.wav</code></td>
+<td data-label="Key"><code>Rain</code></td>
+</tr>
+<tr>
+<td data-label="File"><code>Wind/Wind 1.wav</code></td>
+<td data-label="Key"><code>Wind/Wind 1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Keys are what <code>metadata.json</code> and <code>presets.json</code> use to name tracks. The web UI shows only the part after the <code>/</code>. Two files with the same name and different extensions in one folder (<code>Rain.wav</code> and <code>Rain.mp3</code>) get the same key: give every file its own name.</p>
+<h3 id="folder-names">Folder names</h3>
+<ul>
+<li><strong>Theme folder:</strong> any name not starting with <code>.</code>. It is the theme's name when <code>metadata.json</code> gives none.</li>
+<li><strong>Group folder:</strong> at most 60 characters; not <code>/ \ : * ? " &lt; &gt; |</code>; not starting with <code>.</code> or <code>_</code>; not ending with <code>.</code> or a space. The folder name is the group's name.</li>
+</ul>
+<hr>
+<h2 id="metadatajson">metadata.json</h2>
+<pre><code class="language-json">{
+  &quot;spec_version&quot;: 2,
+  &quot;id&quot;: &quot;c3a9e1f0-5d2b-4f6a-8e47-1b9d0c7a2e58&quot;,
+  &quot;name&quot;: &quot;Thunderstorm&quot;,
+  &quot;description&quot;: &quot;Rain and wind, with thunder rolling in.&quot;,
+  &quot;icon&quot;: &quot;⛈️&quot;,
+  &quot;categories&quot;: [&quot;Weather&quot;],
+  &quot;ebb_duration&quot;: true,
+  &quot;intrusions_retired&quot;: true,
+  &quot;auto_retired&quot;: true,
+  &quot;tracks&quot;: { &quot;Rain&quot;: { &quot;playback_mode&quot;: &quot;continuous&quot;, &quot;volume&quot;: 0.7 } },
+  &quot;groups&quot;: {}
+}
+</code></pre>
+<h3 id="theme-fields">Theme fields</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>spec_version</code></td>
+<td data-label="Type">integer</td>
+<td data-label="Required">Yes: write <code>2</code></td>
+<td data-label="Default"><code>2</code></td>
+<td data-label="What it does">The file layout version. Missing or below 2 marks an older theme, which Sonorium converts when it loads it (see <a href="#what-sonorium-does-when-it-loads-a-theme">What Sonorium does when it loads a theme</a>).</td>
+</tr>
+<tr>
+<td data-label="Field"><code>id</code></td>
+<td data-label="Type">string</td>
+<td data-label="Required">Recommended</td>
+<td data-label="Default">A new random UUID, saved on first load</td>
+<td data-label="What it does">The theme's permanent ID. Channels, playlists and linked files find the theme by it, so renaming the folder keeps them working. Make one with any UUID tool (<code>python -c "import uuid; print(uuid.uuid4())"</code>); every theme needs its own. <strong>Import theme</strong> gives the imported theme a new one.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>name</code></td>
+<td data-label="Type">string</td>
+<td data-label="Required">No</td>
+<td data-label="Default">The folder name</td>
+<td data-label="What it does">The name shown in Sonorium.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>description</code></td>
+<td data-label="Type">string</td>
+<td data-label="Required">No</td>
+<td data-label="Default"><code>""</code></td>
+<td data-label="What it does">Shown under the name.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>icon</code></td>
+<td data-label="Type">string</td>
+<td data-label="Required">No</td>
+<td data-label="Default"><code>""</code></td>
+<td data-label="What it does">One emoji. Empty: Sonorium picks one from the theme's name.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>is_favorite</code></td>
+<td data-label="Type">true/false</td>
+<td data-label="Required">No</td>
+<td data-label="Default"><code>false</code></td>
+<td data-label="What it does">Listed under <strong>Favorites</strong>.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>categories</code></td>
+<td data-label="Type">list of strings</td>
+<td data-label="Required">No</td>
+<td data-label="Default"><code>[]</code></td>
+<td data-label="What it does">Category names. A category that doesn't exist yet is listed once a theme uses it.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>short_file_threshold</code></td>
+<td data-label="Type">number, seconds</td>
+<td data-label="Required">No</td>
+<td data-label="Default"><code>15</code> (Settings › Advanced)</td>
+<td data-label="What it does">Only used for tracks without a <code>playback_mode</code> (see <code>auto</code> below).</td>
+</tr>
+<tr>
+<td data-label="Field"><code>tracks</code></td>
+<td data-label="Type">object</td>
+<td data-label="Required">No</td>
+<td data-label="Default"><code>{}</code></td>
+<td data-label="What it does">Settings per track, by key. A track without an entry uses every default.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>groups</code></td>
+<td data-label="Type">object</td>
+<td data-label="Required">No</td>
+<td data-label="Default"><code>{}</code></td>
+<td data-label="What it does">Settings per group, by group name.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>links</code></td>
+<td data-label="Type">object</td>
+<td data-label="Required">No</td>
+<td data-label="Default">none</td>
+<td data-label="What it does">Files used from other themes (see <a href="#linked-files">Linked files</a>).</td>
+</tr>
+<tr>
+<td data-label="Field"><code>attribution</code></td>
+<td data-label="Type">object</td>
+<td data-label="Required">No</td>
+<td data-label="Default">none</td>
+<td data-label="What it does">Source and licence (see <a href="#attribution">attribution</a>).</td>
+</tr>
+<tr>
+<td data-label="Field"><code>ebb_duration</code>, <code>intrusions_retired</code>, <code>auto_retired</code></td>
+<td data-label="Type">true/false</td>
+<td data-label="Required">Yes for a new theme: write <code>true</code></td>
+<td data-label="Default"><code>false</code></td>
+<td data-label="What it does">Marks that the three one-time conversions for older themes are done. Without <code>"ebb_duration": true</code>, Sonorium reads your Ebb &amp; Flow Duration values as the old Interval and turns them around (0.3 becomes 0.7) the first time it loads the theme.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="track-settings">Track settings</h3>
+<p>Each entry in <code>tracks</code> holds any of these fields. Leave a field out to use its default.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type, range</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>playback_mode</code></td>
+<td data-label="Type, range"><code>"continuous"</code>, <code>"sparse"</code>, <code>"presence"</code>, <code>"unassigned"</code></td>
+<td data-label="Default"><code>"auto"</code></td>
+<td data-label="What it does">How the track plays: see <a href="#playback-modes">Playback modes</a>. Always write it.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>volume</code></td>
+<td data-label="Type, range">0.0 to 1.0</td>
+<td data-label="Default"><code>1.0</code></td>
+<td data-label="What it does">The track's level (1.0 is the file as it is). For Ebb &amp; Flow, the top of the <strong>Volume</strong> range.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>presence</code></td>
+<td data-label="Type, range">0.0 to 1.0</td>
+<td data-label="Default"><code>1.0</code></td>
+<td data-label="What it does"><strong>Interval</strong> for Intermittent, <strong>Duration</strong> for Ebb &amp; Flow, the chance of being picked in a group (see the modes).</td>
+</tr>
+<tr>
+<td data-label="Field"><code>muted</code></td>
+<td data-label="Type, range">true/false</td>
+<td data-label="Default"><code>false</code></td>
+<td data-label="What it does">Leaves the track out of the mix.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>seamless_loop</code></td>
+<td data-label="Type, range">true/false</td>
+<td data-label="Default"><code>false</code></td>
+<td data-label="What it does"><strong>Gapless</strong>: a Background track loops with a hard cut instead of a 1.5 s crossfade. Only for files cut to loop perfectly.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>fade_in</code>, <code>fade_out</code></td>
+<td data-label="Type, range">0 to 30 seconds</td>
+<td data-label="Default"><code>0</code> (off)</td>
+<td data-label="What it does"><strong>Fade in</strong> / <strong>Fade out</strong>: the file fades in each time it starts and out each time it ends, loops included. For files that start or end abruptly.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>volume_low</code></td>
+<td data-label="Type, range">0.0 to 1.0</td>
+<td data-label="Default"><code>0.2</code></td>
+<td data-label="What it does">Ebb &amp; Flow: the bottom of the <strong>Volume</strong> range. The level moves between <code>volume_low</code> and <code>volume</code>.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>rise</code></td>
+<td data-label="Type, range">0.0 to 1.0</td>
+<td data-label="Default"><code>0.0</code></td>
+<td data-label="What it does">Ebb &amp; Flow <strong>Rise</strong>: how fast the level climbs, from 0 (Gradual) to 1 (Sudden).</td>
+</tr>
+<tr>
+<td data-label="Field"><code>pause_between</code></td>
+<td data-label="Type, range">true/false</td>
+<td data-label="Default"><code>false</code></td>
+<td data-label="What it does">Ebb &amp; Flow <strong>Pause between plays</strong>: the file plays once from start to end, fades out, pauses, then comes back.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>pause_min</code>, <code>pause_max</code></td>
+<td data-label="Type, range">seconds, 0 or more</td>
+<td data-label="Default"><code>30</code>, <code>300</code></td>
+<td data-label="What it does">Ebb &amp; Flow <strong>Pause</strong>: each pause is a random time in this range. It also staggers the first start.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>exclusive</code></td>
+<td data-label="Type, range">true/false</td>
+<td data-label="Default"><code>false</code></td>
+<td data-label="What it does"><strong>One at a time (legacy)</strong>, from themes made before groups. Use a group instead.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="playback-modes">Playback modes</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th><code>playback_mode</code></th>
+<th>In the web UI</th>
+<th>What you hear</th>
+<th><code>presence</code> means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="playback_mode"><code>"continuous"</code></td>
+<td data-label="In the web UI"><strong>Background</strong></td>
+<td data-label="What you hear">Plays all the time, looping smoothly. Rain, wind, a fire.</td>
+<td data-label="presence means">Not used.</td>
+</tr>
+<tr>
+<td data-label="playback_mode"><code>"sparse"</code></td>
+<td data-label="In the web UI"><strong>Intermittent</strong></td>
+<td data-label="What you hear">Plays the whole file once, then stays quiet before playing again. Bird calls, a door.</td>
+<td data-label="presence means"><strong>Interval</strong>: the wait between plays. 1.0 waits about 3 minutes, 0.0 about 30 minutes, each wait 30 % shorter or longer at random. These are the defaults of <strong>Wait between plays</strong> and <strong>Wait randomness</strong> on Settings › Advanced.</td>
+</tr>
+<tr>
+<td data-label="playback_mode"><code>"presence"</code></td>
+<td data-label="In the web UI"><strong>Ebb &amp; Flow</strong></td>
+<td data-label="What you hear">Always heard, the level drifting up and down between <code>volume_low</code> and <code>volume</code>. Surf, gusting wind.</td>
+<td data-label="presence means"><strong>Duration</strong>: how long the level stays at each value; higher is longer.</td>
+</tr>
+<tr>
+<td data-label="playback_mode"><code>"unassigned"</code></td>
+<td data-label="In the web UI"><strong>Unassigned</strong></td>
+<td data-label="What you hear">Nothing. The track waits to be placed.</td>
+<td data-label="presence means">Not used.</td>
+</tr>
+<tr>
+<td data-label="playback_mode"><code>"auto"</code></td>
+<td data-label="In the web UI">(none)</td>
+<td data-label="What you hear">The default for a track without a mode, decided by the file's length when it starts: at <code>presence</code> 1.0 Background; below 1.0, files shorter than <code>short_file_threshold</code> play Intermittent, longer ones Ebb &amp; Flow. Write a real mode instead.</td>
+<td data-label="presence means">Depends on the mode it becomes.</td>
+</tr>
+</tbody>
+</table></div>
+<p>A track inside a group plays the group's way, whatever its own <code>playback_mode</code>. Its <code>volume</code> and <code>presence</code> still count (see below).</p>
+<h3 id="groups">Groups</h3>
+<p>A subfolder with audio in it is a group. Its entry in <code>groups</code> (keyed by the folder name) sets how its tracks play together. A group without an entry is an Intermittent group with the defaults.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th><code>mode</code></th>
+<th>In the web UI</th>
+<th>What you hear</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="mode"><code>"intermittent"</code> (or missing)</td>
+<td data-label="In the web UI">Intermittent group, in the <strong>Intermittent</strong> section</td>
+<td data-label="What you hear">One track at a time, never overlapping. A track plays its whole file once; then the group waits for the <strong>Gap</strong> and picks the next one. The same track never plays twice in a row, and a track that just played is less likely to be picked next.</td>
+</tr>
+<tr>
+<td data-label="mode"><code>"merry_go_round"</code></td>
+<td data-label="In the web UI"><strong>Merry-go-round</strong>, in the <strong>Background</strong> section</td>
+<td data-label="What you hear">One continuous bed: one file plays, then crossfades into another picked at random. A group with one file crossfades into itself.</td>
+</tr>
+<tr>
+<td data-label="mode"><code>"ebb_flow"</code></td>
+<td data-label="In the web UI">Ebb &amp; Flow group, in the <strong>Ebb &amp; Flow</strong> section</td>
+<td data-label="What you hear">Every file plays at once, each rising and falling between its own <code>volume_low</code> and <code>volume</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>"intrusion"</code> is a retired mode: Sonorium converts such groups when it loads the theme.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Group field</th>
+<th>Type, range</th>
+<th>Default</th>
+<th>Applies to</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Group field"><code>mode</code></td>
+<td data-label="Type, range">see above</td>
+<td data-label="Default"><code>"intermittent"</code></td>
+<td data-label="Applies to">all</td>
+<td data-label="What it does">How the group plays.</td>
+</tr>
+<tr>
+<td data-label="Group field"><code>volume</code></td>
+<td data-label="Type, range">0.0 to 1.0</td>
+<td data-label="Default"><code>1.0</code></td>
+<td data-label="Applies to">all</td>
+<td data-label="What it does">Group <strong>Volume</strong>: multiplies each track's own volume.</td>
+</tr>
+<tr>
+<td data-label="Group field"><code>presence</code></td>
+<td data-label="Type, range">0.0 to 1.0</td>
+<td data-label="Default"><code>1.0</code></td>
+<td data-label="Applies to">all</td>
+<td data-label="What it does">Group <strong>Interval</strong> or <strong>Duration</strong>: multiplies each track's own <code>presence</code>.</td>
+</tr>
+<tr>
+<td data-label="Group field"><code>muted</code></td>
+<td data-label="Type, range">true/false</td>
+<td data-label="Default"><code>false</code></td>
+<td data-label="Applies to">all</td>
+<td data-label="What it does">Mutes every track in the group.</td>
+</tr>
+<tr>
+<td data-label="Group field"><code>gap_min</code>, <code>gap_max</code></td>
+<td data-label="Type, range">seconds, 0 or more</td>
+<td data-label="Default">120 each (Settings › Advanced)</td>
+<td data-label="Applies to">Intermittent</td>
+<td data-label="What it does"><strong>Gap</strong>: after a track finishes, the group waits a random time in this range. The web UI shows it in minutes. With only one of the two set, it is used for both.</td>
+</tr>
+<tr>
+<td data-label="Group field"><code>crossfade</code></td>
+<td data-label="Type, range">seconds, 1 to 60</td>
+<td data-label="Default"><code>10</code></td>
+<td data-label="Applies to">Merry-go-round</td>
+<td data-label="What it does"><strong>Crossfade</strong>: the overlap between one file and the next. A short file gets a shorter crossfade (at most half its length).</td>
+</tr>
+<tr>
+<td data-label="Group field"><code>pause_between</code></td>
+<td data-label="Type, range">true/false</td>
+<td data-label="Default"><code>false</code></td>
+<td data-label="Applies to">Ebb &amp; Flow</td>
+<td data-label="What it does"><strong>Pause between plays</strong> for the whole group: every file pauses between plays, at staggered times, so at least one is always playing.</td>
+</tr>
+<tr>
+<td data-label="Group field"><code>rise</code></td>
+<td data-label="Type, range">0.0 to 1.0</td>
+<td data-label="Default">none</td>
+<td data-label="Applies to">Ebb &amp; Flow</td>
+<td data-label="What it does"><strong>Same Rise for every file</strong>: one Rise for the whole group instead of each file's own. Leave it out to use each file's own.</td>
+</tr>
+</tbody>
+</table></div>
+<p>A group works like a submix fader on a mixing desk: its <code>volume</code> and <code>presence</code> scale its tracks' own values. A track at 0.5 in a group at 0.5 plays at 0.25.</p>
+<p>In an Intermittent group or a Merry-go-round, each track's <code>presence</code> is its chance of being picked: with four tracks at 1.0, 1.0, 1.0 and 0.2, the 0.2 track plays about one turn in ten. In a Merry-go-round, a track at 0 (or muted) is never picked.</p>
+<h3 id="linked-files">Linked files</h3>
+<p>A linked file is an audio file of another theme, used by this theme without a copy. It is listed in <code>links</code> and has its own entry in <code>tracks</code> like any other track:</p>
+<pre><code class="language-json">&quot;links&quot;: {
+  &quot;Crickets&quot;: { &quot;theme&quot;: &quot;0b6f2d4e-7a51-4c3e-9d27-5e8a1f3c9b62&quot;, &quot;track&quot;: &quot;Crickets&quot; },
+  &quot;Night/Owl&quot;: { &quot;theme&quot;: &quot;0b6f2d4e-7a51-4c3e-9d27-5e8a1f3c9b62&quot;, &quot;track&quot;: &quot;Owl&quot; }
+},
+&quot;tracks&quot;: {
+  &quot;Crickets&quot;: { &quot;playback_mode&quot;: &quot;sparse&quot;, &quot;muted&quot;: true }
+}
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Part">Key</td>
+<td data-label="Rule"><code>"&lt;name&gt;"</code> for an ungrouped link, <code>"&lt;group&gt;/&lt;name&gt;"</code> for one in a group. It must not be the key of a file of this theme.</td>
+</tr>
+<tr>
+<td data-label="Part"><code>theme</code></td>
+<td data-label="Rule">The source theme's <code>id</code> (from its <code>metadata.json</code>).</td>
+</tr>
+<tr>
+<td data-label="Part"><code>track</code></td>
+<td data-label="Rule">The source track's key. Only real files can be linked, not another theme's links.</td>
+</tr>
+<tr>
+<td data-label="Part">Missing source</td>
+<td data-label="Rule">The link is kept and shown as <strong>Missing</strong>; it doesn't play.</td>
+</tr>
+<tr>
+<td data-label="Part">Export</td>
+<td data-label="Rule"><strong>Export</strong> copies linked files into the zip as normal files, so an exported theme stands on its own.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Since a link points at a theme <code>id</code>, it only works on the install that has that theme. To share a theme with a linked file, export it from Sonorium, or copy the file in.</p>
+<h3 id="attribution">attribution</h3>
+<p>Optional. Shown to people who look at the theme's source. Any of:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>source</code></td>
+<td data-label="Example"><code>"Recorded by the theme author"</code></td>
+</tr>
+<tr>
+<td data-label="Field"><code>source_url</code></td>
+<td data-label="Example">The page the sounds came from</td>
+</tr>
+<tr>
+<td data-label="Field"><code>license</code></td>
+<td data-label="Example"><code>"CC BY 4.0"</code></td>
+</tr>
+<tr>
+<td data-label="Field"><code>license_url</code></td>
+<td data-label="Example"><code>"https://creativecommons.org/licenses/by/4.0/"</code></td>
+</tr>
+<tr>
+<td data-label="Field"><code>imported_date</code></td>
+<td data-label="Example">ISO 8601 time, for a tool that made the theme</td>
+</tr>
+<tr>
+<td data-label="Field"><code>imported_by</code></td>
+<td data-label="Example">The tool that made the theme</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="fields-sonorium-keeps">Fields Sonorium keeps</h3>
+<p>The first time Sonorium saves the theme (any change in the editor, an import, a conversion), it rewrites <code>metadata.json</code> with every field listed above, defaults filled in. Any other field at the top level, or inside a track entry, is dropped. Unknown fields inside a group entry and inside <code>presets.json</code> are kept.</p>
+<hr>
+<h2 id="presetsjson">presets.json</h2>
+<pre><code class="language-json">{
+  &quot;presets&quot;: {
+    &quot;&lt;preset id&gt;&quot;: { &quot;name&quot;: &quot;...&quot;, &quot;is_default&quot;: true, &quot;tracks&quot;: {}, &quot;groups&quot;: {} }
+  },
+  &quot;sequence_defaults&quot;: { &quot;hold_min&quot;: 300, &quot;hold_max&quot;: 900, &quot;ramp&quot;: 30 },
+  &quot;sequences&quot;: {}
+}
+</code></pre>
+<h3 id="presets">Presets</h3>
+<p>A preset is a saved version of the theme's mix: the same storm with the thunder off, or with the rain louder. A channel playing a preset hears the theme's own settings with the preset's values on top. A field the preset leaves out follows the theme.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field">Preset ID (the key)</td>
+<td data-label="Type">string</td>
+<td data-label="Required">Yes</td>
+<td data-label="What it does">Lower-case letters, digits and <code>_</code>. Sonorium makes IDs from the name the same way: <code>"Full storm"</code> becomes <code>full_storm</code>.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>name</code></td>
+<td data-label="Type">string</td>
+<td data-label="Required">Yes</td>
+<td data-label="What it does">Shown in preset lists.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>is_default</code></td>
+<td data-label="Type">true/false</td>
+<td data-label="Required">No</td>
+<td data-label="What it does">The default preset, marked <strong>★</strong>: picked when a channel chooses the theme. Mark one preset; if several are marked, the first in the file wins.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>tracks</code></td>
+<td data-label="Type">object</td>
+<td data-label="Required">No</td>
+<td data-label="What it does">Per track key: any of <code>volume</code>, <code>presence</code>, <code>muted</code>, <code>playback_mode</code>, <code>seamless_loop</code>, <code>exclusive</code>, <code>volume_low</code>, <code>pause_between</code>, <code>pause_min</code>, <code>pause_max</code>, with the ranges in <a href="#track-settings">Track settings</a>.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>groups</code></td>
+<td data-label="Type">object</td>
+<td data-label="Required">No</td>
+<td data-label="What it does">Per group name: any of <code>volume</code>, <code>presence</code>, <code>muted</code>, <code>gap_min</code>, <code>gap_max</code>, <code>pause_between</code>, <code>rise</code>. A group's <code>mode</code> and <code>crossfade</code> belong to the theme and can't be set by a preset.</td>
+</tr>
+</tbody>
+</table></div>
+<p>When a channel switches preset, volumes and intervals glide to the new values over 3 seconds, and tracks the preset turns on or off fade in or out over 3 seconds. A new <code>playback_mode</code> or <code>seamless_loop</code> is heard the next time the theme starts.</p>
+<p>A preset made in the web UI lists every track with every field, so it doesn't depend on the theme's settings. By hand, listing only what changes is enough; listing everything protects the preset from later changes to the theme.</p>
+<h3 id="sequences">Sequences</h3>
+<p>A sequence plays some of the theme's presets in order on a channel, gliding from one to the next: drizzle, then rain, then a downpour. It is listed with the presets, marked with the sequence icon.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type, range</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>sequence_defaults.hold_min</code>, <code>.hold_max</code></td>
+<td data-label="Type, range">seconds, 0 to 604800</td>
+<td data-label="Default"><code>300</code>, <code>900</code></td>
+<td data-label="What it does">The theme's <strong>Time on each preset</strong>: each preset plays for a random time in this range.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>sequence_defaults.ramp</code></td>
+<td data-label="Type, range">seconds, 0 to 604800</td>
+<td data-label="Default"><code>30</code></td>
+<td data-label="What it does">The theme's <strong>Ramp</strong>: how long the glide to the next preset lasts.</td>
+</tr>
+<tr>
+<td data-label="Field">Sequence ID (the key)</td>
+<td data-label="Type, range">string</td>
+<td data-label="Default"></td>
+<td data-label="What it does">Made like a preset ID.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>name</code></td>
+<td data-label="Type, range">string, 1 to 100 characters</td>
+<td data-label="Default">required</td>
+<td data-label="What it does">Shown with the presets. Unique in the theme.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>presets</code></td>
+<td data-label="Type, range">list of preset IDs</td>
+<td data-label="Default">required</td>
+<td data-label="What it does">The presets, in play order. Presets not listed are never reached.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>at_end</code></td>
+<td data-label="Type, range"><code>"reverse"</code>, <code>"restart"</code>, <code>"stop"</code></td>
+<td data-label="Default"><code>"reverse"</code></td>
+<td data-label="What it does"><strong>At the end</strong>: <strong>Reverse</strong> plays the list backwards (1 2 3 2 1 2 …), <strong>Start again</strong> goes back to the first preset, <strong>Stop</strong> stays on the last one.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>hold_min</code>, <code>hold_max</code>, <code>ramp</code></td>
+<td data-label="Type, range">seconds, or <code>null</code></td>
+<td data-label="Default"><code>null</code></td>
+<td data-label="What it does">The sequence's own timing. <code>null</code> uses <code>sequence_defaults</code>. <code>hold_min</code> must not be above <code>hold_max</code>.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>owner</code></td>
+<td data-label="Type, range"><code>null</code></td>
+<td data-label="Default"><code>null</code></td>
+<td data-label="What it does">Write <code>null</code>.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>while</code></td>
+<td data-label="Type, range">object</td>
+<td data-label="Default">none</td>
+<td data-label="What it does"><strong>While playing</strong> changes per step (below).</td>
+</tr>
+<tr>
+<td data-label="Field"><code>transitions</code></td>
+<td data-label="Type, range">object</td>
+<td data-label="Default">none</td>
+<td data-label="What it does"><strong>Coming in</strong> / <strong>Leaving</strong> styles per step (below).</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="while-playing">While playing</h4>
+<p>Changes how tracks play while one step plays, for this sequence only, on top of that step's preset. Keyed by preset ID:</p>
+<pre><code class="language-json">&quot;while&quot;: {
+  &quot;full_storm&quot;: {
+    &quot;tracks&quot;: { &quot;Rain&quot;: { &quot;volume&quot;: 0.9 } },
+    &quot;groups&quot;: { &quot;Thunder&quot;: { &quot;gap_min&quot;: 30, &quot;gap_max&quot;: 90 } }
+  }
+}
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Fields</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Part"><code>tracks</code></td>
+<td data-label="Fields">Per track key: any of <code>volume</code>, <code>volume_low</code>, <code>presence</code>, <code>muted</code>, <code>pause_between</code>, <code>pause_min</code>, <code>pause_max</code>.</td>
+</tr>
+<tr>
+<td data-label="Part"><code>groups</code></td>
+<td data-label="Fields">Per group name: any of <code>volume</code>, <code>presence</code>, <code>muted</code>, <code>gap_min</code>, <code>gap_max</code>, <code>pause_between</code>, <code>rise</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>A field left out (or <code>null</code>) keeps the preset's value.</p>
+<h4 id="coming-in-and-leaving">Coming in and Leaving</h4>
+<p>How tracks change at a step, keyed by preset ID. <code>in</code> holds the tracks this step turns on or makes louder (<strong>Coming in</strong>); <code>out</code> the tracks the next step turns off or makes quieter (<strong>Leaving</strong>).</p>
+<pre><code class="language-json">&quot;transitions&quot;: {
+  &quot;full_storm&quot;: {
+    &quot;in&quot;:  { &quot;Thunder/Thunder 1&quot;: { &quot;styles&quot;: [&quot;dist&quot;], &quot;values&quot;: { &quot;dist&quot;: 70 }, &quot;pre_fade&quot;: 20 } },
+    &quot;out&quot;: { &quot;Gusts&quot;: { &quot;styles&quot;: [&quot;swell&quot;], &quot;values&quot;: { &quot;swell&quot;: 20 }, &quot;pre_fade&quot;: 0 } }
+  }
+}
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Style</th>
+<th>Coming in</th>
+<th>Leaving</th>
+<th><code>values</code> entry</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Style"><code>gusts</code></td>
+<td data-label="Coming in"><strong>Gusts</strong></td>
+<td data-label="Leaving"><strong>Gusts dying down</strong></td>
+<td data-label="values entry">Intensity, 0 to 100 (default 50)</td>
+</tr>
+<tr>
+<td data-label="Style"><code>swell</code></td>
+<td data-label="Coming in"><strong>Swell</strong></td>
+<td data-label="Leaving"><strong>Smooth fade</strong></td>
+<td data-label="values entry">Speed: seconds of the fade time it uses (default 20)</td>
+</tr>
+<tr>
+<td data-label="Style"><code>build</code></td>
+<td data-label="Coming in"><strong>Build</strong></td>
+<td data-label="Leaving"><strong>Thin out</strong></td>
+<td data-label="values entry">Amount, 0 to 100 (default 60). For Intermittent tracks.</td>
+</tr>
+<tr>
+<td data-label="Style"><code>dist</code></td>
+<td data-label="Coming in"><strong>Distance</strong></td>
+<td data-label="Leaving"><strong>Recede</strong></td>
+<td data-label="values entry">How far, 0 to 100 (default 50)</td>
+</tr>
+<tr>
+<td data-label="Style"><code>fresh</code></td>
+<td data-label="Coming in"><strong>Start fresh</strong></td>
+<td data-label="Leaving"><strong>Finish then stop</strong></td>
+<td data-label="values entry">none</td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type, range</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>styles</code></td>
+<td data-label="Type, range">list of the style keys</td>
+<td data-label="What it does">Any combination. An empty list with <code>pre_fade</code> 0 is <strong>Smooth</strong>: the track follows the ramp.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>values</code></td>
+<td data-label="Type, range">object</td>
+<td data-label="What it does">The setting of each style that has one.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>max_volume</code></td>
+<td data-label="Type, range">0.0 to 1.0, optional</td>
+<td data-label="What it does">Gusts: the peaks never go above this.</td>
+</tr>
+<tr>
+<td data-label="Field"><code>pre_fade</code></td>
+<td data-label="Type, range">0 to 90 seconds</td>
+<td data-label="What it does"><strong>Pre-fade</strong>: the change starts this long before the step. The fade time is pre-fade plus ramp.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The web UI and the API refuse values outside these ranges. Sonorium doesn't check a hand-written <code>presets.json</code> the same way, so keep every value inside its range.</p>
+<hr>
+<h2 id="manifestjson-and-attributionmd">MANIFEST.json and ATTRIBUTION.md</h2>
+<p>Both are optional and travel with the theme in exports. Sonorium's mixer reads neither.</p>
+<p><code>ATTRIBUTION.md</code> is for people: where the sounds come from, the licence and what it allows, and credits per file.</p>
+<p><code>MANIFEST.json</code> is for tools. The bundled themes use this shape:</p>
+<pre><code class="language-json">{
+  &quot;source&quot;:  { &quot;site&quot;: &quot;&quot;, &quot;url&quot;: &quot;&quot;, &quot;creator&quot;: &quot;The theme author&quot; },
+  &quot;license&quot;: { &quot;name&quot;: &quot;CC BY 4.0&quot;, &quot;url&quot;: &quot;https://creativecommons.org/licenses/by/4.0/&quot;, &quot;requires_attribution&quot;: true }
+}
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Field"><code>source.site</code>, <code>source.url</code>, <code>source.creator</code></td>
+<td data-label="What it is">Where the sounds come from and who made them</td>
+</tr>
+<tr>
+<td data-label="Field"><code>license.name</code>, <code>license.url</code></td>
+<td data-label="What it is">The licence</td>
+</tr>
+<tr>
+<td data-label="Field"><code>license.requires_attribution</code></td>
+<td data-label="What it is"><code>true</code> when anyone sharing the sounds must credit the source</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="what-sonorium-does-when-it-loads-a-theme">What Sonorium does when it loads a theme</h2>
+<p>Sonorium loads every theme when it starts, after <strong>Refresh</strong> on the Themes page, and after an import.</p>
+<h3 id="older-layouts-are-converted">Older layouts are converted</h3>
+<p>Each conversion runs once per theme and first copies <code>metadata.json</code> and <code>presets.json</code> to backup files next to them:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Found</th>
+<th>What Sonorium does</th>
+<th>Backup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Found"><code>spec_version</code> missing or below 2, or presets inside <code>metadata.json</code></td>
+<td data-label="What Sonorium does">Moves the presets to <code>presets.json</code> and writes <code>"spec_version": 2</code></td>
+<td data-label="Backup"><code>metadata.json.pre-presets.bak</code></td>
+</tr>
+<tr>
+<td data-label="Found">No <code>"ebb_duration": true</code></td>
+<td data-label="What Sonorium does">Turns every Ebb &amp; Flow <code>presence</code> around (0.3 becomes 0.7), in the theme and its presets</td>
+<td data-label="Backup"><code>*.pre-duration.bak</code></td>
+</tr>
+<tr>
+<td data-label="Found">A group with <code>"mode": "intrusion"</code></td>
+<td data-label="What Sonorium does">Ungroups its linked files and removes the group; its own files move to the theme folder</td>
+<td data-label="Backup"><code>*.pre-links.bak</code></td>
+</tr>
+<tr>
+<td data-label="Found">A track with <code>"playback_mode": "auto"</code> (and no <code>"auto_retired": true</code>)</td>
+<td data-label="What Sonorium does">Gives it the mode it plays as</td>
+<td data-label="Backup"><code>*.pre-auto.bak</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>A theme written as described on this page (<code>spec_version</code> 2, the three markers <code>true</code>, a mode on every track) needs none of these, and no backup files appear.</p>
+<h3 id="broken-files-are-set-aside">Broken files are set aside</h3>
+<p>A <code>metadata.json</code> or <code>presets.json</code> that isn't valid JSON is renamed to <code>&lt;name&gt;.broken-&lt;date&gt;-&lt;time&gt;</code> and replaced:</p>
+<ul>
+<li><code>metadata.json</code> is rebuilt with default settings for every track, keeping the <code>id</code> if it can still be read.</li>
+<li><code>presets.json</code> is refilled from <code>metadata.json.pre-presets.bak</code> if that holds presets, otherwise left empty.</li>
+</ul>
+<p>The theme still loads and plays. Fix the <code>.broken</code> file and copy it back over the new one.</p>
+<h3 id="where-to-see-problems">Where to see problems</h3>
+<p>Sonorium writes what it did to its log. To read it:</p>
+<ol>
+<li>Click <strong>Settings</strong> in the menu.</li>
+<li>Click <strong>Logs</strong>.</li>
+</ol>
+<p>Lines to look for:</p>
+<pre><code>Theme 'Broken': can't read metadata.json (line 1): Illegal trailing comma before end of object, kept as metadata.json.broken-20261012-112248. Using defaults
+Theme 'Old' converted to the 2.0 format
+Theme 'Old': Ebb &amp; Flow Interval values converted to Duration (originals kept as *.pre-duration.bak)
+Theme 'Old': Auto playback modes replaced by the mode each track plays as (originals kept as *.pre-auto.bak)
+Imported theme 'Thunderstorm' with 12 files
+</code></pre>
+<p>The API lists the same problems per theme: <code>GET /api/themes</code> gives each theme a <code>"problems"</code> list, empty when it loaded cleanly.</p>
+<h3 id="ignored">Ignored</h3>
+<ul>
+<li>Files and folders starting with <code>.</code> or <code>_</code>, and folders more than one level deep.</li>
+<li>Entries in <code>tracks</code> whose key matches no file or link (kept in the file, not used).</li>
+<li>Sequence steps that name a preset that doesn't exist.</li>
+</ul>
+<hr>
+<h2 id="example-1-a-minimal-theme">Example 1: a minimal theme</h2>
+<p>Two tracks and one preset: a fire that plays all the time and crickets now and then.</p>
+<pre><code>Campfire/
+  metadata.json
+  presets.json
+  Fire.wav
+  Crickets.wav
+</code></pre>
+<p><code>metadata.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;spec_version&quot;: 2,
+  &quot;id&quot;: &quot;0b6f2d4e-7a51-4c3e-9d27-5e8a1f3c9b62&quot;,
+  &quot;name&quot;: &quot;Campfire&quot;,
+  &quot;description&quot;: &quot;A fire crackling, crickets now and then.&quot;,
+  &quot;icon&quot;: &quot;🔥&quot;,
+  &quot;categories&quot;: [&quot;Nature&quot;],
+  &quot;ebb_duration&quot;: true,
+  &quot;intrusions_retired&quot;: true,
+  &quot;auto_retired&quot;: true,
+  &quot;tracks&quot;: {
+    &quot;Fire&quot;:     { &quot;playback_mode&quot;: &quot;continuous&quot;, &quot;volume&quot;: 0.8 },
+    &quot;Crickets&quot;: { &quot;playback_mode&quot;: &quot;sparse&quot;, &quot;volume&quot;: 0.5, &quot;presence&quot;: 0.6 }
+  }
+}
+</code></pre>
+<p><code>presets.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;presets&quot;: {
+    &quot;late_night&quot;: {
+      &quot;name&quot;: &quot;Late night&quot;,
+      &quot;is_default&quot;: true,
+      &quot;tracks&quot;: {
+        &quot;Fire&quot;:     { &quot;volume&quot;: 0.5 },
+        &quot;Crickets&quot;: { &quot;volume&quot;: 0.7, &quot;presence&quot;: 0.9 }
+      }
+    }
+  }
+}
+</code></pre>
+<p>Without a preset, the fire plays at 80 % and the crickets about every 10 to 18 minutes. <strong>Late night</strong> (the default) turns the fire down and brings the crickets back about every 4 to 7 minutes. Replace the <code>id</code> with a new UUID of your own.</p>
+<hr>
+<h2 id="example-2-a-fuller-theme">Example 2: a fuller theme</h2>
+<p>Rain all the time, a Merry-go-round of wind, thunder in an Intermittent group, drips now and then, and gusts that rise and fall. Two presets and a sequence that moves between them.</p>
+<pre><code>Thunderstorm/
+  metadata.json
+  presets.json
+  ATTRIBUTION.md
+  MANIFEST.json
+  Rain.wav                 Background
+  Drips.wav                Intermittent
+  Gusts.wav                Ebb &amp; Flow, with Pause between plays
+  Wind/                    Merry-go-round group
+    Wind 1.wav
+    Wind 2.wav
+    Wind 3.wav
+  Thunder/                 Intermittent group
+    Thunder 1.wav
+    Thunder 2.wav
+</code></pre>
+<p><code>metadata.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;spec_version&quot;: 2,
+  &quot;id&quot;: &quot;c3a9e1f0-5d2b-4f6a-8e47-1b9d0c7a2e58&quot;,
+  &quot;name&quot;: &quot;Thunderstorm&quot;,
+  &quot;description&quot;: &quot;Rain and wind, with thunder rolling in.&quot;,
+  &quot;icon&quot;: &quot;⛈️&quot;,
+  &quot;categories&quot;: [&quot;Weather&quot;],
+  &quot;short_file_threshold&quot;: 15.0,
+  &quot;ebb_duration&quot;: true,
+  &quot;intrusions_retired&quot;: true,
+  &quot;auto_retired&quot;: true,
+  &quot;tracks&quot;: {
+    &quot;Rain&quot;:  { &quot;playback_mode&quot;: &quot;continuous&quot;, &quot;volume&quot;: 0.7 },
+    &quot;Drips&quot;: { &quot;playback_mode&quot;: &quot;sparse&quot;, &quot;volume&quot;: 0.4, &quot;presence&quot;: 0.8, &quot;fade_in&quot;: 0.5, &quot;fade_out&quot;: 0.5 },
+    &quot;Gusts&quot;: { &quot;playback_mode&quot;: &quot;presence&quot;, &quot;volume&quot;: 0.9, &quot;volume_low&quot;: 0.2, &quot;presence&quot;: 0.4, &quot;rise&quot;: 0.7,
+               &quot;pause_between&quot;: true, &quot;pause_min&quot;: 20, &quot;pause_max&quot;: 90 },
+    &quot;Wind/Wind 1&quot;: { &quot;playback_mode&quot;: &quot;continuous&quot;, &quot;volume&quot;: 1.0, &quot;presence&quot;: 1.0 },
+    &quot;Wind/Wind 2&quot;: { &quot;playback_mode&quot;: &quot;continuous&quot;, &quot;volume&quot;: 0.9, &quot;presence&quot;: 1.0 },
+    &quot;Wind/Wind 3&quot;: { &quot;playback_mode&quot;: &quot;continuous&quot;, &quot;volume&quot;: 1.0, &quot;presence&quot;: 0.5 },
+    &quot;Thunder/Thunder 1&quot;: { &quot;playback_mode&quot;: &quot;sparse&quot;, &quot;volume&quot;: 1.0, &quot;presence&quot;: 1.0 },
+    &quot;Thunder/Thunder 2&quot;: { &quot;playback_mode&quot;: &quot;sparse&quot;, &quot;volume&quot;: 0.8, &quot;presence&quot;: 0.6 }
+  },
+  &quot;groups&quot;: {
+    &quot;Wind&quot;:    { &quot;mode&quot;: &quot;merry_go_round&quot;, &quot;crossfade&quot;: 8, &quot;volume&quot;: 0.6 },
+    &quot;Thunder&quot;: { &quot;mode&quot;: &quot;intermittent&quot;, &quot;gap_min&quot;: 60, &quot;gap_max&quot;: 240, &quot;volume&quot;: 0.9, &quot;presence&quot;: 1.0 }
+  },
+  &quot;attribution&quot;: {
+    &quot;source&quot;: &quot;Recorded by the theme author&quot;,
+    &quot;license&quot;: &quot;CC BY 4.0&quot;,
+    &quot;license_url&quot;: &quot;https://creativecommons.org/licenses/by/4.0/&quot;
+  }
+}
+</code></pre>
+<p><code>presets.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;presets&quot;: {
+    &quot;light_rain&quot;: {
+      &quot;name&quot;: &quot;Light rain&quot;,
+      &quot;is_default&quot;: true,
+      &quot;tracks&quot;: {
+        &quot;Rain&quot;:  { &quot;volume&quot;: 0.5, &quot;muted&quot;: false },
+        &quot;Drips&quot;: { &quot;muted&quot;: false },
+        &quot;Gusts&quot;: { &quot;muted&quot;: true },
+        &quot;Thunder/Thunder 1&quot;: { &quot;muted&quot;: true },
+        &quot;Thunder/Thunder 2&quot;: { &quot;muted&quot;: true }
+      },
+      &quot;groups&quot;: {
+        &quot;Wind&quot;:    { &quot;volume&quot;: 0.3, &quot;muted&quot;: false },
+        &quot;Thunder&quot;: { &quot;muted&quot;: true }
+      }
+    },
+    &quot;full_storm&quot;: {
+      &quot;name&quot;: &quot;Full storm&quot;,
+      &quot;is_default&quot;: false,
+      &quot;tracks&quot;: {
+        &quot;Rain&quot;:  { &quot;volume&quot;: 1.0, &quot;muted&quot;: false },
+        &quot;Drips&quot;: { &quot;muted&quot;: true },
+        &quot;Gusts&quot;: { &quot;muted&quot;: false, &quot;volume&quot;: 1.0, &quot;volume_low&quot;: 0.4 },
+        &quot;Thunder/Thunder 1&quot;: { &quot;muted&quot;: false },
+        &quot;Thunder/Thunder 2&quot;: { &quot;muted&quot;: false }
+      },
+      &quot;groups&quot;: {
+        &quot;Wind&quot;:    { &quot;volume&quot;: 0.8, &quot;muted&quot;: false },
+        &quot;Thunder&quot;: { &quot;muted&quot;: false, &quot;gap_min&quot;: 30, &quot;gap_max&quot;: 120 }
+      }
+    }
+  },
+  &quot;sequence_defaults&quot;: { &quot;hold_min&quot;: 300, &quot;hold_max&quot;: 900, &quot;ramp&quot;: 30 },
+  &quot;sequences&quot;: {
+    &quot;storm_builds&quot;: {
+      &quot;name&quot;: &quot;Storm builds&quot;,
+      &quot;presets&quot;: [&quot;light_rain&quot;, &quot;full_storm&quot;],
+      &quot;at_end&quot;: &quot;reverse&quot;,
+      &quot;hold_min&quot;: 600,
+      &quot;hold_max&quot;: 1200,
+      &quot;ramp&quot;: 60,
+      &quot;owner&quot;: null,
+      &quot;transitions&quot;: {
+        &quot;full_storm&quot;: {
+          &quot;in&quot;:  { &quot;Thunder/Thunder 1&quot;: { &quot;styles&quot;: [&quot;dist&quot;], &quot;values&quot;: { &quot;dist&quot;: 70 }, &quot;pre_fade&quot;: 20 } },
+          &quot;out&quot;: { &quot;Gusts&quot;: { &quot;styles&quot;: [&quot;swell&quot;], &quot;values&quot;: { &quot;swell&quot;: 20 }, &quot;pre_fade&quot;: 0 } }
+        }
+      },
+      &quot;while&quot;: {
+        &quot;full_storm&quot;: {
+          &quot;tracks&quot;: { &quot;Rain&quot;: { &quot;volume&quot;: 0.9 } },
+          &quot;groups&quot;: {}
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<p><code>ATTRIBUTION.md</code>:</p>
+<pre><code># Thunderstorm
+
+All sounds recorded by the theme author.
+Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Credit the author when you share it.
+</code></pre>
+<p><code>MANIFEST.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;source&quot;: { &quot;site&quot;: &quot;&quot;, &quot;url&quot;: &quot;&quot;, &quot;creator&quot;: &quot;The theme author&quot; },
+  &quot;license&quot;: { &quot;name&quot;: &quot;CC BY 4.0&quot;, &quot;url&quot;: &quot;https://creativecommons.org/licenses/by/4.0/&quot;, &quot;requires_attribution&quot;: true }
+}
+</code></pre>
+<p>What you hear:</p>
+<ul>
+<li><strong>Light rain</strong> (the default, ★): soft rain, a quiet wind bed, drips now and then. Gusts and thunder are off.</li>
+<li><strong>Full storm</strong>: loud rain, the wind bed louder, gusts rising and falling between 40 % and 100 % with pauses of 20 to 90 seconds, thunder every 30 seconds to 2 minutes after the last crack, one crack at a time. Drips are off.</li>
+<li><strong>Storm builds</strong>: 10 to 20 minutes on each preset with a one-minute glide between them, back and forth. Coming into Full storm, the first thunder starts far off and muffled (Distance), 20 seconds before the step; leaving it, the gusts fade out on a curve (Smooth fade). While Full storm plays in this sequence, the rain is at 90 % instead of 100 %.</li>
+</ul>
+<p>In the Wind group, Wind 3 (<code>presence</code> 0.5) comes up less often than the other two. Every wind file is 20 seconds or longer, at least twice the 8-second crossfade.</p>
+<p>Both examples were checked on Sonorium 1.7.1: imported as zip files, they load without problems, their presets apply, and the sequence runs and steps.</p>
+<hr>
+<h2 id="adding-the-theme-to-sonorium">Adding the theme to Sonorium</h2>
+<h3 id="as-a-zip-file">As a zip file</h3>
+<p>The zip holds <strong>one folder</strong>, the theme folder, with everything inside it:</p>
+<pre><code>Thunderstorm.zip
+  Thunderstorm/
+    metadata.json
+    presets.json
+    Rain.wav
+    ...
+    Wind/Wind 1.wav
+    ...
+</code></pre>
+<ul>
+<li>Zip the folder, not its contents. In a zip without the top folder, files in group folders land at the top of the theme and the groups are lost.</li>
+<li>The top folder's name becomes the theme folder's name. If a folder with that name already exists, the new one gets <code>_1</code> (<code>Thunderstorm_1</code>), <code>_2</code>, and so on.</li>
+<li>The imported theme gets a new <code>id</code>.</li>
+</ul>
+<p>To make the zip:</p>
+<ul>
+<li><strong>Windows:</strong> right-click the theme folder, then click <strong>Compress to ZIP file</strong> (Windows 11) or <strong>Send to › Compressed (zipped) folder</strong>.</li>
+<li><strong>macOS:</strong> right-click (or Control-click) the theme folder, then click <strong>Compress</strong>.</li>
+<li><strong>Linux:</strong> <code>zip -r Thunderstorm.zip Thunderstorm</code></li>
+</ul>
+<h3 id="import-through-the-web-ui">Import through the web UI</h3>
+<ol>
+<li>Click <strong>Themes</strong> in the menu.</li>
+<li>Click <strong>⋯</strong> at the top right of the Themes page (or press Tab until it is highlighted, then Enter).</li>
+<li>Click <strong>Import theme…</strong>.</li>
+<li>Pick the zip file and click <strong>Open</strong> (or type its name and press Enter).</li>
+</ol>
+<p>A message shows <code>Imported "Thunderstorm" (12 files)</code>, and the theme appears in the list.</p>
+<p>In 1.7.1, <strong>Import theme</strong> works on the Home Assistant app and Docker. On the Windows app, copy the folder in instead (see <a href="#copy-the-folder-in">Copy the folder in</a>).</p>
+<h3 id="import-through-the-api">Import through the API</h3>
+<pre><code>curl -F &quot;file=@Thunderstorm.zip&quot; http://&lt;sonorium-address&gt;:8008/api/themes/import
+curl -X POST http://&lt;sonorium-address&gt;:8008/api/themes/refresh
+</code></pre>
+<p>The first call answers:</p>
+<pre><code class="language-json">{&quot;status&quot;: &quot;ok&quot;, &quot;theme_folder&quot;: &quot;Thunderstorm&quot;, &quot;files_extracted&quot;: 12, &quot;path&quot;: &quot;/media/sonorium/Thunderstorm&quot;, &quot;problems&quot;: []}
+</code></pre>
+<p>The second rescans the audio folder, as the web UI does after an import. With <strong>Require login</strong> on, add a key with <strong>Themes and presets › Upload and delete</strong> checked: <code>-H "Authorization: Bearer &lt;key&gt;"</code>. Keys are made on <strong>Settings › Keys</strong> (see <a href="https://github.com/synssins/sonorium/wiki/Sign-in-and-Users" target="_blank" rel="noopener">Sign-in and Users</a>).</p>
+<p>To add one audio file to an existing theme, into a group (the group folder is created if needed):</p>
+<pre><code>curl -F &quot;file=@Drip 2.wav&quot; -F &quot;group=Thunder&quot; http://&lt;sonorium-address&gt;:8008/api/themes/&lt;theme id&gt;/upload
+</code></pre>
+<p>A new file starts <strong>Unassigned</strong>: it doesn't play until you give it a mode in the Theme Editor. A file in a group plays the group's way.</p>
+<h3 id="copy-the-folder-in">Copy the folder in</h3>
+<ol>
+<li>Copy the theme folder into the audio folder (see <a href="#where-themes-live">Where themes live</a>).</li>
+<li>In Sonorium, click <strong>Themes</strong> in the menu.</li>
+<li>Click <strong>⋯</strong> at the top right of the Themes page.</li>
+<li>Click <strong>Refresh</strong>.</li>
+</ol>
+<p>A copied theme keeps its <code>id</code>. Don't copy the same theme in twice with the same <code>id</code>: give the copy a new one.</p>
+<hr>
+<h2 id="tips">Tips</h2>
+<ul>
+<li><strong>Names:</strong> name files for what they are (<code>Rain on roof.wav</code>, <code>Thunder 2.wav</code>). The file name, without its extension, is the track's name in Sonorium and its key in the JSON files. Renaming a file later means changing its key everywhere it appears.</li>
+<li><strong>Levels:</strong> Sonorium raises the whole mix (Settings › Audio Settings › <strong>Master output gain</strong>, 60 % by default) and softens peaks that go too high. With the default gain, a single track's peaks above about -18 dBFS reach that limiter. Keep files modest and balance them with <code>volume</code> instead of making each file loud.</li>
+<li><strong>Loop seams (Background):</strong> a Background track crossfades its end into its start over 1.5 seconds, which hides a slightly rough loop point. Turn on <code>seamless_loop</code> (<strong>Gapless</strong>) only for a file cut to loop perfectly. Beds of 2 to 5 minutes repeat less noticeably than short ones.</li>
+<li><strong>Variety:</strong> for a bed that never repeats the same way, use 3 or more files of the same scene in a Merry-go-round group, each at least twice the crossfade long. For events (thunder, a door, a lute song), put several versions in an Intermittent group: they play one at a time, never the same one twice in a row.</li>
+<li><strong>Abrupt files:</strong> give a file that starts or ends with a click a short <code>fade_in</code> / <code>fade_out</code> (0.2 to 1 second).</li>
+<li><strong>File sizes:</strong> 44.1 kHz mono WAV is about 5 MB a minute; mono MP3 at 128 kbit/s about 1 MB a minute. Sonorium's own stream is 128 kbit/s mono MP3, so higher quality isn't heard. Use MP3 or OGG for long beds.</li>
+<li><strong>Test as you go:</strong> after a change by hand, use <strong>Refresh</strong>, open the theme with <strong>Edit</strong>, and listen with <strong>Preview mix</strong>. Check <strong>Settings › Logs</strong> if the theme looks different from what you wrote.</li>
+</ul>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo"><img src="images/icon.png" alt="Sonorium"><span>Sonorium</span></div>
+            <div class="footer-links">
+                <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
+                <a href="docs.html">Docs</a>
+                <a href="faq.html">FAQ</a>
+                <a href="privacy/">Privacy</a>
+            </div>
+            <div class="footer-credit">Fork of <a href="https://github.com/fmtr/amniotic" target="_blank">Amniotic</a> by fmtr</div>
+        </div>
+    </footer>
+</body>
+</html>
