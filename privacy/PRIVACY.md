@@ -4,7 +4,7 @@ Effective 11 October 2026
 
 **Sonorium doesn't collect your data. The app has no analytics, no ads, no crash-reporting service, no developer accounts and no developer servers. Everything the app stores stays on your phone, and the app talks only to your own Sonorium server and the speakers on your home network. The one exception is a Pro purchase: Google handles the payment and passes the developer a limited order record, used only for refunds, support and tax records.**
 
-This policy covers the Sonorium app for Android, made by Synssins, and the sonorium.app website.
+This policy covers the Sonorium app for Android, made by Chris Kliewer, and the sonorium.app website.
 
 ## What the app stores
 
