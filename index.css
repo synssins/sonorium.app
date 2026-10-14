@@ -182,6 +182,14 @@
     font-size: 0.95rem;
 }
 
+.download-desc {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    min-height: 5.7rem;
+}
+
 .download-points {
     list-style: none;
     padding: 0;
@@ -199,6 +207,16 @@
     color: var(--text-secondary);
     font-size: 0.9rem;
     line-height: 1.45;
+}
+
+.download-points li:nth-child(1),
+.download-points li:nth-child(2),
+.download-points li:nth-child(3) {
+    min-height: 3.95rem;
+}
+
+.download-points li:nth-child(4) {
+    min-height: 2.65rem;
 }
 
 .download-points li svg {
@@ -226,7 +244,9 @@
     margin-top: 1rem;
     margin-bottom: 0;
     font-size: 0.8rem;
+    line-height: 1.4;
     color: var(--text-muted);
+    min-height: 3.4rem;
 }
 
 .download-card code {
@@ -461,6 +481,9 @@
     .hero-text h1 { font-size: 2rem; }
     .downloads-grid { grid-template-columns: 1fr; }
     .screenshot-gallery { grid-template-columns: 1fr; }
+    .download-desc { min-height: 0; }
+    .download-points li { min-height: 0; }
+    .download-card .download-note { min-height: 0; }
 }
 
 /* Screenshots open larger when clicked */
