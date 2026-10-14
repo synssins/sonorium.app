@@ -79,42 +79,64 @@
             <p>Choose the version that fits your setup. Each has a step-by-step guide. Free for noncommercial use.</p>
         </div>
         <div class="downloads-grid">
-            <div class="download-card">
+            <div class="download-card" id="home-assistant">
                 <div class="icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 </div>
                 <h3>Home Assistant app</h3>
-                <div class="version" id="addon-version">v1.7.1</div>
-                <p>Runs inside Home Assistant and appears in its sidebar. Plays to the speakers Home Assistant knows about.</p>
-                <a href="https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fsynssins%2Fsonorium" target="_blank" class="btn btn-ha">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                    Add to Home Assistant
-                </a>
-                <p class="download-note">One-click install via My Home Assistant · <a href="getting-started-home-assistant.html" style="color: var(--accent-primary);">Step-by-step guide</a></p>
+                <div class="version" data-release="version">v1.8.0</div>
+                <p class="download-desc">Runs inside Home Assistant, on the same machine. Sonorium appears in the Home Assistant sidebar.</p>
+                <ul class="download-points">
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Plays on the speakers in Home Assistant: Google Cast, Sonos, Music Assistant players and more</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Home Assistant users are signed in to Sonorium already</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Switches, selects and dashboard cards for every channel in Home Assistant</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Runs on 64-bit Raspberry Pi and x86-64 machines</span></li>
+                </ul>
+                <div class="download-actions">
+                    <a href="https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fsynssins%2Fsonorium" target="_blank" rel="noopener" class="btn btn-ha"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg> Add to Home Assistant</a>
+                    <a href="getting-started-home-assistant.html" class="btn btn-secondary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Step-by-step guide</a>
+                </div>
+                <p class="download-note">One-click install through My Home Assistant · Needs the Mosquitto broker app</p>
             </div>
-            <div class="download-card">
+            <div class="download-card" id="windows">
                 <div class="icon windows">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
                 </div>
                 <h3>Windows</h3>
-                <p>Sonorium on a Windows PC.</p>
-                <a href="getting-started-windows.html" class="btn btn-windows">
-                    Getting Started on Windows
-                </a>
+                <div class="version" data-release="version">v1.8.0</div>
+                <p class="download-desc">A Windows app for a PC on the network, with or without Home Assistant. One installer, nothing else to set up.</p>
+                <ul class="download-points">
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Finds Google Cast, Sonos, DLNA, AirPlay, LinkPlay and HEOS speakers on the network</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Installed for all users, runs as a Windows service that starts with Windows</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Tray icon and settings window: Status, Connections, Updates, Logs</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Checks for new versions and installs them</span></li>
+                </ul>
+                <div class="download-actions">
+                    <a href="https://github.com/synssins/sonorium/releases/latest" data-release="windows-download" class="btn btn-windows"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Download for Windows</a>
+                    <a href="getting-started-windows.html" class="btn btn-secondary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Getting Started on Windows</a>
+                </div>
+                <p class="download-note"><span data-release="windows-file">Sonorium-Setup-1.8.0.exe</span> · Windows 10 (version 2004 or later), 11 or Server 2025, 64-bit</p>
             </div>
             <div class="download-card" id="docker">
                 <div class="icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                 </div>
                 <h3>Docker</h3>
-                <div class="version" id="docker-version">v1.7.1</div>
-                <p>Runs on any Docker host, with or without Home Assistant. Finds Google Cast, Sonos, DLNA, AirPlay, LinkPlay and HEOS speakers on your network.</p>
-                <a href="getting-started-docker.html" class="btn btn-primary">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                    Getting Started with Docker
-                </a>
-                <p class="download-note">Image: <a href="https://github.com/synssins/sonorium/pkgs/container/sonorium" target="_blank" style="color: var(--accent-primary);">ghcr.io/synssins/sonorium:latest</a><br>Run <code>docker compose up -d</code>, then open port 8008</p>
+                <div class="version" data-release="version">v1.8.0</div>
+                <p class="download-desc">Runs in a container on a Linux machine, such as a NAS, a mini PC or a server, with or without Home Assistant.</p>
+                <ul class="download-points">
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Finds Google Cast, Sonos, DLNA, AirPlay, LinkPlay and HEOS speakers on the network</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Home Assistant and MQTT are optional, linked from the web UI</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Themes and settings stay in two folders, so the container can be replaced at any time</span></li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Starts again by itself after a reboot</span></li>
+                </ul>
+                <div class="download-actions">
+                    <a href="getting-started-docker.html" class="btn btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Getting Started with Docker</a>
+                    <a href="https://github.com/synssins/sonorium/pkgs/container/sonorium" target="_blank" rel="noopener" class="btn btn-secondary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> Image on GitHub</a>
+                </div>
+                <p class="download-note">Image: <code>ghcr.io/synssins/sonorium:latest</code> · x86-64 (amd64) host with host networking</p>
             </div>
+        </div>
     </section>
 
     <!-- Features -->
