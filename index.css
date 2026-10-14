@@ -129,6 +129,8 @@
     border: 1px solid var(--border-color);
     text-align: center;
     transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
 }
 
 .download-card:hover {
@@ -180,15 +182,59 @@
     font-size: 0.95rem;
 }
 
+.download-points {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: left;
+}
+
+.download-points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.45;
+}
+
+.download-points li svg {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    color: var(--accent-primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.download-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: auto;
+}
+
 .download-card .btn {
     width: 100%;
     justify-content: center;
 }
 
-.download-note {
-    margin-top: 0.75rem;
+.download-card .download-note {
+    margin-top: 1rem;
+    margin-bottom: 0;
     font-size: 0.8rem;
     color: var(--text-muted);
+}
+
+.download-card code {
+    background: var(--bg-sidebar);
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Consolas', monospace;
+    font-size: 0.8rem;
 }
 
 .coming-soon-notice {
