@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the beta - Sonorium</title>
+    <meta name="description" content="Help test the Sonorium Android app before release.">
+    <link rel="icon" type="image/png" href="../images/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .beta-form { display: grid; gap: 1.25rem; }
+        .beta-card [hidden] { display: none; }
+        .beta-field label { display: block; font-weight: 600; margin-bottom: 0.4rem; }
+        .beta-field .optional { color: var(--text-muted); font-weight: 400; }
+        .beta-field input[type=text], .beta-field input[type=email] {
+            width: 100%; padding: 0.75rem 1rem; font: inherit; font-size: 1rem;
+            color: var(--text-primary); background: var(--bg-sidebar);
+            border: 1px solid var(--border-color); border-radius: 8px;
+        }
+        .beta-field input:focus { outline: none; border-color: var(--accent-primary); }
+        .beta-field input[aria-invalid=true] { border-color: #f87171; }
+        .beta-field label.beta-consent { display: flex; gap: 0.75rem; align-items: flex-start; font-weight: 400; cursor: pointer; margin: 0; }
+        .beta-consent input { width: 1.15rem; height: 1.15rem; margin-top: 0.2rem; flex-shrink: 0; accent-color: var(--accent-primary); }
+        .beta-error { color: #f87171; font-size: 0.9rem; margin-top: 0.35rem; }
+        .beta-error:empty { display: none; }
+        .beta-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+        .beta-form input { scroll-margin-top: 110px; }
+        .beta-form .btn { font-family: inherit; }
+        .beta-form .btn[disabled] { opacity: 0.6; cursor: wait; transform: none; }
+        .card .beta-status { color: #f87171; }
+        .beta-thanks h2 { color: var(--accent-primary); font-size: 1.5rem; margin-bottom: 0.75rem; }
+        .beta-thanks p { color: var(--text-secondary); }
+        .card .beta-note { font-size: 0.9rem; color: var(--text-muted); }
+        .beta-note a { color: var(--accent-primary); }
+        .beta-card { overflow-wrap: anywhere; }
+        @media (max-width: 640px) {
+            nav { padding: 1rem; }
+            .page-header { padding: 7rem 1rem 2.5rem; }
+            .page-header p { font-size: 1.1rem; }
+            .content-container.beta-container { padding: 2rem 1rem; }
+            .card { padding: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo"><img src="../images/logo.png" alt="Sonorium"></a>
+            <div class="nav-links">
+                <a href="../index.html#downloads">Downloads</a>
+                <a href="../getting-started.html">Get Started</a>
+                <a href="../index.html#features">Features</a>
+                <a href="../faq.html">FAQ</a>
+                <a href="../docs.html">Docs</a>
+                <a href="../api.html">API</a>
+                <a href="../plugin-development.html">Plugin Development</a>
+                <a href="../theme-format.html">Theme Format</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Join the Sonorium beta</h1>
+        <p>Help test the Sonorium Android app before release. Testers get early builds through Google Play's testing program. You'll need a Google account and a device running Android 8 or newer, and we'll email you an invite.</p>
+    </header>
+
+    <div class="content-container beta-container" style="max-width:640px">
+        <div class="card beta-card">
+            <form id="beta-form" class="beta-form" novalidate>
+                <div class="beta-field">
+                    <label for="beta-name">Name</label>
+                    <input type="text" id="beta-name" name="name" autocomplete="name" maxlength="200" required aria-describedby="beta-name-error">
+                    <div class="beta-error" id="beta-name-error" aria-live="polite"></div>
+                </div>
+                <div class="beta-field">
+                    <label for="beta-email">Email</label>
+                    <input type="email" id="beta-email" name="email" autocomplete="email" maxlength="254" required aria-describedby="beta-email-error">
+                    <div class="beta-error" id="beta-email-error" aria-live="polite"></div>
+                </div>
+                <div class="beta-field">
+                    <label for="beta-device">Android device <span class="optional">(optional)</span></label>
+                    <input type="text" id="beta-device" name="device" maxlength="200" placeholder="e.g. Pixel 9, Android 15">
+                </div>
+                <div class="beta-hp" aria-hidden="true">
+                    <label for="beta-website">Leave this empty</label>
+                    <input type="text" id="beta-website" name="website" tabindex="-1" autocomplete="off">
+                </div>
+                <div class="beta-field">
+                    <label class="beta-consent" for="beta-consent">
+                        <input type="checkbox" id="beta-consent" name="consent" required aria-describedby="beta-consent-error">
+                        <span>I agree to be contacted about the Sonorium beta.</span>
+                    </label>
+                    <div class="beta-error" id="beta-consent-error" aria-live="polite"></div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary btn-large" id="beta-submit">Join the beta</button>
+                </div>
+                <p class="beta-status" id="beta-status" role="alert" hidden></p>
+                <p class="beta-note">We use these details only to send beta invites. See the <a href="../privacy/">privacy policy</a>.</p>
+            </form>
+            <div class="beta-thanks" id="beta-thanks" hidden>
+                <h2>You're on the list</h2>
+                <p id="beta-thanks-text"></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo"><img src="../images/icon.png" alt="Sonorium"><span>Sonorium</span></div>
+            <div class="footer-links">
+                <a href="../getting-started.html">Get Started</a>
+                <a href="../getting-started-home-assistant.html">Home Assistant</a>
+                <a href="../getting-started-docker.html">Docker</a>
+                <a href="../getting-started-windows.html">Windows</a>
+                <a href="../docs.html">Docs</a>
+                <a href="../api.html">API</a>
+                <a href="../plugin-development.html">Plugin Development</a>
+                <a href="../theme-format.html">Theme Format</a>
+                <a href="../faq.html">FAQ</a>
+                <a href="../privacy/">Privacy</a>
+                <a href="https://github.com/synssins/sonorium/issues" target="_blank">Issues</a>
+                <a href="https://github.com/synssins/sonorium" target="_blank">GitHub</a>
+            </div>
+            <div class="footer-credit">Originally based on <a href="https://github.com/fmtr/amniotic" target="_blank">Amniotic</a> by fmtr · <a href="https://github.com/synssins/sonorium/blob/main/LICENSE.md" target="_blank">PolyForm Noncommercial 1.0.0</a></div>
+        </div>
+    </footer>
+
+    <script>
+    (function () {
+        var FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScnNqiByyQmGaBQZ3HZkvS4CJXdGza5CJQPV7vBvdbANRmsvw/formResponse';
+        var form = document.getElementById('beta-form');
+        var nameInput = document.getElementById('beta-name');
+        var emailInput = document.getElementById('beta-email');
+        var deviceInput = document.getElementById('beta-device');
+        var consent = document.getElementById('beta-consent');
+        var honeypot = document.getElementById('beta-website');
+        var button = document.getElementById('beta-submit');
+        var status = document.getElementById('beta-status');
+        var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        function setError(input, message) {
+            document.getElementById(input.id + '-error').textContent = message;
+            input.setAttribute('aria-invalid', message ? 'true' : 'false');
+        }
+
+        function validate() {
+            var first = null;
+            var n = nameInput.value.trim();
+            var e = emailInput.value.trim();
+            if (!n) { setError(nameInput, 'Enter your name.'); first = nameInput; }
+            else setError(nameInput, '');
+            if (!e) { setError(emailInput, 'Enter your email address.'); first = first || emailInput; }
+            else if (!EMAIL_RE.test(e)) { setError(emailInput, 'Enter a valid email address, like name@example.com.'); first = first || emailInput; }
+            else setError(emailInput, '');
+            if (!consent.checked) { setError(consent, 'Tick the box to agree to be contacted about the beta.'); first = first || consent; }
+            else setError(consent, '');
+            return first;
+        }
+
+        [nameInput, emailInput].forEach(function (el) {
+            el.addEventListener('input', function () { if (el.getAttribute('aria-invalid') === 'true') validate(); });
+        });
+        consent.addEventListener('change', function () { if (consent.getAttribute('aria-invalid') === 'true') validate(); });
+
+        function showStatus(message) {
+            status.textContent = message;
+            status.hidden = !message;
+        }
+
+        function showThanks(n, e) {
+            document.getElementById('beta-thanks-text').textContent =
+                'Thanks, ' + n + '. We\'ll email ' + e + ' when the next test build is ready.';
+            form.hidden = true;
+            document.getElementById('beta-thanks').hidden = false;
+        }
+
+        form.addEventListener('submit', function (ev) {
+            ev.preventDefault();
+            showStatus('');
+            var invalid = validate();
+            if (invalid) { invalid.focus(); return; }
+            var n = nameInput.value.trim();
+            var e = emailInput.value.trim();
+            // Bots fill every field; people never see this one. Pretend it worked, send nothing.
+            if (honeypot.value) { showThanks(n, e); return; }
+            var body = new URLSearchParams();
+            body.append('entry.937146329', n);
+            body.append('entry.986227417', e);
+            body.append('entry.105492058', deviceInput.value.trim());
+            body.append('entry.1059565364', 'Yes');
+            button.disabled = true;
+            button.textContent = 'Sending…';
+            fetch(FORM_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: body.toString()
+            }).then(function () {
+                showThanks(n, e);
+            }).catch(function () {
+                showStatus('We couldn\'t send your details. Check your network connection and try again.');
+            }).then(function () {
+                button.disabled = false;
+                button.textContent = 'Join the beta';
+            });
+        });
+    })();
+    </script>
+</body>
+</html>
