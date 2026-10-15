@@ -419,7 +419,7 @@ footer {
 .doc-source { margin-top: 3rem; font-size: 0.85rem; color: var(--text-muted); }
 .footer-links { flex-wrap: wrap; gap: 0.5rem 1.5rem; }
 
-@media (max-width: 1150px) {
+@media (max-width: 1240px) {
     .nav-links { display: none; }
     .mobile-menu-btn { display: block; }
 }
@@ -436,3 +436,15 @@ footer {
 .docs-content hr + h2 { border-top: none; padding-top: 0; }
 .nav-links a.btn-primary, .nav-links a.btn-primary:hover { color: var(--bg-primary); }
 @media (max-width: 640px) { .docs-content .table-wrap table { min-width: 560px; } }
+
+/* Discord link: far right of the nav; stays visible as an icon when the menu collapses */
+.btn-discord { background: #5865F2; color: #fff; }
+.btn-discord:hover { background: #4752C4; transform: translateY(-1px); }
+.nav-links { margin-left: auto; }
+.nav-links a { white-space: nowrap; }
+.nav-discord, .nav-discord:hover { color: #fff; margin-left: 1.5rem; }
+@media (max-width: 1240px) {
+    .nav-discord { margin-left: auto; padding: 0.5rem 0.6rem; }
+    .nav-discord-label { display: none; }
+    .mobile-menu-btn { margin-left: 0.5rem; }
+}
