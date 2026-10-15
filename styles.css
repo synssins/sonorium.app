@@ -419,7 +419,7 @@ footer {
 .doc-source { margin-top: 3rem; font-size: 0.85rem; color: var(--text-muted); }
 .footer-links { flex-wrap: wrap; gap: 0.5rem 1.5rem; }
 
-@media (max-width: 1240px) {
+@media (max-width: 900px) {
     .nav-links { display: none; }
     .mobile-menu-btn { display: block; }
 }
@@ -443,7 +443,7 @@ footer {
 .nav-links { margin-left: auto; }
 .nav-links a { white-space: nowrap; }
 .nav-discord, .nav-discord:hover { color: #fff; margin-left: 1.5rem; }
-@media (max-width: 1240px) {
+@media (max-width: 900px) {
     .nav-discord { margin-left: auto; padding: 0.5rem 0.6rem; }
     .nav-discord-label { display: none; }
     .mobile-menu-btn { margin-left: 0.5rem; }
